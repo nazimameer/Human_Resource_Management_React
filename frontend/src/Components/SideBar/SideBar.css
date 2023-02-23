@@ -247,30 +247,7 @@ transform: translateX(-50%);
     color: white;
 }
 
-.home_content{
-    position: absolute;
-    left: 78px;
-    width: calc(100% - 78px);
-    transition: 0.5 ease;
-}
 
-.home_content .text{
-    z-index: 98;
-    font-size: 25px;
-    font-weight: 500;
-    color: #b1b1b1;
-    height: 70px;
-    width: 100%;
-    position:sticky;
-    position: fixed;
-    background: #11101d;
-}
-
-.sidebar.active ~ .home_content{
-    width: calc(100% - 240px);
-    left: 240px;
-    transition: 0.5s ease;
-}
 .logoT{
     width: 40px;
     margin-top: 1%;

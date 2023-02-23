@@ -1,8 +1,8 @@
 import React from 'react'
 import './SideBar.css'
-import {useState } from 'react'
+import {useState,useEffect } from 'react'
 function SideBar() {
-const [isActive, setIsActive] = useState(false)
+const [isActive, setIsActive] = useState(true)
 const handleButtonClick=()=>{
     setIsActive(!isActive)
 }
@@ -11,6 +11,10 @@ const handleActive = ()=>{
     setIsActive(true)
 }
 
+useEffect(()=>{
+    if(window.innerWidth < 768){
+        setIsActive(false)
+}},[])
   return (
     <>
     
@@ -21,7 +25,7 @@ const handleActive = ()=>{
       
           >HRM</div>
         </div>
-        <i className='bx bx-menu' id="btn" onClick={handleButtonClick}></i>
+        <i className='bx bx-menu cursor-pointer' id="btn" onClick={handleButtonClick}></i>
       </div>
       <div className="nav_list">
         <li>
@@ -80,13 +84,13 @@ const handleActive = ()=>{
             </a>
             <span className="tooltip">Saved</span>
         </li>
-        <li>
+        {/* <li>
             <a href='/'>
                 <i className='bx bx-cog' ></i>
                 <span className="links_name">Settings</span>
             </a>
             <span className="tooltip">Settings</span>
-        </li>
+        </li> */}
       </div>
       <div className="profile_content">
         <div className="profile">
