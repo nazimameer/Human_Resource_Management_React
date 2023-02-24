@@ -1,53 +1,82 @@
-import React from "react";
-
+import React,{useState} from "react";
+import axios from '../../axios'
+import {useNavigate} from 'react-router-dom'
 function LoginForm() {
-    
+const [formData,setFormData] = useState({
+    username:'',
+    password:''
+})
+const Navigate = useNavigate()
+
+const handleChange = (event) =>{
+    setFormData({
+        ...formData,
+        [event.target.name]: event.target.value
+    })
+}
+const handleSubmit = (event)=>{
+    event.preventDefault();
+
+    axios.post('/hr/login',formData).then(response=>{
+        console.log(response.data)
+        if(response.data){
+            console.log('halo')
+            Navigate('/hr/home')
+        }
+    })
+
+}
+
   return (
     <>
-      <div className="bg-slate-900 w-screen h-screen flex justify-center items-center">
-        <div className=" bg-slate-700 rounded-3xl flex  ">
-          <div>
-            <form action="">
+      <div className="bg-slate-900 w-screen h-screen flex justify-center ">
+        <div className="  rounded-3xl flex w-3/4 h-3/4 justify-around items-center relative">
+          <div className="text-white font-extrabold text-6xl absolute top-10">
+                        HR LOGIN
+                    </div>
+          <div className="pl-20" >
+            <form onSubmit={handleSubmit}>
               <div>
+                    
                 <label
-                  for="first-name"
-                  class="block text-sm font-semibold leading-6 text-gray-900"
+                  htmlFor="username"
+                  className="block text-sm font-semibold leading-6 text-white"
                 >
                   Username
                 </label>
-                <div class="mt-2">
+                <div className="mt-2">
                   <input
                     type="text"
-                    name="first-name"
-                    id="first-name"
-                    autocomplete="given-name"
-                    class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                    name="username"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="block w-full rounded-md py-2 px-3.5 text-sm shadow-sm "
                   />
                 </div>
               </div>
 
               <div>
                 <label
-                  for="last-name"
-                  class="block text-sm font-semibold leading-6 text-gray-900"
+                  htmlFor="password"
+                  className="block text-sm font-semibold leading-6 text-white mt-2.5"
                 >
                   Password
                 </label>
-                <div class="mt-2.5">
+                <div className="">
                   <input
-                    type="text"
-                    name="last-name"
-                    id="last-name"
-                    autocomplete="family-name"
-                    class="block w-full rounded-md border-0 py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="block w-96 rounded-md py-2 px-3.5 text-sm leading-6 text-gray-900 shadow-sm "
                   />
                 </div>
               </div>
 
-              <div class="mt-3">
+              <div className="mt-3">
                 <button
                   type="submit"
-                  class="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="block w-full rounded-md bg-sky-400 border px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Submit
                 </button>
@@ -56,7 +85,7 @@ function LoginForm() {
           </div>
 
           <div>
-            <img src="/images/landing.png" className="w-80" alt="" />
+            <img src="/images/landing.png" className="" alt="" />
           </div>
         </div>
       </div>

@@ -1,8 +1,10 @@
 import React from 'react'
 import './SideBar.css'
 import {useState,useEffect } from 'react'
+import { Link } from 'react-router-dom'
 function SideBar() {
 const [isActive, setIsActive] = useState(true)
+const [value,setValue] = useState('')
 const handleButtonClick=()=>{
     setIsActive(!isActive)
 }
@@ -31,30 +33,30 @@ useEffect(()=>{
         <li>
             
                 <i className='bx bx-search' onClick={handleActive}></i>
-                <input type="text" name="" value="" placeholder="search"/>
+                <input type="text" name="" value={value} onChange={(e)=>setValue(e.target.value)} placeholder="search"/>
             
             <span className="tooltip">Search</span>
         </li>
         <li>
-            <a href='/'>
+            <Link to='/hr/home'>
                 <i className='bx bx-grid-alt'></i>
                 <span className="links_name">Dashboard</span>
-            </a>
+            </Link>
             <span className="tooltip">Dashboard</span>
         </li>
         <li>
-            <a href='/'>
+            <Link to='/hr/employees'>
                 <i className='bx bx-user'></i>
-                <span className="links_name">Users</span>
-            </a>
-            <span className="tooltip">Users</span>
+                <span className="links_name">Employees</span>
+            </Link>
+            <span className="tooltip">Employees</span>
         </li>
         <li>
             <a href='/'>
                 <i className='bx bx-chat'></i>
-                <span className="links_name">Message</span>
+                <span className="links_name">Messages</span>
             </a>
-            <span className="tooltip">Message</span>
+            <span className="tooltip">Messages</span>
         </li>
         <li>
             <a href='/'>
@@ -66,23 +68,23 @@ useEffect(()=>{
         <li>
             <a href='/'>
                 <i className='bx bx-folder'></i>
-                <span className="links_name">File Manager</span>
+                <span className="links_name">Anoucement</span>
             </a>
-            <span className="tooltip">Files</span>
+            <span className="tooltip">Anoucement</span>
         </li>
         <li>
             <a href='/'>
-                <i className='bx bx-cart-alt' ></i>
-                <span className="links_name">Orders</span>
+            <i class='bx bx-layer'></i>
+                <span className="links_name">Leave Application</span>
             </a>
-            <span className="tooltip">Orders</span>
+            <span className="tooltip">Applications</span>
         </li>
         <li>
             <a href='/'>
-                <i className='bx bx-heart'></i>
-                <span className="links_name">Saved</span>
+            <i class='bx bx-purchase-tag'></i>
+                <span className="links_name">Salary slip</span>
             </a>
-            <span className="tooltip">Saved</span>
+            <span className="tooltip">Salary slip</span>
         </li>
         {/* <li>
             <a href='/'>
@@ -95,10 +97,10 @@ useEffect(()=>{
       <div className="profile_content">
         <div className="profile">
             <div className="profile_details">
-                <img src="adminlogo.jpeg" alt="" className="adminlogo"/>
+                <img src="" alt="" className="adminlogo"/>
                 <div className="name_job">
                     <div className="name">akshay</div>
-                    <div className="job">Web Admin</div>
+                    <div className="job">HR id:39287</div>
                 </div>
             </div>
             <a href='/'
