@@ -4,7 +4,7 @@ function NavBar() {
   return (
     <>
 
-      <div className='w-full md:h-16 h-14 xl:h-20 bg-slate-900 flex md:justify-end justify-between content-center fixed'>
+      <div className='w-full md:h-16 h-14 xl:h-20 bg-slate-900 flex md:justify-end justify-between content-center fixed z-50'>
 
             <div className='text-xl text-white py-3 md:hidden ml-20'>
               <h1>HRM</h1>

@@ -74,14 +74,14 @@ useEffect(()=>{
         </li>
         <li>
             <a href='/'>
-            <i class='bx bx-layer'></i>
+            <i className='bx bx-layer'></i>
                 <span className="links_name">Leave Application</span>
             </a>
             <span className="tooltip">Applications</span>
         </li>
         <li>
             <a href='/'>
-            <i class='bx bx-purchase-tag'></i>
+            <i className='bx bx-purchase-tag'></i>
                 <span className="links_name">Salary slip</span>
             </a>
             <span className="tooltip">Salary slip</span>

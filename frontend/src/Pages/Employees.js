@@ -8,7 +8,7 @@ function Employees() {
     <div>
       <SideBar/>
       <NavBar/>
-      <div className='content'>
+      <div className='content bg-slate-900'>
       <EmployeesBody/>
       </div>
     </div>

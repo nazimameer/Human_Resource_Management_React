@@ -4,4 +4,19 @@ const instance = axios.create({
     baseURL:baseUrl,
 })
 
-export default instance;
+instance.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('jwt'); // taking token from local storage
+
+         if(token){ // checking if token is present or not
+            config.headers.Authorization = `Bearer ${token}`;
+         }
+
+         return config;
+    },
+    error => {
+        return Promise.reject(error);
+    } 
+)
+
+export default instance;    

@@ -18,10 +18,12 @@ const handleSubmit = (event)=>{
     event.preventDefault();
 
     axios.post('/hr/login',formData).then(response=>{
-        console.log(response.data)
         if(response.data){
-            console.log('halo')
-            Navigate('/hr/home')
+          const token = response.data.token //recieved token to a variable
+          localStorage.setItem('jwt',token) // store the token into local storage
+          const storedtoken = localStorage.getItem('jwt')
+          console.log(storedtoken)
+            Navigate('/hr/home')  //navigate to home page
         }
     })
 
