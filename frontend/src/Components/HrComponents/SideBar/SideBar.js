@@ -1,0 +1,134 @@
+import React from "react";
+import "./SideBar.css";
+import { useState, useEffect } from "react";
+
+import { Link, useNavigate } from "react-router-dom";
+function SideBar() {
+  const [isActive, setIsActive] = useState(true);
+  const [value, setValue] = useState("");
+  const Navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    setIsActive(!isActive);
+  };
+
+  const handleActive = () => {
+    setIsActive(true);
+  };
+
+  const HandleLogout = () => {
+    localStorage.removeItem("jwt");
+    Navigate("/hr/login");
+  };
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsActive(false);
+    }
+  }, []);
+  return (
+    <>
+      <div className={isActive ? "sidebar active" : "sidebar"}>
+        <div className="logo_content">
+          <div className="logo">
+            <div className="logo_name">HRM</div>
+          </div>
+          <i
+            className="bx bx-menu cursor-pointer"
+            id="btn"
+            onClick={handleButtonClick}
+          ></i>
+        </div>
+        <div className="nav_list">
+          <li key={"search"}>
+            <i className="bx bx-search" onClick={handleActive}></i>
+            <input
+              type="text"
+              name=""
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="search"
+            />
+
+            <span className="tooltip">Search</span>
+          </li>
+          <li key={"dashboard"}>
+            <Link to="/hr/home">
+              <i className="bx bx-grid-alt"></i>
+              <span className="links_name">Dashboard</span>
+            </Link>
+            <span className="tooltip">Dashboard</span>
+          </li>
+          <li key={"employees"}>
+            <Link to="/hr/employees">
+              <i className="bx bx-user"></i>
+              <span className="links_name">Employees</span>
+            </Link>
+            <span className="tooltip">Employees</span>
+          </li>
+          <li key={"messages"}>
+            <a href="/">
+              <i className="bx bx-chat"></i>
+              <span className="links_name">Messages</span>
+            </a>
+            <span className="tooltip">Messages</span>
+          </li>
+          <li key={"analytics"}>
+            <a href="/">
+              <i className="bx bx-pie-chart-alt-2"></i>
+              <span className="links_name">Analytics</span>
+            </a>
+            <span className="tooltip">Analytics</span>
+          </li>
+          <li key={"announcement"}>
+            <a href="/">
+              <i className="bx bx-folder"></i>
+              <span className="links_name">Anoucement</span>
+            </a>
+            <span className="tooltip">Anoucement</span>
+          </li>
+          <li key={"application"}>
+            <Link to="/hr/LeaveApplications">
+              <i className="bx bx-layer"></i>
+              <span className="links_name">Applications</span>
+            </Link>
+            <span className="tooltip">Applications</span>
+          </li>
+          <li key={"salary slip"}>
+            <a href="/">
+              <i className="bx bx-purchase-tag"></i>
+              <span className="links_name">Salary slip</span>
+            </a>
+            <span className="tooltip">Salary slip</span>
+          </li>
+          {/* <li>
+            <a href='/'>
+                <i className='bx bx-cog' ></i>
+                <span className="links_name">Settings</span>
+            </a>
+            <span className="tooltip">Settings</span>
+        </li> */}
+        </div>
+        <div className="profile_content">
+          <div className="profile">
+            <div className="profile_details">
+              <img src="../images/adminlogo.jpeg" alt="" className="adminlogo" />
+              <div className="name_job">
+                <div className="name">akshay</div>
+                <div className="job">HR id:39287</div>
+              </div>
+            </div>
+            <div
+              // style="color: white;"
+              onClick={HandleLogout}
+            >
+              <i className="bx bx-log-out cursor-pointer" id="log_out"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default SideBar;

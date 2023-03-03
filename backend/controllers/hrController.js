@@ -3,8 +3,26 @@ const mongoose = require("mongoose");
 const employeeModel = require("../models/employeeModel");
 const preusername = "nazim@gmail.com";
 const prepassword = "123";
-
+const secretKey ='Brototype';
 module.exports = {
+  verifyLogin:(req,res)=>{
+    const authHeader = req.headers.authorization;
+console.log("ivde")
+    const token = authHeader.split(" ").pop()
+    jwt.verify(token,secretKey,(err,decoded)=>{
+        if(err){
+console.log("scene")
+
+            res.status(500).json({error:'Authentication failed'})
+        }else{
+console.log("pote")
+
+            res.status(200).json({success:true})
+        }
+
+    })
+    
+},
   postLogin: (req, res) => {
     try {
       // Handle error
@@ -30,7 +48,7 @@ module.exports = {
 
         // Expire
         const expire = {
-          expiresIn: 86400,
+          expiresIn: 84600,
         };
 
         // Sign token
@@ -98,9 +116,11 @@ module.exports = {
 
   getEmployees: async (req, res) => {
     const employees = await employeeModel.find({});
+    const length = employees.length
     res.status(200).json({
       status:true,
-      employees
+      employees,
+      length
     })
   },
 };

@@ -1,0 +1,31 @@
+.ps__rail-x{
+    left: 0px; 
+    bottom: -96px; 
+    width: 310px;
+}
+
+.ps__thumb-x{
+    left: 0px;
+    width: 294px
+}
+
+.ps__rail-y{
+    top: 96px; 
+    height: 516px; 
+    right: 0px;
+}
+
+.ps__thumb-y{
+    top: 81px; 
+    height: 435px;
+}
+
+.application::-webkit-scrollbar {
+        display: none;
+    
+    }
+
+.application{
+    height:75vh;
+}
+

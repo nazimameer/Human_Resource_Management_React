@@ -1,32 +1,32 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from '../../axios'
+import axios from "../../../axios";
 
 function AddEmployee() {
-    const Navigate = useNavigate()
-    const [formData, setFormData] = useState({
-        firstname:'',
-        lastname:'',
-        position:'',
-        role:'',
-        email:'',
-        password:''
-    })
+  const Navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    position: "",
+    role: "",
+    email: "",
+    password: "",
+  });
 
-    const handleChange = (event) =>{
-        setFormData({
-            ...formData,
-            [event.target.name]: event.target.value
-        })
-    }
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        axios.post('/hr/addemployee',formData).then(response=>{
-            if(response.data.success){
-                Navigate('/hr/employees')
-            }
-        })
-    }
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    axios.post("/hr/addemployee", formData).then((response) => {
+      if (response.data.success) {
+        Navigate("/hr/employees");
+      }
+    });
+  };
   return (
     <div className="bg-slate-900 h-screen">
       <div className="flex flex-wrap -mx-3">
@@ -42,7 +42,9 @@ function AddEmployee() {
               className="absolute top-0 left-0 flex flex-col visible w-full h-auto min-w-0 p-4 break-words bg-white border-0 shadow-xl opacity-100 dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border"
             >
               <h5 className="mb-0 font-bold text-black">ADD EMPLOYEE</h5>
-              <p className="mb-0 text-sm leading-normal">Mandatory Informations</p>
+              <p className="mb-0 text-sm leading-normal">
+                Mandatory Informations
+              </p>
               <div>
                 <div className="flex flex-wrap mt-4 -mx-3">
                   <div className="w-full max-w-full px-3 flex-0 sm:w-6/12">

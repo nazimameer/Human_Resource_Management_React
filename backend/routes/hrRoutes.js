@@ -5,6 +5,6 @@ const Authentication = require('../middleware/varifyJwt')
 router.post('/login',hrController.postLogin)
 router.get('/employees',Authentication.varifyToken,hrController.getEmployees)
 router.post('/addemployee',Authentication.varifyToken,hrController.addEmployee)
-
+router.post('/LoginPageAuth',hrController.verifyLogin)
 
 module.exports = router; 

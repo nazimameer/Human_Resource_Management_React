@@ -1,0 +1,35 @@
+.content{
+    position: absolute;
+    left: 78px;
+    width: calc(100% - 78px);
+    height: 100vh;
+    transition: 0.5 ease;
+}
+
+
+.sidebar.active ~ .content{
+    width: calc(100% - 240px);
+    left: 240px;
+    transition: 0.5s ease;
+}
+
+
+@media screen and (max-width: 768px) {
+    /* Your CSS styles for screens 640px wide and below go here */
+    .content {
+        position: absolute;
+        left: 78px;
+        width: calc(100% - 78px);
+        height: 100vh;
+        transition: 0.5 ease;
+    }
+
+    .sidebar.active ~ .content{
+        width: calc(100% - 78px);
+        left: 78px;
+        transition: 0.5s ease;
+    }
+
+
+    /* ... */
+  }

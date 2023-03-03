@@ -1,45 +1,56 @@
-import React,{useState} from "react";
-import axios from '../../axios'
-import {useNavigate} from 'react-router-dom'
+import React, { useState,useEffect } from "react";
+import axios from "../../../axios";
+import { useNavigate } from "react-router-dom";
 function LoginForm() {
-const [formData,setFormData] = useState({
-    username:'',
-    password:''
-})
-const Navigate = useNavigate()
 
-const handleChange = (event) =>{
+  const Navigate = useNavigate();
+  useEffect(()=>{
+    if(localStorage.getItem('jwt')){
+      console.log('Hai')
+      axios.post('/hr/LoginPageAuth').then((response)=>{
+        console.log(response.status)
+        if(response.status === 200){
+          Navigate('/hr/home')
+        }
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (event) => {
     setFormData({
-        ...formData,
-        [event.target.name]: event.target.value
-    })
-}
-const handleSubmit = (event)=>{
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    axios.post('/hr/login',formData).then(response=>{
-        if(response.data){
-          const token = response.data.token //recieved token to a variable
-          localStorage.setItem('jwt',token) // store the token into local storage
-          const storedtoken = localStorage.getItem('jwt')
-          console.log(storedtoken)
-            Navigate('/hr/home')  //navigate to home page
-        }
-    })
-
-}
+    axios.post("/hr/login", formData).then((response) => {
+      if (response.data) {
+        const token = response.data.token; //recieved token to a variable
+        localStorage.setItem("jwt", token); // store the token into local storage
+        const storedtoken = localStorage.getItem("jwt");
+        console.log(storedtoken);
+        Navigate("/hr/home"); //navigate to home page
+      }
+    });
+  };
 
   return (
     <>
       <div className="bg-slate-900 w-screen h-screen flex justify-center ">
         <div className="  rounded-3xl flex w-3/4 h-3/4 justify-around items-center relative">
           <div className="text-white font-extrabold text-6xl absolute top-10">
-                        HR LOGIN
-                    </div>
-          <div className="pl-20" >
+            HR LOGIN
+          </div>
+          <div className="pl-20">
             <form onSubmit={handleSubmit}>
               <div>
-                    
                 <label
                   htmlFor="username"
                   className="block text-sm font-semibold leading-6 text-white"
