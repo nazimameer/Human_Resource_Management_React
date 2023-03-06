@@ -12,8 +12,9 @@ module.exports = {
             if(err){
                 res.status(500).send({error:'Authentication failed'})
             }else{
+                console.log(decoded)
                 next()
-            }
+            } 
 
         })
         

@@ -17,9 +17,9 @@ function Hero() {
                 I'm HR
               </Link>
 
-              <button className="btn text-2xl border-2 w-60 h-14 rounded-xl border-sky-500 hover:shadow-lg hover:shadow-blue-400 hover:border-white hover:bg-sky-400 ease-out duration-300">
+              <Link to={'/employee/login'} className="btn flex justify-center items-center text-2xl border-2 w-60 h-14 rounded-xl border-sky-500 hover:shadow-lg hover:shadow-blue-400 hover:border-white hover:bg-sky-400 ease-out duration-300">
                 I'm Employee
-              </button>
+              </Link>
             </div>
           </div>
         </div>

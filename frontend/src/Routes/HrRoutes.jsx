@@ -12,7 +12,7 @@ function HrRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/employees" element={<Employees />} />
         <Route path="/addemployee" element={<AddEmployee />} />
-        <Route path={'/leaveapplications'} element={ <LeaveApplications/> }/>
+        <Route path='/leaveapplications' element={ <LeaveApplications/> }/>
       </Routes>
     </div>
   );

@@ -1,62 +1,68 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
-const preusername = "nazim@gmail.com";
+const preusername = "hr@xcompany";
 const prepassword = "123";
-const secretKey ='Brototype';
+const secretKey = "Brototype";
+const hrModel = require("../models/hrModel");
 module.exports = {
-  verifyLogin:(req,res)=>{
+  verifyLogin: (req, res) => {
     const authHeader = req.headers.authorization;
-console.log("ivde")
-    const token = authHeader.split(" ").pop()
-    jwt.verify(token,secretKey,(err,decoded)=>{
-        if(err){
-console.log("scene")
-
-            res.status(500).json({error:'Authentication failed'})
-        }else{
-console.log("pote")
-
-            res.status(200).json({success:true})
-        }
-
-    })
-    
-},
-  postLogin: (req, res) => {
+    const token = authHeader.split(" ").pop();
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        res.status(500).json({ error: "Authentication failed" });
+      } else {
+        res.status(200).json({ success: true });
+      }
+    });
+  },
+  postLogin: async (req, res) => {
     try {
       // Handle error
       const data = req.body; // Puting the data in to a variable
-      const CurrentUserName = data.username; // Taking usename from provided data
-      const CurrentPassword = data.password; // Taking password from provided data
+      const providedUsername = data.username; // Taking usename from provided data
+      const providedPass = data.password; // Taking password from provided data
+      const hrDetails = await hrModel.findOne({ username: providedUsername }); // Take hr details from db with provided username
 
-      //Varifying with predefined username and password
-      if (CurrentUserName === preusername && CurrentPassword === prepassword) {
+      if (hrDetails) { // Check whether hrExist or not
+        const hrId = hrDetails._id; // Take id from hr details doc
+        const hrUsername = hrDetails.username; // Take username from hr details doc
+        const hrPassword = hrDetails.password;  // Take password from hr details doc
 
-        // Varification done
+        bcrypt.compare(providedPass, hrPassword, (err, isMatch) => {
+          if (err) {
+            res.status(500).json({ error: "Internal Server Error....!" });// Send error msg to client side
+          }
+          if (isMatch) {
+            // Varification done Jwt generates
 
-        // Jwt generates
 
-        // Payload
-        const payload = {
-          username: CurrentUserName,
-          password: CurrentPassword,
-        };
+            // Payload
+          const payload = {
+            id: hrId,
+            username: providedUsername,
+          };
+            // Secret key
+            const secretKey = "Brototype";
 
-        // Secret key
-        const secretKey = "Brototype";
+            // Expire
+            const expire = {
+              expiresIn: 84600,
+            };
 
-        // Expire
-        const expire = {
-          expiresIn: 84600,
-        };
+            // Sign token
+          const token = jwt.sign(payload, secretKey, expire);
+          res.status(200).json({ success: true, token: token }); // Send response with token
 
-        // Sign token
-        const token = jwt.sign(payload, secretKey, expire);
 
-        res.status(200).json({ success: true, token: token }); // Send response with token
+          } else {
+            res.status(401).json({ message: "Incorrect Password...!" });
+          }
+        });
       } else {
-        res.status(401).json({ error: "Invalid Username or Password" }); // Username or password would be wrong so send error msg
+        res.status(401).json({ error: "Invalid Username or Password" }); // Username is be wrong so send error msg
       }
     } catch (error) {
       console.log(error);
@@ -68,8 +74,10 @@ console.log("pote")
     try {
       // Handle error
       const data = req.body; // Puting the data in to a variable
-
-// Algorithm to generate unique user ID
+      const { password } = data;
+      const saltRounds = 10;
+      const hashedPassword = bcrypt.hashSync(password, saltRounds);
+      // Algorithm to generate unique user ID
 
       const UIDs = []; // Initialize an empty array
       const employees = await employeeModel.find({}); //taken all documents in employees collection
@@ -85,14 +93,14 @@ console.log("pote")
 
       // Generate a random number and check its already in that array
 
-      const RandomNumber = () => Math.floor(10000 + Math.random() * 90000); // generate a random number with 5 digits
+      const RandomNumber = () => Math.floor(10000 + Math.random() * 90000); // Generate a random number with 5 digits
 
       // Puting unique number into UID variable
-      let UID;
+      let UID; // Declares variable
       do {
-        UID = RandomNumber();
+        UID = RandomNumber(); 
       } while (UIDs.includes(UID));
-//
+      //
 
       // Add user to db with uid
       await employeeModel
@@ -103,24 +111,24 @@ console.log("pote")
           position: data.position,
           role: data.role,
           email: data.email,
-          password: data.password,
+          password: hashedPassword,
         })
         .then(() => {
           res.json({ success: true }); // Send response after add user done
         });
     } catch (error) {
-        console.log(error); // Display error
-        res.status(500).json({ error: "Server Busy.....!" }); // Catching error and send response
+      console.log(error); // Display error
+      res.status(500).json({ error: "Server Busy.....!" }); // Catching error and send response
     }
   },
 
   getEmployees: async (req, res) => {
     const employees = await employeeModel.find({});
-    const length = employees.length
+    const length = employees.length;
     res.status(200).json({
-      status:true,
+      status: true,
       employees,
-      length
-    })
+      length,
+    });
   },
 };

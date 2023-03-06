@@ -1,14 +1,125 @@
-import React from "react";
+import React,{useState} from "react";
 import "./Applications.css";
 
 function Applicaitons() {
-  return (
-    <div className="flex mt-20">
-        <div class='w-full h-full bg-white rounded-xl'>
 
-            <input type="" />
+    const [FullDay,setFullDay] = useState(true)
+    const handleClick =(event)=>{
+
+        const value = event.target.value;
+            console.log(value)       
+            if(value==="Half Day"){
+                setFullDay(false)
+            }else{
+                setFullDay(true)
+            }
+    }
+  return (
+    <div className="flex mt-20 justify-center">
+      <div class="w-1/3 h-full bg-white rounded-xl ">
+      
+        <div className="p-14">
+          <form class="w-full max-w-lg">
+
+          <div class="w-full md:w-1/3  mb-6 md:mb-0 py-3">
+                <label
+                  class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-state"
+                >
+                  Leave Period
+                </label>
+                <div class="relative w-28">
+                  <select onChange={handleClick}
+                    class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-state"
+                  >
+                    <option >Full Day</option>
+                    <option >Half Day</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg
+                      class="fill-current h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+
+
+          {
+            FullDay&&
+
+            <div class="flex flex-wrap -mx-3 mb-6">
             
+              <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-first-name"
+                >
+                  Leave From
+                </label>
+                <input
+                  class="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  id="grid-first-name"
+                  type="date"
+                  placeholder="Jane"
+                />
+                
+              </div>
+              <div class="w-full md:w-1/2 px-3">
+                <label
+                  class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-last-name"
+                >
+                  To
+                </label>
+                <input
+                  class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="grid-last-name"
+                  type="date"
+                  placeholder="Doe"
+                />
+              </div>
+            </div>
+           
+          }
+
+
+
+            <div class="flex flex-wrap -mx-3 mb-6">
+              <div class="w-full px-3">
+                <label
+                  class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  for="grid-password"
+                >
+                  Reason
+                </label>
+                <input
+                  class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="grid-password"
+                  type="text"
+                  placeholder=""
+                />
+                
+              </div>
+            </div>
+            <div class="flex flex-wrap -mx-3 mb-2 justify-end">
+              
+              
+              <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                
+                <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                        Send
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
+      </div>
       <div class="w-full max-w-full px-3 shrink-0 xl:flex-0 xl:w-3/12 ">
         <div class="flex flex-wrap -mx-3">
           <div class="w-full max-w-full px-3 mt-6 shrink-0 md:flex-0 md:w-6/12 xl:w-full xl:mt-0">
@@ -20,13 +131,13 @@ function Applicaitons() {
                 <div class="flex">
                   <div>
                     <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-red-600/3">
-                    <i class='bx bx-note text-2xl' ></i>
+                      <i class="bx bx-note text-2xl"></i>
                     </div>
                   </div>
                   <div class="ml-4">
                     <div>
                       <h6 class="mb-1 text-sm leading-normal  text-slate-700">
-                        Cyber Week
+                        Health issue
                       </h6>
                       <span class="text-sm leading-normal">
                         21 March 2021, at 12:30 PM
@@ -37,13 +148,13 @@ function Applicaitons() {
                 <div class="flex mt-6">
                   <div>
                     <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-blue-500/3">
-                    <i class='bx bx-note text-2xl' ></i>
+                      <i class="bx bx-note text-2xl"></i>
                     </div>
                   </div>
                   <div class="ml-4">
                     <div>
                       <h6 class="mb-1 text-sm leading-normal  text-slate-700">
-                        Meeting with Marry
+                        Personal issue
                       </h6>
                       <span class="text-sm leading-normal">
                         24 March 2021, at 10:00 PM
@@ -54,13 +165,13 @@ function Applicaitons() {
                 <div class="flex mt-6">
                   <div>
                     <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-emerald-500/3">
-                    <i class='bx bx-note text-2xl' ></i>
+                      <i class="bx bx-note text-2xl"></i>
                     </div>
                   </div>
                   <div class="ml-4">
                     <div>
                       <h6 class="mb-1 text-sm leading-normal  text-slate-700">
-                        Book Deposit Hall
+                        Marriage Function
                       </h6>
                       <span class="text-sm leading-normal">
                         25 March 2021, at 9:30 AM
@@ -71,13 +182,13 @@ function Applicaitons() {
                 <div class="flex mt-6">
                   <div>
                     <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-red-500/3">
-                    <i class='bx bx-note text-2xl' ></i>
+                      <i class="bx bx-note text-2xl"></i>
                     </div>
                   </div>
                   <div class="ml-4">
                     <div>
                       <h6 class="mb-1 text-sm leading-normal  text-slate-700">
-                        Shipment Deal UK
+                        Personal issue
                       </h6>
                       <span class="text-sm leading-normal">
                         25 March 2021, at 2:00 PM
@@ -88,8 +199,7 @@ function Applicaitons() {
                 <div class="flex mt-6">
                   <div>
                     <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-cyan-500/3">
-                    <i class='bx bx-note text-2xl' ></i>
-
+                      <i class="bx bx-note text-2xl"></i>
                     </div>
                   </div>
                   <div class="ml-4">
@@ -117,8 +227,8 @@ function Applicaitons() {
                         class="fa fa-arrow-up text-emerald-500"
                         aria-hidden="true"
                       ></i>
-                      <span class="font-semibold">4% more</span>
-                      in 2021
+                      <span class="font-semibold">60% Leave   </span>
+                        Completed on March 2023
                     </p>
                   </div>
                   <div class="w-5/12 max-w-full px-3 text-right flex-0">

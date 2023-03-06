@@ -14,10 +14,12 @@ app.use(express.urlencoded({extended:true}))
 // Routes
 
 const hrRoutes = require('./routes/hrRoutes')
-
+const employeeRoutes = require('./routes/employeeRoutes')
 //start
 
 app.use('/hr',hrRoutes)
+app.use('/employee',employeeRoutes)
+
 
 
 dbconnect();

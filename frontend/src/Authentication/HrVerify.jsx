@@ -5,7 +5,7 @@ export default function HrVerify({ children }) {
   const Navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("jwt")) {
+    if (!localStorage.getItem("hrjwt")) {
       Navigate("/hr/login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

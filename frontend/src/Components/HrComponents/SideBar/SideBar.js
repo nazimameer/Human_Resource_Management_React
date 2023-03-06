@@ -17,7 +17,7 @@ function SideBar() {
   };
 
   const HandleLogout = () => {
-    localStorage.removeItem("jwt");
+    localStorage.removeItem("hrjwt");
     Navigate("/hr/login");
   };
 
