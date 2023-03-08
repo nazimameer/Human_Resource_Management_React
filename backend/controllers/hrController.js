@@ -1,9 +1,7 @@
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
-const preusername = "hr@xcompany";
-const prepassword = "123";
+
 const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
 module.exports = {
@@ -17,7 +15,7 @@ module.exports = {
         res.status(200).json({ success: true });
       }
     });
-  },
+  }, 
   postLogin: async (req, res) => {
     try {
       // Handle error
@@ -26,24 +24,24 @@ module.exports = {
       const providedPass = data.password; // Taking password from provided data
       const hrDetails = await hrModel.findOne({ username: providedUsername }); // Take hr details from db with provided username
 
-      if (hrDetails) { // Check whether hrExist or not
+      if (hrDetails) {
+        // Check whether hrExist or not
         const hrId = hrDetails._id; // Take id from hr details doc
         const hrUsername = hrDetails.username; // Take username from hr details doc
-        const hrPassword = hrDetails.password;  // Take password from hr details doc
+        const hrPassword = hrDetails.password; // Take password from hr details doc
 
         bcrypt.compare(providedPass, hrPassword, (err, isMatch) => {
           if (err) {
-            res.status(500).json({ error: "Internal Server Error....!" });// Send error msg to client side
+            res.status(500).json({ error: "Internal Server Error....!" }); // Send error msg to client side
           }
           if (isMatch) {
             // Varification done Jwt generates
 
-
             // Payload
-          const payload = {
-            id: hrId,
-            username: providedUsername,
-          };
+            const payload = {
+              id: hrId,
+              username: providedUsername,
+            };
             // Secret key
             const secretKey = "Brototype";
 
@@ -53,10 +51,8 @@ module.exports = {
             };
 
             // Sign token
-          const token = jwt.sign(payload, secretKey, expire);
-          res.status(200).json({ success: true, token: token }); // Send response with token
-
-
+            const token = jwt.sign(payload, secretKey, expire);
+            res.status(200).json({ success: true, token: token }); // Send response with token
           } else {
             res.status(401).json({ message: "Incorrect Password...!" });
           }
@@ -98,7 +94,7 @@ module.exports = {
       // Puting unique number into UID variable
       let UID; // Declares variable
       do {
-        UID = RandomNumber(); 
+        UID = RandomNumber();
       } while (UIDs.includes(UID));
       //
 

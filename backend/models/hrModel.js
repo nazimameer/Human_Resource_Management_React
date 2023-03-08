@@ -1,14 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const hrSchema = new mongoose.Schema({
-    username:{
-        type:String,
-        required:true
+  username: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
 
-    },
-    password:{
-        type:String,
-        required:true
-    }
-})
-
-module.exports = mongoose.model('hr', hrSchema)
+module.exports = mongoose.model("hr", hrSchema);

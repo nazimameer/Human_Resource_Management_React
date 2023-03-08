@@ -74,7 +74,7 @@ function Employees() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {isLength ? (
+              {isLength ? 
                 employees.map((obj, index) => {
                   return (
                     <tr key={index} className="bg-white">
@@ -109,7 +109,7 @@ function Employees() {
                     </tr>
                   );
                 })
-              ) : (
+               : (
                 <tr className="w-full h-16" colSpan="6">
                   <td></td>
                   <td></td>

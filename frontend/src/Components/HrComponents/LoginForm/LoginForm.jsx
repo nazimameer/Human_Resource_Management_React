@@ -34,8 +34,7 @@ function LoginForm() {
       if (response.data) {
         const token = response.data.token; //recieved token to a variable
         localStorage.setItem("hrjwt", token); // store the token into local storage
-        const storedtoken = localStorage.getItem("hrjwt");
-        console.log(storedtoken);
+        
         Navigate("/hr/home"); //navigate to home page
       }
     });

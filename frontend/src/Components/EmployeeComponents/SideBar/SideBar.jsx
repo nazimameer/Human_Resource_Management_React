@@ -17,8 +17,8 @@ function SideBar() {
   };
 
   const HandleLogout = () => {
-    localStorage.removeItem("jwt");
-    Navigate("/hr/login");
+    localStorage.removeItem("employeejwt");
+    Navigate("/employee/login");
   };
 
   useEffect(() => {
@@ -60,7 +60,7 @@ function SideBar() {
             <span className="tooltip">Dashboard</span>
           </li>
           <li key={"employees"}>
-            <Link to="/">
+            <Link to="/employee/myprofile">
               <i className="bx bx-user"></i>
               <span className="links_name">My Profile</span>
             </Link>

@@ -13,9 +13,9 @@ module.exports = {
                 res.status(500).send({error:'Authentication failed'})
             }else{
                 console.log(decoded)
+                req.uid = decoded.uid
                 next()
             } 
-
         })
         
     }
