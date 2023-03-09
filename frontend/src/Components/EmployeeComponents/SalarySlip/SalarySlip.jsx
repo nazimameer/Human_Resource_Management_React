@@ -1,6 +1,11 @@
 import React from "react";
+import './SalarySlip.css'
 
 function SalarySlip() {
+    const date = new Date();
+    const month = date.getMonth()+1;
+    const year = date.getFullYear();
+    const thismonth = `${year}-${month.toString().padStart(2, '0')}`;
   return (
     <div className="my-20 bg-slate-900">
       <div class="w-full px-6 py-6 mx-auto">
@@ -13,36 +18,32 @@ function SalarySlip() {
                     class="relative overflow-hidden rounded-2xl"
                     // style="background-image: url('../assets/img/curved-images/curved14.jpg')"
                   >
-                    <span class="absolute top-0 left-0 w-full h-full bg-center bg-cover bg-gradient-to-tl from-gray-900 to-slate-800 opacity-80"></span>
+                    <span class="absolute top-0 left-0 w-full h-full bg-center bg-cover  bg-white "></span>
                     <div class="relative z-10 flex-auto p-4">
                       <i
                         class="p-2 text-white fas fa-wifi"
                         aria-hidden="true"
                       ></i>
-                      <h5 class="pb-2 mt-6 mb-12 text-white">
-                        4562&nbsp;&nbsp;&nbsp;1122&nbsp;&nbsp;&nbsp;4594&nbsp;&nbsp;&nbsp;7852
+                      <h5 class="pb-2 mt-6 mb-12 text-black">
+                        4 5 6 2 1 1 2 2 4 5 9 4 7 8 5 2
                       </h5>
-                      <div class="flex">
+                      <div class="flex justify-between">
                         <div class="flex">
                           <div class="mr-6">
-                            <p class="mb-0 leading-normal text-white text-sm opacity-80">
-                              Card Holder
+                            <p class="mb-0 leading-normal text-black text-sm opacity-80">
+                              Account Holder
                             </p>
-                            <h6 class="mb-0 text-white">Jack Peterson</h6>
+                            <h6 class="mb-0 text-black">Nazim Ameer</h6>
                           </div>
                           <div>
-                            <p class="mb-0 leading-normal text-white text-sm opacity-80">
-                              Expires
+                            <p class="mb-0 leading-normal text-black text-sm opacity-80">
+                              IFSC
                             </p>
-                            <h6 class="mb-0 text-white">11/22</h6>
+                            <h6 class="mb-0 text-black">SBIN00000007</h6>
                           </div>
                         </div>
-                        <div class="flex items-end justify-end w-1/5 ml-auto">
-                          <img
-                            class="w-3/5 mt-2"
-                            src="../assets/img/logos/mastercard.png"
-                            alt="logo"
-                          />
+                        <div className="flex justify-center items-center mx-3 cursor-pointer">
+                        <i class='bx bxs-pencil '></i>
                         </div>
                       </div>
                     </div>
@@ -61,120 +62,77 @@ function SalarySlip() {
                         </div>
                       </div>
                       <div class="flex-auto p-4 pt-0 text-center">
-                        <h6 class="mb-0 text-center">Salary</h6>
+                        <h6 class="mb-0 text-center">Yearly</h6>
                         <span class="leading-tight text-xs">
-                          Belong Interactive
+                          Yearly CTC
                         </span>
                         <hr class="h-px my-4 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent" />
-                        <h5 class="mb-0">+$2000</h5>
+                        <h5 class="mb-0">2400000</h5>
                       </div>
                     </div>
                   </div>
                   <div class="w-full max-w-full px-3 mt-6 md:mt-0 md:w-1/2 md:flex-none">
                     <div class="relative flex flex-col min-w-0 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
                       <div class="flex justify-center p-4 mx-6 mb-0 text-center bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-                        <div class="w-16 h-16 text-center bg-center icon bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl rounded-xl">
-                          <i
-                            class="relative text-white opacity-100 fab fa-paypal text-xl top-31/100"
-                            aria-hidden="true"
+                        <div class="flex justify-center items-center w-16 h-16 text-center bg-center icon bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl rounded-xl">
+                        <i 
+                            class="bx bxs-bank relative text-white opacity-100 fas fa-landmark text-2xl top-31/100"
                           ></i>
                         </div>
                       </div>
                       <div class="flex-auto p-4 pt-0 text-center">
                         <h6 class="mb-0 text-center">Monthly</h6>
                         <span class="leading-tight text-xs">
-                          Freelance Payment
+                          Monthly CTC
                         </span>
                         <hr class="h-px my-4 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent" />
-                        <h5 class="mb-0">$455.00</h5>
+                        <h5 class="mb-0">200000</h5>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="max-w-full px-3 mb-4 lg:mb-0 lg:w-full lg:flex-none">
+              <div class="w-full px-3 mb-4 lg:mb-0  ">
                 <div class="relative flex flex-col min-w-0 mt-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
                   <div class="p-4 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                     <div class="flex flex-wrap -mx-3">
-                      <div class="flex items-center flex-none w-1/2 max-w-full px-3">
-                        <h6 class="mb-0">Payment Method</h6>
+                      <div class="flex justify-between items-center flex-none w-full max-w-full px-3">
+                        <div className="flex gap-2   items-center">
+
+                        <i class='bx bx-dollar-circle text-lg'></i>
+                        <h6 class="mb-0 ">Bonus Previous Month 
+                        
+                        </h6>
+                        </div>
+                        <div className="flex items-center gap-2">
+                        <i class='bx bx-dollar-circle'></i>
+                            <h6>
+                            Bonus This Month
+                            </h6>
+                        </div>
                       </div>
-                      <div class="flex-none w-1/2 max-w-full px-3 text-right">
-                        <a
-                          class="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all bg-transparent rounded-lg cursor-pointer leading-pro text-xs ease-soft-in shadow-soft-md bg-150 bg-gradient-to-tl from-gray-900 to-slate-800 hover:shadow-soft-xs active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25"
-                          href="/"
-                        >
-                          {" "}
-                          <i class="fas fa-plus" aria-hidden="true">
-                            {" "}
-                          </i>
-                          &nbsp;&nbsp;Add New Card
-                        </a>
-                      </div>
+                      
                     </div>
                   </div>
                   <div class="flex-auto p-4">
                     <div class="flex flex-wrap -mx-3">
-                      <div class="max-w-full px-3 mb-6 md:mb-0 md:w-1/2 md:flex-none">
-                        <div class="relative flex flex-row items-center flex-auto min-w-0 p-6 break-words bg-transparent border border-solid shadow-none rounded-xl border-slate-100 bg-clip-border">
-                          <img
-                            class="mb-0 mr-4 w-1/10"
-                            src="../assets/img/logos/mastercard.png"
-                            alt="logo"
-                          />
+                      <div class="w-full px-3 mb-6 md:mb-0 md:w-1/2 md:flex-none">
+                        <div class="relative flex flex-row justify-center items-center flex-auto min-w-0 p-6 break-words bg-transparent border border-solid shadow-none rounded-xl border-slate-200 bg-clip-border">
+                          
                           <h6 class="mb-0">
-                            ****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;7852
+                            February 2023 : <span className="text-green-600">+ 3299</span>
                           </h6>
-                          <i
-                            class="ml-auto cursor-pointer fas fa-pencil-alt text-slate-700"
-                            data-target="tooltip_trigger"
-                            data-placement="top"
-                            aria-hidden="true"
-                          ></i>
-                          <div
-                            data-target="tooltip"
-                            class="px-2 py-1 text-white bg-black rounded-lg text-sm hidden"
-                            // style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(653.6px, -308px, 0px);"
-                            data-popper-placement="top"
-                          >
-                            Edit Card
-                            <div
-                              class="invisible absolute h-2 w-2 bg-inherit before:visible before:absolute before:h-2 before:w-2 before:rotate-45 before:bg-inherit before:content-['']"
-                              data-popper-arrow=""
-                            //   style="position: absolute; left: 0px; transform: translate3d(0px, 0px, 0px);"
-                            ></div>
-                          </div>
+                          
+                         
                         </div>
                       </div>
-                      <div class="max-w-full px-3 md:w-1/2 md:flex-none">
-                        <div class="relative flex flex-row items-center flex-auto min-w-0 p-6 break-words bg-transparent border border-solid shadow-none rounded-xl border-slate-100 bg-clip-border">
-                          <img
-                            class="mb-0 mr-4 w-1/10"
-                            src="../assets/img/logos/visa.png"
-                            alt="logo"
-                          />
+                      <div class="  w-full px-3 md:w-1/2 md:flex-none">
+                        <div class="relative flex flex-row items-center justify-center  flex-auto min-w-0 p-6 break-words bg-transparent border border-solid shadow-none rounded-xl border-slate-200 bg-clip-border">
+                          
                           <h6 class="mb-0">
-                            ****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;5248
+                             March 2023 : <span className="text-green-600">+ 3299</span>
                           </h6>
-                          <i
-                            class="ml-auto cursor-pointer fas fa-pencil-alt text-slate-700"
-                            data-target="tooltip_trigger"
-                            data-placement="top"
-                            aria-hidden="true"
-                          ></i>
-                          <div
-                            data-target="tooltip"
-                            class="px-2 py-1 text-white bg-black rounded-lg text-sm hidden"
-                            // style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(1050.4px, -308px, 0px);"
-                            data-popper-placement="top"
-                          >
-                            Edit Card
-                            <div
-                              class="invisible absolute h-2 w-2 bg-inherit before:visible before:absolute before:h-2 before:w-2 before:rotate-45 before:bg-inherit before:content-['']"
-                              data-popper-arrow=""
-                            //   style="position: absolute; left: 0px; transform: translate3d(0px, 0px, 0px);"
-                            ></div>
-                          </div>
+                          
                         </div>
                       </div>
                     </div>
@@ -191,19 +149,32 @@ function SalarySlip() {
                     <h6 class="mb-0">Invoices</h6>
                   </div>
                   <div class="flex-none w-1/2 max-w-full px-3 text-right">
-                    <button class="inline-block px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer leading-pro ease-soft-in text-xs bg-150 active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 border-fuchsia-500 text-fuchsia-500 hover:opacity-75">
-                      View All
-                    </button>
+                  <small><input type="month" defaultValue={`${thismonth}`}/></small>
                   </div>
                 </div>
               </div>
 
-              <div class="flex-auto p-4 pb-0 bg-white rounded-b-2xl">
+              <div class="invoices flex-auto p-4 pb-0 bg-white rounded-b-2xl ">
                 <ul class="flex flex-col pl-0 mb-0 rounded-lg">
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-t-inherit text-inherit rounded-xl">
                     <div class="flex flex-col">
                       <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                        March, 01, 2020
+                        March, 01, 2023
+                      </h6>
+                      <span class="leading-tight text-xs">#MS-415646</span>
+                    </div>
+                    <div class="flex items-center leading-normal text-sm">
+                      $180
+                      <button class="inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer ease-soft-in bg-150 text-sm active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 text-slate-700">
+                      <i class='bx bxs-file-pdf'></i>{" "}
+                        PDF
+                      </button>
+                    </div>
+                  </li>
+                  <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-t-inherit text-inherit rounded-xl">
+                    <div class="flex flex-col">
+                      <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
+                        February, 01, 2023
                       </h6>
                       <span class="leading-tight text-xs">#MS-415646</span>
                     </div>
@@ -218,7 +189,7 @@ function SalarySlip() {
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-xl text-inherit">
                     <div class="flex flex-col">
                       <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                        February, 10, 2021
+                        January, 01, 2023
                       </h6>
                       <span class="leading-tight text-xs">#RV-126749</span>
                     </div>
@@ -233,7 +204,7 @@ function SalarySlip() {
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-xl text-inherit">
                     <div class="flex flex-col">
                       <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                        April, 05, 2020
+                        December, 01, 2022
                       </h6>
                       <span class="leading-tight text-xs">#FB-212562</span>
                     </div>
@@ -248,7 +219,7 @@ function SalarySlip() {
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-xl text-inherit">
                     <div class="flex flex-col">
                       <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                        June, 25, 2019
+                        November, 01, 2022
                       </h6>
                       <span class="leading-tight text-xs">#QW-103578</span>
                     </div>
@@ -263,7 +234,7 @@ function SalarySlip() {
                   <li class="relative flex justify-between px-4 py-2 pl-0 bg-white border-0 rounded-b-inherit rounded-xl text-inherit">
                     <div class="flex flex-col">
                       <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                        March, 01, 2019
+                        October, 01, 2022
                       </h6>
                       <span class="leading-tight text-xs">#AR-803481</span>
                     </div>
@@ -428,66 +399,56 @@ function SalarySlip() {
             </div>
           </div>
           <div class="w-full max-w-full px-3 mt-6 md:w-5/12 md:flex-none">
-            <div class="relative flex flex-col h-full min-w-0 mb-6 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
+            <div class="transaction relative flex flex-col h-full min-w-0 mb-6 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
               <div class="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
                 <div class="flex flex-wrap -mx-3">
                   <div class="max-w-full px-3 md:w-1/2 md:flex-none">
                     <h6 class="mb-0">Your Transactions</h6>
                   </div>
                   <div class="flex items-center justify-end max-w-full px-3 md:w-1/2 md:flex-none">
-                    <i class="mr-2 far fa-calendar-alt" aria-hidden="true"></i>
-                    <small>23 - 30 March 2020</small>
+                    
+                    <small><input type="month" defaultValue={`${thismonth}`}/></small>
                   </div>
                 </div>
               </div>
-              <div class="flex-auto p-4 pt-6">
+              <div class="translist flex-auto p-4 pt-6">
                 <h6 class="mb-4 font-bold leading-tight uppercase text-xs text-slate-500">
                   Newest
                 </h6>
                 <ul class="flex flex-col pl-0 mb-0 rounded-lg">
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-t-inherit text-inherit rounded-xl">
                     <div class="flex items-center">
-                      <button class="leading-pro ease-soft-in text-xs bg-150 w-6.35 h-6.35 p-1.2 rounded-3.5xl tracking-tight-soft bg-x-25 mr-4 mb-0 flex cursor-pointer items-center justify-center border border-solid border-red-600 border-transparent bg-transparent text-center align-middle font-bold uppercase text-red-600 transition-all hover:opacity-75">
-                        <i
-                          class="fas fa-arrow-down text-3xs"
-                          aria-hidden="true"
-                        ></i>
-                      </button>
+                      
                       <div class="flex flex-col">
                         <h6 class="mb-1 leading-normal text-sm text-slate-700">
-                          Netflix
+                          Weekly Bonus
                         </h6>
                         <span class="leading-tight text-xs">
-                          27 March 2020, at 12:30 PM
-                        </span>
-                      </div>
-                    </div>
-                    <div class="flex flex-col items-center justify-center">
-                      <p class="relative z-10 inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-red-600 to-rose-400 text-sm bg-clip-text">
-                        - $ 2,500
-                      </p>
-                    </div>
-                  </li>
-                  <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 border-t-0 rounded-b-inherit text-inherit rounded-xl">
-                    <div class="flex items-center">
-                      <button class="leading-pro ease-soft-in text-xs bg-150 w-6.35 h-6.35 p-1.2 rounded-3.5xl tracking-tight-soft bg-x-25 mr-4 mb-0 flex cursor-pointer items-center justify-center border border-solid border-lime-500 border-transparent bg-transparent text-center align-middle font-bold uppercase text-lime-500 transition-all hover:opacity-75">
-                        <i
-                          class="fas fa-arrow-up text-3xs"
-                          aria-hidden="true"
-                        ></i>
-                      </button>
-                      <div class="flex flex-col">
-                        <h6 class="mb-1 leading-normal text-sm text-slate-700">
-                          Apple
-                        </h6>
-                        <span class="leading-tight text-xs">
-                          27 March 2020, at 04:30 AM
+                          27 March 2023, at 12:30 PM
                         </span>
                       </div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
                       <p class="relative z-10 inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-green-600 to-lime-400 text-sm bg-clip-text">
-                        + $ 2,000
+                      +  2,000
+                      </p>
+                    </div>
+                  </li>
+                  <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 border-t-0 rounded-b-inherit text-inherit rounded-xl">
+                    <div class="flex items-center">
+                      
+                      <div class="flex flex-col">
+                        <h6 class="mb-1 leading-normal text-sm text-slate-700">
+                        Weekly Bonus
+                        </h6>
+                        <span class="leading-tight text-xs">
+                          27 March 2023, at 04:30 AM
+                        </span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center">
+                      <p class="relative z-10 inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-green-600 to-lime-400 text-sm bg-clip-text">
+                        +  2,000
                       </p>
                     </div>
                   </li>
@@ -498,165 +459,120 @@ function SalarySlip() {
                 <ul class="flex flex-col pl-0 mb-0 rounded-lg">
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-t-inherit text-inherit rounded-xl">
                     <div class="flex items-center">
-                      <button class="leading-pro ease-soft-in text-xs bg-150 w-6.35 h-6.35 p-1.2 rounded-3.5xl tracking-tight-soft bg-x-25 mr-4 mb-0 flex cursor-pointer items-center justify-center border border-solid border-lime-500 border-transparent bg-transparent text-center align-middle font-bold uppercase text-lime-500 transition-all hover:opacity-75">
-                        <i
-                          class="fas fa-arrow-up text-3xs"
-                          aria-hidden="true"
-                        ></i>
-                      </button>
+                      
                       <div class="flex flex-col">
                         <h6 class="mb-1 leading-normal text-sm text-slate-700">
-                          Stripe
+                        Weekly Bonus
                         </h6>
                         <span class="leading-tight text-xs">
-                          26 March 2020, at 13:45 PM
+                          26 March 2023, at 13:45 PM
                         </span>
                       </div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
                       <p class="relative z-10 inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-green-600 to-lime-400 text-sm bg-clip-text">
-                        + $ 750
+                        +  750
                       </p>
                     </div>
                   </li>
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 border-t-0 text-inherit rounded-xl">
                     <div class="flex items-center">
-                      <button class="leading-pro ease-soft-in text-xs bg-150 w-6.35 h-6.35 p-1.2 rounded-3.5xl tracking-tight-soft bg-x-25 mr-4 mb-0 flex cursor-pointer items-center justify-center border border-solid border-lime-500 border-transparent bg-transparent text-center align-middle font-bold uppercase text-lime-500 transition-all hover:opacity-75">
-                        <i
-                          class="fas fa-arrow-up text-3xs"
-                          aria-hidden="true"
-                        ></i>
-                      </button>
+                      
                       <div class="flex flex-col">
                         <h6 class="mb-1 leading-normal text-sm text-slate-700">
-                          HubSpot
+                        Weekly Bonus
                         </h6>
                         <span class="leading-tight text-xs">
-                          26 March 2020, at 12:30 PM
+                          26 March 2023, at 12:30 PM
                         </span>
                       </div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
                       <p class="relative z-10 inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-green-600 to-lime-400 text-sm bg-clip-text">
-                        + $ 1,000
+                        +  1,000
                       </p>
                     </div>
                   </li>
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 border-t-0 text-inherit rounded-xl">
                     <div class="flex items-center">
-                      <button class="leading-pro ease-soft-in text-xs bg-150 w-6.35 h-6.35 p-1.2 rounded-3.5xl tracking-tight-soft bg-x-25 mr-4 mb-0 flex cursor-pointer items-center justify-center border border-solid border-lime-500 border-transparent bg-transparent text-center align-middle font-bold uppercase text-lime-500 transition-all hover:opacity-75">
-                        <i
-                          class="fas fa-arrow-up text-3xs"
-                          aria-hidden="true"
-                        ></i>
-                      </button>
+                      
                       <div class="flex flex-col">
                         <h6 class="mb-1 leading-normal text-sm text-slate-700">
-                          Creative Tim
+                        Weekly Bonus
                         </h6>
                         <span class="leading-tight text-xs">
-                          26 March 2020, at 08:30 AM
+                          26 March 2023, at 08:30 AM
                         </span>
                       </div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
                       <p class="relative z-10 items-center inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-green-600 to-lime-400 text-sm bg-clip-text">
-                        + $ 2,500
+                        +  2,500
                       </p>
                     </div>
                   </li>
                   <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 border-t-0 rounded-b-inherit text-inherit rounded-xl">
                     <div class="flex items-center">
-                      <button class="leading-pro ease-soft-in text-xs bg-150 w-6.35 h-6.35 p-1.2 rounded-3.5xl tracking-tight-soft bg-x-25 mr-4 mb-0 flex cursor-pointer items-center justify-center border border-solid border-slate-700 border-transparent bg-transparent text-center align-middle font-bold uppercase text-slate-700 transition-all hover:opacity-75">
-                        <i
-                          class="fas fa-exclamation text-3xs"
-                          aria-hidden="true"
-                        ></i>
-                      </button>
+                      
                       <div class="flex flex-col">
                         <h6 class="mb-1 leading-normal text-sm text-slate-700">
-                          Webflow
+                        Weekly Bonus
                         </h6>
                         <span class="leading-tight text-xs">
-                          26 March 2020, at 05:00 AM
+                          26 March 2023, at 05:00 AM
                         </span>
                       </div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
-                      <p class="flex items-center m-0 font-semibold leading-normal text-sm text-slate-700">
-                        Pending
+                      <p class="relative z-10 inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-green-600 to-lime-400 text-sm bg-clip-text">
+                      +  2,500
                       </p>
                     </div>
                   </li>
+
+                  <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 border-t-0 rounded-b-inherit text-inherit rounded-xl">
+                    <div class="flex items-center">
+                      
+                      <div class="flex flex-col">
+                        <h6 class="mb-1 leading-normal text-sm text-slate-700">
+                        Weekly Bonus
+                        </h6>
+                        <span class="leading-tight text-xs">
+                          26 March 2023, at 05:00 AM
+                        </span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center">
+                      <p class="relative z-10 inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-green-600 to-lime-400 text-sm bg-clip-text">
+                      +  2,500
+                      </p>
+                    </div>
+                  </li>
+
+                  <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 border-t-0 rounded-b-inherit text-inherit rounded-xl">
+                    <div class="flex items-center">
+                      
+                      <div class="flex flex-col">
+                        <h6 class="mb-1 leading-normal text-sm text-slate-700">
+                        Weekly Bonus
+                        </h6>
+                        <span class="leading-tight text-xs">
+                          26 March 2023, at 05:00 AM
+                        </span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center">
+                      <p class="relative z-10 inline-block m-0 font-semibold leading-normal text-transparent bg-gradient-to-tl from-green-600 to-lime-400 text-sm bg-clip-text">
+                      +  2,500
+                      </p>
+                    </div>
+                  </li> 
                 </ul>
               </div>
             </div>
           </div>
         </div>
-        <footer class="pt-4">
-          <div class="w-full px-6 mx-auto">
-            <div class="flex flex-wrap items-center -mx-3 lg:justify-between">
-              <div class="w-full max-w-full px-3 mt-0 mb-6 shrink-0 lg:mb-0 lg:w-1/2 lg:flex-none">
-                <div class="leading-normal text-center text-sm text-slate-500 lg:text-left">
-                  ©
-                  <script>
-                    document.write(new Date().getFullYear() + ",");
-                  </script>
-                  2023, made with <i class="fa fa-heart" aria-hidden="true"></i>{" "}
-                  by
-                  <a
-                    href="/"
-                    class="font-semibold text-slate-700"
-                    target="_blank"
-                  >
-                    Creative Tim
-                  </a>
-                  for a better web.
-                </div>
-              </div>
-              <div class="w-full max-w-full px-3 mt-0 shrink-0 lg:w-1/2 lg:flex-none">
-                <ul class="flex flex-wrap justify-center pl-0 mb-0 list-none lg:justify-end">
-                  <li class="nav-item">
-                    <a
-                      href="/"
-                      class="block px-4 pt-0 pb-1 font-normal transition-colors ease-soft-in-out text-sm text-slate-500"
-                      target="_blank"
-                    >
-                      Creative Tim
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      href="/"
-                      class="block px-4 pt-0 pb-1 font-normal transition-colors ease-soft-in-out text-sm text-slate-500"
-                      target="_blank"
-                    >
-                      About Us
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      href="/"
-                      class="block px-4 pt-0 pb-1 font-normal transition-colors ease-soft-in-out text-sm text-slate-500"
-                      target="_blank"
-                    >
-                      Blog
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a
-                      href="/"
-                      class="block px-4 pt-0 pb-1 pr-0 font-normal transition-colors ease-soft-in-out text-sm text-slate-500"
-                      target="_blank"
-                    >
-                      License
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </footer>
+       {/* footer here */}
       </div>
     </div>
   );

@@ -1,0 +1,24 @@
+.invoices{
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+
+.invoices::-webkit-scrollbar {
+    display: none;
+
+}
+
+.transaction{
+    height: 77vh;
+}
+
+.translist{
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+.translist::-webkit-scrollbar {
+    display: none;
+
+}
