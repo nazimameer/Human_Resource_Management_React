@@ -7,6 +7,9 @@ const leaveApplicationSchema = new mongoose.Schema({
   UID: {
     type: String,
   },
+  name:{
+    type:String,
+  },
   leavePeriod: {
     type: String,
   },

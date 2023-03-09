@@ -4,10 +4,10 @@ const employeeSchema = new mongoose.Schema({
   UID: {
     type:Number
   },
-  firstname: {
+  fullname: {
     type: String,
   },
-  lastname: {
+  place: {
     type: String,
   },
   position: {
@@ -19,9 +19,12 @@ const employeeSchema = new mongoose.Schema({
   email: {
     type: String,
   },
+  phone:{
+    type:Number,
+  },
   password: {
     type: String,
   },
 });
-
+ 
 module.exports = mongoose.model("employee", employeeSchema);

@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
+const applicationModel = require('../models/leaveApplication')
 
 const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
+const { default: mongoose } = require("mongoose");
 module.exports = {
   verifyLogin: (req, res) => {
     const authHeader = req.headers.authorization;
@@ -65,13 +67,57 @@ module.exports = {
       res.status(500).json({ error: "Server Busy.....!" }); // Catching error and send response
     }
   },
+  checkemail:async(req,res)=>{
+    const checkemail = req.body.email;
+    console.log("checked email:  "+checkemail)
+    const gotit = await employeeModel.findOne({
+      email:checkemail
+    })
 
-  addEmployee: async (req, res) => {
+    if(!gotit){
+      res.status(200).json({success:true})
+    }else{
+      res.status(400).json({ error:"email already taken"});
+    }
+  },
+  getApplications:async(req,res)=>{
+    const applications = await applicationModel.find({status:"Pending"})
+    if(applications.length != 0){
+
+      res.status(200).json({ applications })
+    }else{
+      res.status(400).json({error:"no data available"})
+    }
+  },
+
+
+  applicApprove:async(req,res)=>{
+    const id = req.body.id;
+    const objid = mongoose.Types.ObjectId(id);
+    const update = await applicationModel.updateOne(
+      {_id:objid},
+      { $set:{ status: "Approved"}}
+    )
+    res.status(200).json({ success:true })
+  },
+  applicReject:async(req,res)=>{
+    const id = req.body.id;
+    const objid =mongoose.Types.ObjectId(id);
+    const update = await applicationModel.updateOne(
+      {_id:objid},
+      {$set:{ status:"Rejected"}}
+    )
+
+    res.status(200).json({ success:true })
+  },
+
+   addEmployee: async (req, res) => {
     try {
       // Handle error
       const data = req.body; // Puting the data in to a variable
+      console.log(data)
       const { password } = data;
-      const saltRounds = 10;
+      const saltRounds = 10; 
       const hashedPassword = bcrypt.hashSync(password, saltRounds);
       // Algorithm to generate unique user ID
 
@@ -102,11 +148,12 @@ module.exports = {
       await employeeModel
         .create({
           UID: UID,
-          firstname: data.firstname,
-          lastname: data.lastname,
+          fullname: data.fullname,
+          place: data.place,
           position: data.position,
           role: data.role,
           email: data.email,
+          phone:data.phone,
           password: hashedPassword,
         })
         .then(() => {
@@ -127,4 +174,21 @@ module.exports = {
       length,
     });
   },
+  getApproved:async(req,res)=>{
+    const applications = await applicationModel.find({status:"Approved"});
+    if(applications.length != 0){
+      res.status(200).json({ applications})
+    }else{
+      res.status(404).json({ error: " no data available"})
+    }
+  },
+  getRejected:async(req,res)=>{
+    const applications = await applicationModel.find({status:"Rejected"});
+    if(applications.length != 0){
+      res.status(200).json({applications});
+
+    }else{
+      res.status(404).json({ error:"no data available" });
+    }
+  }
 };

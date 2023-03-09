@@ -1,0 +1,9 @@
+.skillbar{
+    height: 45vh;
+}
+
+
+.skillbar::-webkit-scrollbar {
+    display: none;
+
+}

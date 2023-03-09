@@ -1,25 +1,24 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Applications.css";
 import axios from "../../../Api/EmployeeAxios";
+import { Link } from "react-router-dom";
 
 function Applicaitons() {
   const [isLength, setIsLength] = useState(false);
-  const [Applications, setApplications] = useState([])
+  const [Applications, setApplications] = useState([]);
   const [InputError, setInputError] = useState(false);
   const [FullDay, setFullDay] = useState(true);
-   useEffect(() => {
-    
-    axios.get('/employee/previousApplication').then((response)=>{
-      console.log(response)
-      const data = response.data.applicationsinfo
-      if(data.length !== 0){
-        setIsLength(true)
-        setApplications(response.data.applicationsinfo)
+  useEffect(() => {
+    axios.get("/employee/previousApplication").then((response) => {
+      console.log(response);
+      const data = response.data.applicationsinfo;
+      if (data.length !== 0) {
+        setIsLength(true);
+        setApplications(response.data.applicationsinfo);
       }
-    })
-    
-  },[]);
-  
+    });
+  }, []);
+
   const [formData, setFormData] = useState({
     leaveperiod: "Full Day",
     from: "",
@@ -58,8 +57,18 @@ function Applicaitons() {
       setInputError(true);
       return;
     }
+    
     axios.post("/employee/leave_application", formData).then((response) => {
-      console.log(response);
+      if (response.status === 200) {
+        axios.get("/employee/previousApplication").then((response) => {
+          console.log(response);
+          const data = response.data.applicationsinfo;
+          if (data.length !== 0) {
+            setIsLength(true);
+            setApplications(response.data.applicationsinfo);
+          }
+        });
+      }
     });
   };
   return (
@@ -177,64 +186,56 @@ function Applicaitons() {
         </div>
       </div>
 
-
-
       <div class="w-full max-w-full px-3 shrink-0 xl:flex-0 xl:w-3/12 ">
         <div class="flex flex-wrap -mx-3">
           <div class="w-full max-w-full px-3 mt-6 shrink-0 md:flex-0 md:w-6/12 xl:w-full xl:mt-0">
             <div class="prev relative flex flex-col min-w-0 break-words bg-white border-0 shadow-xl rounded-2xl bg-clip-border">
-              <div class="border-black/12.5 rounded-t-2xl border-b-0 border-solid p-4 pb-0">
-                <h6 class="mb-0 ">Previous Leave Application</h6>
+              <div class=" border-black/12.5 rounded-t-2xl border-b-0 border-solid p-4 pb-0">
+                <h6 class="mb-0">Previous Leave Application</h6>
               </div>
-              <div class="flex-col  p-4 rounded-xl">
-
-{isLength?
-          Applications.map((obj,index)=>{
-            return(
-
-                <div class="flex mb-6" key={index} >
-                  <div>
-                    <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-red-600/3">
-                      <i class="bx bx-note text-2xl"></i>
-                    </div>
-                  </div>
-                  <div class="ml-4">
+              <div class="flex flex-col-reverse p-4 rounded-xl">
+                {isLength ? (
+                  Applications.map((obj, index) => {
+                    return (
+                      <Link to={"/"} class="flex mb-6" key={index}>
+                        <div>
+                          <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-red-600/3">
+                            <i class="bx bx-note text-2xl"></i>
+                          </div>
+                        </div>
+                        <div class="ml-4">
+                          <div>
+                            <h6 class="mb-1 text-sm leading-normal  text-slate-700">
+                              {obj.reason}
+                            </h6>
+                            <span class="text-sm leading-normal">
+                              {obj.submitdate}
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })
+                ) : (
+                  <div class="flex mb-6">
                     <div>
-                      <h6 class="mb-1 text-sm leading-normal  text-slate-700">
-                        {obj.reason}
-                      </h6>
-                      <span class="text-sm leading-normal">
-                        {obj.submitdate}
-                      </span>
+                      <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-red-600/3">
+                        <i class="bx bx-note text-2xl"></i>
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <div>
+                        <h6 class="mb-1 text-sm leading-normal  text-slate-700">
+                          No Data Available
+                        </h6>
+                      </div>
                     </div>
                   </div>
-                </div>
-            )
-          })
-                :
-
-                <div class="flex mb-6">
-                  <div>
-                    <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-red-600/3">
-                      <i class="bx bx-note text-2xl"></i>
-                    </div>
-                  </div>
-                  <div class="ml-4">
-                    <div>
-                      <h6 class="mb-1 text-sm leading-normal  text-slate-700">
-                        No Data Available
-                      </h6>
-                      
-                    </div>
-                  </div>
-                </div>
-
-}
+                )}
               </div>
             </div>
           </div>
 
-          
           <div class="w-full max-w-full px-3 mt-6 shrink-0 md:flex-0 md:w-6/12 xl:w-full">
             <div class="relative flex flex-col min-w-0 break-words border-0 shadow-xl bg-gradient-to-tl from-zinc-800 to-zinc-700  rounded-2xl bg-clip-border">
               <div class="h-40 border-black/12.5 rounded-t-2xl border-b-0 border-solid bg-transparent p-4 pb-0">
@@ -297,7 +298,6 @@ function Applicaitons() {
                   </div>
                 </div>
               </div>
-              
             </div>
           </div>
         </div>

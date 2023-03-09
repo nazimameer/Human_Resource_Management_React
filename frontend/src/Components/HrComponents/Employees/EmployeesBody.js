@@ -87,11 +87,11 @@ function Employees() {
                           />
                         </div>
                         <div className="mx-3">
-                          {obj.firstname + " " + obj.lastname}
+                          {obj.fullname}
                         </div>
                       </td>
                       <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
-                        {obj.UID}
+                        #{obj.UID}
                       </td>
                       <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
                         {obj.position}

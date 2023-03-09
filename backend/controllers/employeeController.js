@@ -62,12 +62,15 @@ module.exports = {
     const data = req.body;
     const leavePeriod = data.leaveperiod;
     if(leavePeriod === "Half Day"){
-      const now  = new Date();
       const UID = req.uid;
+      const employee = await employeeModel.findOne({UID:UID})
+      const name = employee.fullname;
+      const now  = new Date();
       const reason = data.reason;
       await applicationModel.create({
-        submiton:now,
         UID:UID,
+        name:name,
+        submiton:now,
         leavePeriod:"Half Day",
         reason:reason,
       })
@@ -75,6 +78,8 @@ module.exports = {
 
       const now = new Date();
       const UID = req.uid;
+      const employee = await employeeModel.findOne({UID:UID})
+      const name = employee.fullname;
       const reason = data.reason;
       const d1 = new Date(data.from)
       const d2 = new Date(data.to)
@@ -82,6 +87,7 @@ module.exports = {
       const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 *  24))
       await applicationModel.create({
         UID: UID,
+        name:name,
         submiton:now,
         leavePeriod:diffInDays,
         reason:reason,
@@ -89,6 +95,8 @@ module.exports = {
         to:d2
       })
     }
+
+    res.status(200).json({success:true})
   },
 
   getApplication:async(req,res)=>{
@@ -126,5 +134,15 @@ module.exports = {
 
       res.status(200).json({ applicationsinfo })
   
+  },
+
+  getProfile:async(req,res)=>{
+    const uid = req.uid;
+    const profile = await employeeModel.findOne({
+      UID:uid
+    })
+
+    res.status(200).json({ profile })
   }
 };
+ 
