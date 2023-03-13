@@ -22,6 +22,9 @@ router.get(
 );
 router.post('/addskills',Authentication.verifyToken,employeeController.addskill);
 router.get('/skills',Authentication.verifyToken,employeeController.getSkills);
-router.post('/removeskill',Authentication.verifyToken,employeeController.removeSkill)
+router.post('/removeskill',Authentication.verifyToken,employeeController.removeSkill);
+router.post('/removeHobbie',Authentication.verifyToken,employeeController.removeHobbie)
+router.post('/addHobbie',Authentication.verifyToken,employeeController.addHobbie);
+router.get('/hobbies',Authentication.verifyToken,employeeController.getHobbies)
 
 module.exports = router;

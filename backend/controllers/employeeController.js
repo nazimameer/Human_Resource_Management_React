@@ -5,6 +5,7 @@ const applicationModel = require("../models/leaveApplication");
 const jwt = require("jsonwebtoken");
 const secretKey = "Brototype";
 const skillModel = require("../models/skillModel");
+const hobbieModel = require("../models/hobbieModel");
 module.exports = {
   LoginPageAuth: (req, res) => {
     const authHeader = req.headers.authorization;
@@ -142,6 +143,55 @@ module.exports = {
 
     res.status(200).json({ profile });
   },
+  addHobbie: async (req, res) => {
+    const uid = req.uid;
+    const data = req.body.data;
+    if (data != "") {
+      const hobbie = data.toUpperCase();
+      const collectionEx = await hobbieModel.findOne({ UID: uid });
+      if (collectionEx) {
+        const ex = await skillModel.findOne({
+          UID: uid,
+          skills: { $in: [hobbie] },
+        });
+
+        if (ex) {
+          res.status(409).json({ error: "the hobbie already exist" });
+          return;
+        }
+
+        hobbieModel
+          .updateOne(
+            { UID: uid },
+            {
+              $push: {
+                hobbies: hobbie,
+              },
+            }
+          )
+          .then(() => {
+            res.status(200).json({ success: true });
+          })
+          .catch(() => {
+            Promise.reject();
+          });
+      } else {
+        hobbieModel
+          .create({
+            UID: uid,
+            hobbies: [hobbie],
+          })
+          .then(() => {
+            res.status(200).json({ success: true });
+          })
+          .catch(() => {
+            Promise.reject();
+          });
+      }
+    } else {
+      res.status(400).json({ error: "no data provided" });
+    }
+  },
   addskill: async (req, res) => {
     try {
       const uid = req.uid;
@@ -157,7 +207,7 @@ module.exports = {
           });
 
           if (ex) {
-            res.status(400).json({ error: "the skill already exist" });
+            res.status(409).json({ error: "the skill already exist" });
             return;
           }
           skillModel
@@ -169,7 +219,7 @@ module.exports = {
                 },
               }
             )
-            .then((response) => {
+            .then(() => {
               res.status(200).json({ success: true });
             })
             .catch(() => {
@@ -214,18 +264,39 @@ module.exports = {
       Promise.reject();
     }
   },
-  removeSkill:(req,res)=>{
+  removeSkill: (req, res) => {
     const data = req.body.value;
     const uid = req.uid;
-    skillModel.updateOne(
-      {UID:uid},
-      {$pull:{skills:{$in:[data]}}}
-    ).then(()=>{
-      res.status(200).json({ success: true });
+    skillModel
+      .updateOne({ UID: uid }, { $pull: { skills: { $in: [data] } } })
+      .then(() => {
+        res.status(200).json({ success: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "server error" });
+      });
+  },
+  removeHobbie:(req,res)=>{
+    const uid = req.uid;
+    const data = req.body.value;
+    hobbieModel.updateOne({UID:uid}, {$pull:{hobbies:{$in:[data] } } })
+    .then(()=>{
+      res.status(200).json({success:true})
+    }).catch((error)=>{
+      console.log(error);
+      res.status(500).json({ error: " server error"})
+    })
+  },
+
+  getHobbies: (req, res) => {
+    const uid = req.uid;
+
+    hobbieModel.find({ UID: uid }, { hobbies: 1 }).then((hobbies)=>{
+      res.status(200).json({ hobbies })
     }).catch((error)=>{
       console.log(error)
-        res.status(500).json({ error:"server error" })
-      
+      Promise.reject();
     })
-  }
+  },
 };
