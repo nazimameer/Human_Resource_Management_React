@@ -57,7 +57,7 @@ function Applicaitons() {
       setInputError(true);
       return;
     }
-    
+
     axios.post("/employee/leave_application", formData).then((response) => {
       if (response.status === 200) {
         axios.get("/employee/previousApplication").then((response) => {
@@ -197,7 +197,7 @@ function Applicaitons() {
                 {isLength ? (
                   Applications.map((obj, index) => {
                     return (
-                      <Link to={"/"} class="flex mb-6" key={index}>
+                      <Link to={"/"} class="flex mb-6 relative" key={index}>
                         <div>
                           <div class="inline-block w-12 h-12 text-center text-black bg-center rounded-lg shadow-none fill-current stroke-none bg-red-600/3">
                             <i class="bx bx-note text-2xl"></i>
@@ -213,6 +213,29 @@ function Applicaitons() {
                             </span>
                           </div>
                         </div>
+                        <div className="absolute right-0">
+                          {
+                          obj.status === "Rejected" ?
+                          
+                          <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-red-200 rounded-lg bg-opacity-50">
+                          {obj.status}
+                        </span>
+
+                        :
+                        obj.status === "Pending"?
+
+                        <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">
+                          {obj.status}
+                        </span>
+
+                        :
+
+                        <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
+                          {obj.status}
+                        </span>
+                          }
+                        </div>
+                        
                       </Link>
                     );
                   })

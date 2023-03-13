@@ -24,49 +24,48 @@ function AddEmployee() {
   const [passwordError, setPasswordError] = useState(false);
 
   const handleChange = (event) => {
-    if(event.target.value === ""){
-      if(event.target.name === "fullname"){
-        setNameError(true)
+    if (event.target.value === "") {
+      if (event.target.name === "fullname") {
+        setNameError(true);
         return;
-      }else if(event.target.name === "place"){
-        setPlaceError(true)
+      } else if (event.target.name === "place") {
+        setPlaceError(true);
         return;
-      }else if(event.target.name === "position"){
-        setpositionError(true)
+      } else if (event.target.name === "position") {
+        setpositionError(true);
         return;
-      }else if(event.target.name === "role"){
-        setRoleError(true)
+      } else if (event.target.name === "role") {
+        setRoleError(true);
         return;
-      }else if(event.target.name === "email"){
-        setEmailError(true)
+      } else if (event.target.name === "email") {
+        setEmailError(true);
         return;
-      }else if(event.target.name === "phone"){
-        setPhoneError(true)
+      } else if (event.target.name === "phone") {
+        setPhoneError(true);
         return;
-      }else if(event.target.name === "password"){
-        setPasswordError(true)
+      } else if (event.target.name === "password") {
+        setPasswordError(true);
         return;
       }
       return;
-    }else{
-      if(event.target.name === "fullname"){
-        setNameError(false)
-      }else if(event.target.name === "place"){
-        setPlaceError(false)
-      }else if(event.target.name === "position"){
-        setpositionError(false)
-      }else if(event.target.name === "role"){
-        setRoleError(false)
-      }else if(event.target.name === "email"){
-        setEmailError(false)
-      }else if(event.target.name === "phone"){
-        setPhoneError(false)
-      }else if(event.target.name === "password"){
-        setPasswordError(false)
+    } else {
+      if (event.target.name === "fullname") {
+        setNameError(false);
+      } else if (event.target.name === "place") {
+        setPlaceError(false);
+      } else if (event.target.name === "position") {
+        setpositionError(false);
+      } else if (event.target.name === "role") {
+        setRoleError(false);
+      } else if (event.target.name === "email") {
+        setEmailError(false);
+      } else if (event.target.name === "phone") {
+        setPhoneError(false);
+      } else if (event.target.name === "password") {
+        setPasswordError(false);
       }
     }
     setFormData({
-
       ...formData,
       [event.target.name]: event.target.value,
     });
@@ -75,29 +74,29 @@ function AddEmployee() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-      if(formData.fullname === ""){
-        setNameError(true)
-        return;
-      }else if(formData.place === ""){
-        setPlaceError(true)
-        return;
-      }else if(formData.position === ""){
-        setpositionError(true)
-        return;
-      }else if(formData.role === ""){
-        setRoleError(true)
-        return;
-      }else if(formData.email === ""){
-        setEmailError(true)
-        return;
-      }else if(formData.phone === ""){
-        setPhoneError(true)
-        return;
-      }else if(formData.password === ""){
-        setPasswordError(true)
-        return;
-      }
-      
+    if (formData.fullname === "") {
+      setNameError(true);
+      return;
+    } else if (formData.place === "") {
+      setPlaceError(true);
+      return;
+    } else if (formData.position === "") {
+      setpositionError(true);
+      return;
+    } else if (formData.role === "") {
+      setRoleError(true);
+      return;
+    } else if (formData.email === "") {
+      setEmailError(true);
+      return;
+    } else if (formData.phone === "") {
+      setPhoneError(true);
+      return;
+    } else if (formData.password === "") {
+      setPasswordError(true);
+      return;
+    }
+
     const email = formData.email;
     console.log(email);
     axios
@@ -151,14 +150,15 @@ function AddEmployee() {
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black  text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
-                    {nameError?
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                    :
-                    ''}
+                    {nameError ? (
+                      <div className="bg-red-700 rounded w-44 my-2">
+                        <span className="ml-2 text-white ">
+                          This field is required
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="w-full max-w-full px-3 mt-4 flex-0 sm:mt-0 sm:w-6/12">
                     <label
@@ -174,15 +174,15 @@ function AddEmployee() {
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
-                    {placeError?
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                    :
-                    ""
-                    }
+                    {placeError ? (
+                      <div className="bg-red-700 rounded w-44 my-2">
+                        <span className="ml-2 text-white ">
+                          This field is required
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-wrap mt-4 -mx-3">
@@ -201,14 +201,15 @@ function AddEmployee() {
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
 
-                    {positionError?
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                    :
-                    ""}
+                    {positionError ? (
+                      <div className="bg-red-700 rounded w-44 my-2">
+                        <span className="ml-2 text-white ">
+                          This field is required
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="w-full max-w-full px-3 mt-4 flex-0 sm:mt-0 sm:w-6/12">
                     <label
@@ -224,14 +225,15 @@ function AddEmployee() {
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
-                    {roleError?
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                    :
-                    ""}
+                    {roleError ? (
+                      <div className="bg-red-700 rounded w-44 my-2">
+                        <span className="ml-2 text-white ">
+                          This field is required
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
 
@@ -250,14 +252,15 @@ function AddEmployee() {
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
-                    {emailError?
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                    :
-                    ""}
+                    {emailError ? (
+                      <div className="bg-red-700 rounded w-44 my-2">
+                        <span className="ml-2 text-white ">
+                          This field is required
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
 
                   <div className="w-full max-w-full px-3 mt-4 flex-0 sm:mt-0 sm:w-6/12">
@@ -274,14 +277,15 @@ function AddEmployee() {
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
-                    {phoneError?
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                    :
-                    ""}
+                    {phoneError ? (
+                      <div className="bg-red-700 rounded w-44 my-2">
+                        <span className="ml-2 text-white ">
+                          This field is required
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
 
@@ -300,14 +304,15 @@ function AddEmployee() {
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
-                    {passwordError?
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                    :
-                    ""}
+                    {passwordError ? (
+                      <div className="bg-red-700 rounded w-44 my-2">
+                        <span className="ml-2 text-white ">
+                          This field is required
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
 

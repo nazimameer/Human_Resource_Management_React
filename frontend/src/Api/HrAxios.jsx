@@ -7,11 +7,11 @@ const HrInstance = axios.create({
 
 HrInstance.interceptors.request.use(
   (config) => {
-
     const token = localStorage.getItem("hrjwt"); // taking token from local storage
 
-    if (token) { // checking if token is present or not
-      
+    if (token) {
+      // checking if token is present or not
+
       config.headers.Authorization = `Bearer ${token}`;
     }
 

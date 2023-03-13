@@ -13,10 +13,10 @@ function Employees() {
 
       if (response.status === 401) {
         Navigate("/hr/login");
-      }else if(response.status === 500){
+      } else if (response.status === 500) {
         Navigate("/hr/login");
       }
-      
+
       if (response.data.status) {
         if (response.data.length !== 0) {
           setIsLength(true);
@@ -74,7 +74,7 @@ function Employees() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {isLength ? 
+              {isLength ? (
                 employees.map((obj, index) => {
                   return (
                     <tr key={index} className="bg-white">
@@ -86,9 +86,7 @@ function Employees() {
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <div className="mx-3">
-                          {obj.fullname}
-                        </div>
+                        <div className="mx-3">{obj.fullname}</div>
                       </td>
                       <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
                         #{obj.UID}
@@ -109,7 +107,7 @@ function Employees() {
                     </tr>
                   );
                 })
-               : (
+              ) : (
                 <tr className="w-full h-16" colSpan="6">
                   <td></td>
                   <td></td>

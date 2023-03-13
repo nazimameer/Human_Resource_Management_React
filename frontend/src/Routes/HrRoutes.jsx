@@ -14,9 +14,15 @@ function HrRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/employees" element={<Employees />} />
         <Route path="/addemployee" element={<AddEmployee />} />
-        <Route path='/leaveapplications' element={ <LeaveApplications/> }/>
-        <Route path='/leaveapplications/approved' element={ <ApprovedApplication/> }/>
-        <Route path='/leaveapplications/rejected' element={ <RejectedApplication/>} />
+        <Route path="/leaveapplications" element={<LeaveApplications />} />
+        <Route
+          path="/leaveapplications/approved"
+          element={<ApprovedApplication />}
+        />
+        <Route
+          path="/leaveapplications/rejected"
+          element={<RejectedApplication />}
+        />
       </Routes>
     </div>
   );

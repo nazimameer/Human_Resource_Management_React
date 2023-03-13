@@ -95,7 +95,7 @@ function SideBar() {
             <span className="tooltip">Applications</span>
           </li>
           <li key={"salary slip"}>
-            <Link to={'/employee/salaryslip'}>
+            <Link to={"/employee/salaryslip"}>
               <i className="bx bx-purchase-tag"></i>
               <span className="links_name">Salary slip</span>
             </Link>
@@ -112,7 +112,11 @@ function SideBar() {
         <div className="profile_content">
           <div className="profile">
             <div className="profile_details">
-              <img src="../images/adminlogo.jpeg" alt="" className="adminlogo" />
+              <img
+                src="../images/adminlogo.jpeg"
+                alt=""
+                className="adminlogo"
+              />
               <div className="name_job">
                 <div className="name">akshay</div>
                 <div className="job">HR id:39287</div>

@@ -4,7 +4,7 @@ import LandingPage from "./Pages/LandingPage";
 import HrRoutes from "./Routes/HrRoutes";
 import Login from "./Pages/HrPages/Login";
 import EmployeeLogin from "./Pages/EmployeePages/EmployeeLogin";
-import EmployeeRoutes from './Routes/employeeRoutes'
+import EmployeeRoutes from "./Routes/employeeRoutes";
 
 function App() {
   return (
@@ -13,9 +13,16 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/hr/login" element={<Login />} />
-          <Route path='/employee/login' element={ <EmployeeLogin/> }/>
-          <Route path="/employee/*" element={ <EmployeeRoutes/> }/>
-          <Route path="/hr/*" element={<HrVerify><HrRoutes /></HrVerify>}/>
+          <Route path="/employee/login" element={<EmployeeLogin />} />
+          <Route path="/employee/*" element={<EmployeeRoutes />} />
+          <Route
+            path="/hr/*"
+            element={
+              <HrVerify>
+                <HrRoutes />
+              </HrVerify>
+            }
+          />
         </Routes>
       </>
     </BrowserRouter>

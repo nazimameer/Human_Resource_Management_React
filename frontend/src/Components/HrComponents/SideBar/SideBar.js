@@ -112,7 +112,11 @@ function SideBar() {
         <div className="profile_content">
           <div className="profile">
             <div className="profile_details">
-              <img src="../images/adminlogo.jpeg" alt="" className="adminlogo" />
+              <img
+                src="../images/adminlogo.jpeg"
+                alt=""
+                className="adminlogo"
+              />
               <div className="name_job">
                 <div className="name">akshay</div>
                 <div className="job">HR id:39287</div>

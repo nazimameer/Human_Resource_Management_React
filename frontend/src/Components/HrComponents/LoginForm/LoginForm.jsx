@@ -1,21 +1,20 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../../../Api/HrAxios";
 import { useNavigate } from "react-router-dom";
 function LoginForm() {
-
   const Navigate = useNavigate();
-  useEffect(()=>{
-    if(localStorage.getItem('hrjwt')){
-      console.log('Hai')
-      axios.post('/hr/LoginPageAuth').then((response)=>{
-        console.log(response.status)
-        if(response.status === 200){
-          Navigate('/hr/home')
+  useEffect(() => {
+    if (localStorage.getItem("hrjwt")) {
+      console.log("Hai");
+      axios.post("/hr/LoginPageAuth").then((response) => {
+        console.log(response.status);
+        if (response.status === 200) {
+          Navigate("/hr/home");
         }
-      })
+      });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -34,7 +33,7 @@ function LoginForm() {
       if (response.data) {
         const token = response.data.token; //recieved token to a variable
         localStorage.setItem("hrjwt", token); // store the token into local storage
-        
+
         Navigate("/hr/home"); //navigate to home page
       }
     });

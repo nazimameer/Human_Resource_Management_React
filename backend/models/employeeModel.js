@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const employeeSchema = new mongoose.Schema({
   UID: {
-    type:Number
+    type: Number,
   },
   fullname: {
     type: String,
@@ -19,12 +19,12 @@ const employeeSchema = new mongoose.Schema({
   email: {
     type: String,
   },
-  phone:{
-    type:Number,
+  phone: {
+    type: Number,
   },
   password: {
     type: String,
   },
 });
- 
+
 module.exports = mongoose.model("employee", employeeSchema);
