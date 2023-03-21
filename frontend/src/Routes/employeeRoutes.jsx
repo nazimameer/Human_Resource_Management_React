@@ -9,10 +9,10 @@ function employeeRoutes() {
   return (
     <>
       <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/applications" element={<Applications />} />
-        <Route path="/myprofile" element={<MyProfile />} />
-        <Route path="/salaryslip" element={<SalarySlips />} />
+              <Route path="/home" element={ <Home /> } />
+              <Route path="/applications" element={<Applications />} />
+              <Route path="/myprofile" element={<MyProfile />} />
+              <Route path="/salaryslip" element={<SalarySlips />} />
       </Routes>
     </>
   );

@@ -13,3 +13,10 @@
     width: 100%;
     background: #11101d;
 } */
+.attendaceBar{
+    overflow-x: scroll;
+}
+.attendaceBar::-webkit-scrollbar {
+    width: 100px;
+
+}

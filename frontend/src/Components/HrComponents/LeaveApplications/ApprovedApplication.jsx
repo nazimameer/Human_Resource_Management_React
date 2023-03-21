@@ -9,7 +9,7 @@ function ApprovedApplication() {
       .get("/hr/applications/approved")
       .then((response) => {
         if (response.status === 200) {
-          const data = response.data.applications;
+          const data = response.data.applicationsinfo;
           setApplications(data);
           setIsLength(true);
         }
@@ -59,11 +59,17 @@ function ApprovedApplication() {
                               {obj.reason}
                             </span>
                           </span>
+
+                          <span className="leading-tight text-xs mt-2">
+                            submit on:{" "}
+                            <span className="font-semibold text-slate-700 sm:ml-2">
+                              {obj.submiton}
+                            </span>
+                          </span>
                         </div>
                         <div className="ml-auto text-right flex">
                           <div
                             className="relative z-10 inline-block px-4 mb-0 font-bold text-center text-transparent uppercase align-middle transition-all border-0 rounded-lg shadow-none cursor-pointer leading-pro text-xs ease-soft-in bg-150 bg-gradient-to-tl from-red-600 to-rose-400 hover:scale-102 active:opacity-85 bg-x-25 bg-clip-text"
-                            href="/"
                           >
                             <span className="text-lime-500 "> Approved</span>
                           </div>
@@ -73,7 +79,7 @@ function ApprovedApplication() {
                   })
                 ) : (
                   <li className="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50 justify-center">
-                    <div>No Rejected Application</div>
+                    <div>No Approved Application</div>
                   </li>
                 )}
               </ul>

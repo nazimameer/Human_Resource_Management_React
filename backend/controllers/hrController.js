@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
+const attendaceModel = require('../models/employeeAttendance');
 
 const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
@@ -18,6 +19,7 @@ module.exports = {
       }
     });
   },
+
   postLogin: async (req, res) => {
     try {
       // Handle error
@@ -67,81 +69,97 @@ module.exports = {
       res.status(500).json({ error: "Server Busy.....!" }); // Catching error and send response
     }
   },
-  checkemail: async (req, res) => {
-    const checkemail = req.body.email;
-    console.log("checked email:  " + checkemail);
-    const gotit = await employeeModel.findOne({
-      email: checkemail,
-    });
 
-    if (!gotit) {
-      res.status(200).json({ success: true });
-    } else {
-      res.status(400).json({ error: "email already taken" });
+  checkemail: async (req, res) => {
+    try {
+      const checkemail = req.body.email;
+      console.log("checked email:  " + checkemail);
+      const gotit = await employeeModel.findOne({
+        email: checkemail,
+      });
+
+      if (!gotit) {
+        res.status(200).json({ success: true });
+      } else {
+        res.status(400).json({ error: "email already taken" });
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
+
   getApplications: async (req, res) => {
-    const applicationsinfo = [];
-    const applications = await applicationModel.find({ status: "Pending" });
-    if (applications.length != 0) {
-       await applications.forEach((obj) => {
-        const date = obj.submiton;
-        const year = date.getFullYear();
-        const month = date.toLocaleString("default", { month: "long" });
-        const day = date.getDate().toString().padStart(2, "0");
-        let hours = date.getHours();
-        const minutes = date.getMinutes().toString().padStart(2, "0");
-  
-        let AmorPm = "AM";
-        if (hours >= 12) {
-          AmorPm = "PM";
-        }
-  
-        if (hours > 12) {
-          hours -= 12;
-        }
-  
-        const uid = obj.UID;
-        const period = obj.leavePeriod;
-        const reason = obj.reason;
-        const name = obj.name;
-        const submitdate = `${day} ${month} ${year} at ${hours}:${minutes} ${AmorPm}`;
-      const alldata = {
-          uid: uid,
-          name:name,
-          period: period,
-          reason: reason,
-          submiton:submitdate,
-        };
-        applicationsinfo.push(alldata);
-  
-      })
+    try {
+      console.log("eue");
+      const applicationsinfo = [];
+      const applications = await applicationModel.find({ status: "Pending" });
+      if (applications.length != 0) {
+        applications.forEach((obj) => {
+          const date = obj.submiton;
+          const year = date.getFullYear();
+          const month = date.toLocaleString("default", { month: "long" });
+          const day = date.getDate().toString().padStart(2, "0");
+          let hours = date.getHours();
+          const minutes = date.getMinutes().toString().padStart(2, "0");
 
+          let AmorPm = "AM";
+          if (hours >= 12) {
+            AmorPm = "PM";
+          }
 
-      res.status(200).json({ applicationsinfo });
-    } else {
-      res.status(400).json({ error: "no data available" });
+          if (hours > 12) {
+            hours -= 12;
+          }
+          const _id = obj._id;
+          const uid = obj.UID;
+          const period = obj.leavePeriod;
+          const reason = obj.reason;
+          const name = obj.name;
+          const submitdate = `${day} ${month} ${year} at ${hours}:${minutes} ${AmorPm}`;
+          const alldata = {
+            _id: _id,
+            uid: uid,
+            name: name,
+            period: period,
+            reason: reason,
+            submiton: submitdate,
+          };
+          applicationsinfo.push(alldata);
+        });
+        res.status(200).json({ applicationsinfo });
+      } else {
+        res.status(400).json({ error: "no data available" });
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
 
   applicApprove: async (req, res) => {
     const id = req.body.id;
-    const objid = mongoose.Types.ObjectId(id);
-    const update = await applicationModel.updateOne(
-      { _id: objid },
-      { $set: { status: "Approved" } }
-    );
-    res.status(200).json({ success: true });
-  },
-  applicReject: async (req, res) => {
-    const id = req.body.id;
-    const objid = mongoose.Types.ObjectId(id);
-    const update = await applicationModel.updateOne(
-      { _id: objid },
-      { $set: { status: "Rejected" } }
-    );
+    console.log(id);
 
-    res.status(200).json({ success: true });
+    const objid = mongoose.Types.ObjectId(id);
+    applicationModel
+      .updateOne({ _id: objid }, { $set: { status: "Approved" } })
+      .then((response) => {
+        res.status(200).json({ success: true });
+      });
+  },
+
+  applicReject: async (req, res) => {
+    try {
+      const id = req.body.id;
+      const objid = mongoose.Types.ObjectId(id);
+      const update = await applicationModel.updateOne(
+        { _id: objid },
+        { $set: { status: "Rejected" } }
+      );
+
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   addEmployee: async (req, res) => {
@@ -199,28 +217,131 @@ module.exports = {
   },
 
   getEmployees: async (req, res) => {
-    const employees = await employeeModel.find({});
-    const length = employees.length;
-    res.status(200).json({
-      status: true,
-      employees,
-      length,
-    });
+    try {
+      const employees = await employeeModel.find({});
+      const length = employees.length;
+      res.status(200).json({
+        status: true,
+        employees,
+        length,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
+
   getApproved: async (req, res) => {
-    const applications = await applicationModel.find({ status: "Approved" });
-    if (applications.length != 0) {
-      res.status(200).json({ applications });
-    } else {
-      res.status(404).json({ error: " no data available" });
+    try {
+      const applicationsinfo = [];
+      const applications = await applicationModel.find({ status: "Approved" });
+      if (applications.length != 0) {
+        applications.forEach((obj) => {
+          const date = obj.submiton;
+          const year = date.getFullYear();
+          const month = date.toLocaleString("default", { month: "long" });
+          const day = date.getDate().toString().padStart(2, "0");
+          let hours = date.getHours();
+          const minutes = date.getMinutes().toString().padStart(2, "0");
+
+          let AmorPm = "AM";
+          if (hours >= 12) {
+            AmorPm = "PM";
+          }
+
+          if (hours > 12) {
+            hours -= 12;
+          }
+          const _id = obj._id;
+          const uid = obj.UID;
+          const period = obj.leavePeriod;
+          const reason = obj.reason;
+          const name = obj.name;
+          const submitdate = `${day} ${month} ${year} at ${hours}:${minutes} ${AmorPm}`;
+          const alldata = {
+            _id: _id,
+            uid: uid,
+            name: name,
+            period: period,
+            reason: reason,
+            submiton: submitdate,
+          };
+          applicationsinfo.push(alldata);
+        });
+
+        res.status(200).json({ applicationsinfo });
+      } else {
+        res.status(404).json({ error: " no data available" });
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
+
   getRejected: async (req, res) => {
-    const applications = await applicationModel.find({ status: "Rejected" });
-    if (applications.length != 0) {
-      res.status(200).json({ applications });
-    } else {
-      res.status(404).json({ error: "no data available" });
+    try {
+      const applicationsinfo = [];
+      const applications = await applicationModel.find({ status: "Rejected" });
+      if (applications.length != 0) {
+        applications.forEach((obj) => {
+          const date = obj.submiton;
+          const year = date.getFullYear();
+          const month = date.toLocaleString("default", { month: "long" });
+          const day = date.getDate().toString().padStart(2, "0");
+          let hours = date.getHours();
+          const minutes = date.getMinutes().toString().padStart(2, "0");
+
+          let AmorPm = "AM";
+          if (hours >= 12) {
+            AmorPm = "PM";
+          }
+
+          if (hours > 12) {
+            hours -= 12;
+          }
+          const _id = obj._id;
+          const uid = obj.UID;
+          const period = obj.leavePeriod;
+          const reason = obj.reason;
+          const name = obj.name;
+          const submitdate = `${day} ${month} ${year} at ${hours}:${minutes} ${AmorPm}`;
+          const alldata = {
+            _id: _id,
+            uid: uid,
+            name: name,
+            period: period,
+            reason: reason,
+            submiton: submitdate,
+          };
+          applicationsinfo.push(alldata);
+        });
+        res.status(200).json({ applicationsinfo });
+      } else {
+        res.status(404).json({ error: "no data available" });
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
+  getAttendace:(req,res)=>{
+    // Today Date
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+    const day = today.getDate();
+    const date = `${day}-${month}-${year}`;
+    //
+    attendaceModel.findOne({date:date}).then((doc)=>{
+      let attendance;
+      if(doc){
+       attendance = doc.attendance;
+      }else{
+        attendance = null;
+      }
+      res.status(200).json({ attendance })
+
+    }).catch((error)=>{
+      console.log(error);
+      res.status(404).json({error:" No Documents Found"})
+    })
+  }
 };

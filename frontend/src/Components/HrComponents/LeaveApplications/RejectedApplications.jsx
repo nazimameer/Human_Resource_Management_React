@@ -10,7 +10,7 @@ function RejectedApplications() {
       .get("/hr/applications/rejected")
       .then((response) => {
         if (response.status === 200) {
-          const data = response.data.applications;
+          const data = response.data.applicationsinfo;
           setApplications(data);
           setIsLength(true);
         }
@@ -58,6 +58,13 @@ function RejectedApplications() {
                             Reason:{" "}
                             <span className="font-semibold text-slate-700 sm:ml-2">
                               {obj.reason}
+                            </span>
+                          </span>
+
+                          <span className="leading-tight text-xs mt-2">
+                            Sumit On:{" "}
+                            <span className="font-semibold text-slate-700 sm:ml-2">
+                              {obj.submiton}
                             </span>
                           </span>
                         </div>

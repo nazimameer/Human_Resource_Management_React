@@ -5,6 +5,7 @@ import axios from "../../../Api/HrAxios";
 function Employees() {
   const [employees, setEmployees] = useState([]);
   const [isLength, setIsLength] = useState(false);
+  const [searchQuery , setSearchQuery] = useState("");
   const Navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +28,23 @@ function Employees() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleInputSearch = (event)=>{
+    setSearchQuery(event.target.value)
+  }
+
+  const filteredList =searchQuery?
+   employees.filter(
+    (employees)=>
+    employees.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    employees.UID.toString().includes(searchQuery) ||
+    employees.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    employees.position.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+  :
+  employees;
+
+
+
   return (
     <div className="bg-slate-900">
       <div className="sm:mx-5 md:mx-10 my-24">
@@ -44,6 +62,7 @@ function Employees() {
                 type="text"
                 className="p-3 w-28 h-7 sm:w-40 sm:h-9 md:h-10 rounded-lg focus:border-none bg-white py-2 text-gray-700 transition-all placeholder:text-gray-500 "
                 placeholder="Search..."
+                onChange={handleInputSearch}
               />
             ) : (
               ""
@@ -75,39 +94,42 @@ function Employees() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {isLength ? (
-                employees.map((obj, index) => {
-                  return (
-                    <tr key={index} className="bg-white">
-                      <td className="p-3 text-sm text-grey-700 whitespace-nowrap flex items-center">
-                        <div className="w-10 h-10 rounded-lg my-1 mx-2 shadow-lg shadow-gray-300 overflow-hidden">
-                          <img
-                            src="../images/adminlogo.jpeg"
-                            alt="fsdfd"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="mx-3">{obj.fullname}</div>
-                      </td>
-                      <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
-                        #{obj.UID}
-                      </td>
-                      <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
-                        {obj.position}
-                      </td>
-                      <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
-                        {obj.email}
-                      </td>
-                      <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
-                        {" "}
-                        <span className="p-1.5 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
-                          Active
-                        </span>{" "}
-                      </td>
-                      <td>edit</td>
-                    </tr>
-                  );
-                })
-              ) : (
+
+                
+                
+            filteredList.map((obj, index) => {
+                    return (
+                      <tr key={index} className="bg-white">
+                        <td className="p-3 text-sm text-grey-700 whitespace-nowrap flex items-center">
+                          <div className="w-10 h-10 rounded-lg my-1 mx-2 shadow-lg shadow-gray-300 overflow-hidden">
+                            <img
+                              src="../images/adminlogo.jpeg"
+                              alt="fsdfd"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="mx-3">{obj.fullname}</div>
+                        </td>
+                        <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
+                          #{obj.UID}
+                        </td>
+                        <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
+                          {obj.position}
+                        </td>
+                        <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
+                          {obj.email}
+                        </td>
+                        <td className="p-3 text-sm text-grey-700 whitespace-nowrap">
+                          {" "}
+                          <span className="p-1.5 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
+                            Active
+                          </span>{" "}
+                        </td>
+                        <td>edit</td>
+                      </tr>
+                    );
+                  })
+                ) : (
                 <tr className="w-full h-16" colSpan="6">
                   <td></td>
                   <td></td>

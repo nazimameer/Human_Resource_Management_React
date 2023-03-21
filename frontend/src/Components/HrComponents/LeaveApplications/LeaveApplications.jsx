@@ -11,6 +11,7 @@ function LeaveApplications() {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.applicationsinfo;
+          console.log(data)
           setIsLength(true);
           setApplications(data);
         }
@@ -18,20 +19,27 @@ function LeaveApplications() {
       .catch((error) => {
         console.log(error.response);
       });
+
   }, []);
+
+
   const handleApprove = (id) => {
     axios
       .post("/hr/applicationApprove", { id: id })
       .then((response) => {
-        console.log(response);
         if (response.status === 200) {
           axios
             .get("/hr/applications")
             .then((response) => {
+              console.log(response)
               if (response.status === 200) {
-                const data = response.data.applications;
-                setIsLength(true);
-                setApplications(data);
+                const data = response.data.applicationsinfo;
+                if(data.length !== 0){
+                  setIsLength(true);
+                  setApplications(data);
+                }else{
+                  setIsLength(false)
+                }
               }
             })
             .catch((error) => {
@@ -43,6 +51,8 @@ function LeaveApplications() {
         console.log(error);
       });
   };
+
+
   const handleReject = (id) => {
     axios
       .post("/hr/applicationReject", { id: id })
@@ -53,9 +63,14 @@ function LeaveApplications() {
             .get("/hr/applications")
             .then((response) => {
               if (response.status === 200) {
-                const data = response.data.applications;
-                setIsLength(true);
-                setApplications(data);
+                const data = response.data.applicationsinfo;
+                if(data.length !== 0){
+
+                  setIsLength(true);
+                  setApplications(data);
+                }else{
+                  setIsLength(false)
+                }
               }
             })
             .catch((error) => {

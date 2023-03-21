@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const employeeController = require("../controllers/employeeController");
 const Authentication = require("../middleware/varifyJwt");
+const Attendance = require('../middleware/AttendanceCloudinary')
 
 router.post("/login", employeeController.postLogin);
 router.post("/LoginPageAuth", employeeController.LoginPageAuth);
@@ -25,6 +26,11 @@ router.get('/skills',Authentication.verifyToken,employeeController.getSkills);
 router.post('/removeskill',Authentication.verifyToken,employeeController.removeSkill);
 router.post('/removeHobbie',Authentication.verifyToken,employeeController.removeHobbie)
 router.post('/addHobbie',Authentication.verifyToken,employeeController.addHobbie);
-router.get('/hobbies',Authentication.verifyToken,employeeController.getHobbies)
+router.get('/hobbies',Authentication.verifyToken,employeeController.getHobbies);
+router.post('/attendance',Authentication.verifyToken,Attendance,employeeController.markAttendance);
+router.get('/homeInfo',Authentication.verifyToken,employeeController.homeInfo);
+router.post('/verifyCheckIn',Authentication.verifyToken,employeeController.verifyCheckIn);
+
 
 module.exports = router;
+ 

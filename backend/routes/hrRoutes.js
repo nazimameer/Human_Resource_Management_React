@@ -36,5 +36,5 @@ router.get(
   Authentication.verifyToken,
   hrController.getRejected
 );
-
+router.get('/getAttendance',Authentication.verifyToken,hrController.getAttendace)
 module.exports = router;

@@ -8,7 +8,7 @@ EmployeeInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("employeejwt"); // taking token from local storage
 
-    if (token) {
+    if (token) { 
       // checking if token is present or not
 
       config.headers.Authorization = `Bearer ${token}`;

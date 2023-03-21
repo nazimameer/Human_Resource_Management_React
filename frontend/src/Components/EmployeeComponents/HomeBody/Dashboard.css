@@ -1,0 +1,36 @@
+.fc-toolbar-chunk .fc-button-group {
+  margin-left: 79px;
+}
+
+.fc-toolbar-chunk {
+  font-size: 10px;
+}
+
+.fc-media-screen::-webkit-scrollbar {
+  display: none;
+}
+
+@media screen and (max-width: 640px) {
+  .fc-media-screen {
+    height: 25rem;
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .calenderbg {
+    height: 28rem;
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .fc-direction-ltr {
+    height: 25.6rem;
+  }
+}
+
+.taskdue {
+  height: 35rem;
+}
+.taskdue::-webkit-scrollbar {
+    display: none;
+  }
