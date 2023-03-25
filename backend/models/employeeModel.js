@@ -4,7 +4,7 @@ const employeeSchema = new mongoose.Schema({
   UID: {
     type: Number,
   },
-  fullname: {
+  fullname: { 
     type: String,
   },
   place: {
@@ -25,6 +25,13 @@ const employeeSchema = new mongoose.Schema({
   password: {
     type: String,
   },
+  salary:{ 
+    type:Number,
+  },
+  status:{
+    type:String,
+    default: "Offline"
+  }
 });
 
 module.exports = mongoose.model("employee", employeeSchema);

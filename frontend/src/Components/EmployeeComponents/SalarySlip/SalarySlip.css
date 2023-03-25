@@ -22,3 +22,9 @@
     display: none;
 
 }
+
+input[type="month"]:focus {
+    outline: none !important;
+  }
+
+  

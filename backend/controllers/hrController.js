@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
-const attendaceModel = require('../models/employeeAttendance');
+const attendanceModel = require("../models/employeeAttendance");
 
 const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
@@ -164,7 +164,6 @@ module.exports = {
 
   addEmployee: async (req, res) => {
     try {
-      // Handle error
       const data = req.body; // Puting the data in to a variable
       console.log(data);
       const { password } = data;
@@ -206,6 +205,7 @@ module.exports = {
           email: data.email,
           phone: data.phone,
           password: hashedPassword,
+          salary: data.salary,
         })
         .then(() => {
           res.json({ success: true }); // Send response after add user done
@@ -322,26 +322,331 @@ module.exports = {
       console.log(error);
     }
   },
-  getAttendace:(req,res)=>{
-    // Today Date
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
-    const day = today.getDate();
-    const date = `${day}-${month}-${year}`;
-    //
-    attendaceModel.findOne({date:date}).then((doc)=>{
-      let attendance;
-      if(doc){
-       attendance = doc.attendance;
-      }else{
-        attendance = null;
-      }
-      res.status(200).json({ attendance })
-
-    }).catch((error)=>{
+  getAttendace: (req, res) => {
+    try {
+      // Today Date
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+      const day = today.getDate();
+      const date = `${day}-${month}-${year}`;
+      //
+      attendanceModel
+        .findOne({ date: date })
+        .then((doc) => {
+          if (doc) {
+            let matched = doc.attendance.filter(
+              (record) => record.status === "Pending"
+            );
+            if (matched.length !== 0) {
+              console.log(matched);
+              res.status(200).json({ attendance: matched });
+              return;
+            } else {
+              res.status(404).json({ error: "no documents found" });
+              return;
+            }
+          } else {
+            res.status(404).json({ error: "no documents found" });
+            return;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(404).json({ error: " No Documents Found" });
+        });
+    } catch (error) {
       console.log(error);
-      res.status(404).json({error:" No Documents Found"})
-    })
-  }
+    }
+  },
+
+  getPresent: (req, res) => {
+    try {
+      // Today Date
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+      const day = today.getDate();
+      const date = `${day}-${month}-${year}`;
+      //
+
+      attendanceModel
+        .findOne({ date: date })
+        .then((doc) => {
+          if (doc) {
+            let matched = doc.attendance.filter(
+              (record) => record.status === "Present"
+            );
+            if (matched.length !== 0) {
+              console.log(matched);
+              res.status(200).json({ attendance: matched });
+              return;
+            } else {
+              res.status(404).json({ error: "no documents found" });
+              return;
+            } 
+          } else {
+            res.status(404).json({ error: "no documents found" });
+            return;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(404).json({ error: " No Documents Found" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getAbsent: (req, res) => {
+    try {
+      // Today Date
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+      const day = today.getDate();
+      const date = `${day}-${month}-${year}`;
+      //
+      attendanceModel
+        .findOne({ date: date })
+        .then((doc) => {
+          if (doc) {
+            let matched = doc.attendance.filter(
+              (record) => record.status === "Absent"
+            );
+            if (matched.length !== 0) {
+              console.log(matched);
+              res.status(200).json({ attendance: matched });
+              return;
+            } else {
+              res.status(404).json({ error: "no documents found" });
+              return;
+            }
+          } else {
+            res.status(404).json({ error: "no documents found" });
+            return;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(404).json({ error: " No Documents Found" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  confirmAttendance: (req, res) => {
+    try {
+      const uid = req.body.data;
+      if (uid) {
+        // Today Date
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+        const day = today.getDate();
+        const date = `${day}-${month}-${year}`;
+        //
+        attendanceModel
+          .findOneAndUpdate(
+            { date: date, "attendance.UID": uid },
+            { $set: { "attendance.$.status": "Present" } }
+          )
+          .then(() => {
+            res.status(200).json({ success: true });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500);
+          });
+      } else {
+        res.status(404).json({ error: "no UID found" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  confirmAbsent: (req, res) => {
+    try {
+      const uid = req.body.data;
+      if (uid) {
+        // Today Date
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+        const day = today.getDate();
+        const date = `${day}-${month}-${year}`;
+        //
+
+        attendanceModel
+          .findOneAndUpdate(
+            { date: date, "attendance.UID": uid },
+            { $set: { "attendance.$.status": "Absent" } }
+          )
+          .then(() => {
+            console.log("done");
+            res.status(200).json({ success: true });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
+      } else {
+        res.status(404).json({ error: "UID Not Provided" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  blockEmployee: (req, res) => {
+    try {
+      const uid = req.body.uid;
+      if (uid) {
+        employeeModel
+          .findOneAndUpdate({ UID: uid }, { $set: { status: "Blocked" } })
+          .then(() => {
+            res.status(200).json({ success: true });
+          });
+      } else {
+        res.status(422).json({ error: "UID not provided" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  unblockEmployee: (req, res) => {
+    try {
+      const uid = req.body.uid;
+      if (uid) {
+        employeeModel
+          .findOneAndUpdate({ UID: uid }, { $set: { status: "Offline" } })
+          .then(() => {
+            res.status(200).json({ success: true });
+          });
+      } else {
+        res.status(422).json({ error: "UID not provided " });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  geteditEmployee: (req, res) => {
+    try {
+      const uid = req.params.id;
+      employeeModel.findOne({ UID: uid }).then((doc) => {
+        if (doc) {
+          const data = doc;
+          res.status(200).json({ data });
+        } else {
+          res.status(404).json({ error: "Document Not Found " });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  posteditEmployee: (req, res) => {
+    try {
+      const uid = req.body.uid;
+      const data = req.body; // Puting the data in to a variable
+      const { password } = data.formData;
+      console.log(password);
+      if (uid) {
+        employeeModel.findOne({ UID: uid }).then((doc) => {
+          if (doc) {
+            employeeModel
+              .findOneAndUpdate(
+                { UID: uid },
+                {
+                  $set: {
+                    fullname: data.formData.fullname,
+                    place: data.formData.place,
+                    position: data.formData.position,
+                    role: data.formData.role,
+                    email: data.formData.email,
+                    phone: data.formData.phone,
+                    salary: data.formData.salary,
+                  },
+                }
+              )
+              .then(() => {
+                employeeModel.findOne({ UID: uid }).then((doc) => {
+                  if (doc.password === password) {
+                    res.status(200).json({ success: true });
+                  } else {
+                    const saltRounds = 10;
+                    const hashedPassword = bcrypt.hashSync(
+                      password,
+                      saltRounds
+                    );
+
+                    employeeModel
+                      .findOneAndUpdate(
+                        { UID: uid },
+                        {
+                          $set: {
+                            password: hashedPassword,
+                          },
+                        }
+                      )
+                      .then(() => {
+                        res.status(200).json({ success: true });
+                      });
+                  }
+                });
+              });
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  removeEmployee: (req, res) => {
+    try {
+      const uid = req.body.data;
+
+      employeeModel
+        .findOneAndUpdate(
+          { UID: uid },
+          {
+            $set: {
+              status: "Removed",
+            },
+          }
+        )
+        .then(() => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          res.status(500).json({ error: "Internal Server Error" });
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  replaceEmployee: (req, res) => {
+    try {
+      const uid = req.body.data;
+
+      employeeModel
+        .findOneAndUpdate(
+          { UID: uid },
+          {
+            $set: {
+              status: "Offline",
+            },
+          }
+        )
+        .then(() => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };

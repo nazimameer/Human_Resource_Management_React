@@ -6,12 +6,19 @@ function EmployeeLogin() {
   useEffect(() => {
     if (localStorage.getItem("employeejwt")) {
       console.log("Hai");
-      axios.post("/employee/LoginPageAuth").then((response) => {
-        console.log(response.status);
-        if (response.status === 200) {
-          Navigate("/employee/home");
+      axios.post('/employee/checkBlocked').then((response)=>{
+        if(response.status === 200){
+
+          axios.post("/employee/LoginPageAuth").then((response) => {
+            console.log(response.status);
+            if (response.status === 200) {
+              Navigate("/employee/home");
+            }
+          });
         }
-      });
+      }).catch((error)=>{
+        console.log(error);
+      })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

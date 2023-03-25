@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-function topBar() {
+function topBar(props) {
   return (
     <div>
       <div className="p-6 px-4 pb-0 mb-0  border-b-0 rounded-t-2xl">
@@ -10,7 +9,7 @@ function topBar() {
           <div className="flex flex-wrap -mx-3">
             <div className="flex-none w-auto max-w-full px-3">
               <div className="mt-2 ml-3 text-lg relative inline-flex items-center justify-center  text-black transition-all duration-200 ease-in-out h-19 w-19 rounded-xl">
-                Leave Applications
+                Attendance  <span className="mx-5">{props.today}</span>
               </div>
             </div>
 
@@ -22,41 +21,47 @@ function topBar() {
                   role="tablist"
                 >
                   <li className="z-30 flex-auto text-center">
-                    <Link
-                      to={"/hr/leaveapplications"}
-                      className="z-30 flex items-center justify-center w-full px-0 py-1 mb-0 transition-all ease-in-out border-0 rounded-lg bg-inherit text-slate-700"
+                    <div
+                      className="cursor-pointer z-30 flex items-center justify-center w-full px-0 py-1 mb-0 transition-all ease-in-out border-0 rounded-lg bg-inherit text-slate-700"
                       nav-link=""
                       href="/"
                       role="tab"
                       aria-selected="false"
                     >
-                      <span className="ml-2">Pending</span>
-                    </Link>
+                      <span className="ml-2" 
+                      onClick={props.getPendings}
+                      >Pending</span>
+                    </div>
                   </li>
                   <li className="z-30 flex-auto text-center">
-                    <Link
-                      to={"/hr/leaveapplications/approved"}
-                      className="z-30 flex items-center justify-center w-full px-0 py-1 mb-0 transition-all ease-in-out border-0 rounded-lg bg-inherit text-slate-700"
+                    <div
+                      className="cursor-pointer z-30 flex items-center justify-center w-full px-0 py-1 mb-0 transition-all ease-in-out border-0 rounded-lg bg-inherit text-slate-700"
                       nav-link=""
                       href="/"
                       role="tab"
                       aria-selected="false"
                     >
-                      <span className="ml-2">Approved</span>
-                    </Link>
+                      <span className="ml-2"
+                      onClick={props.getPresent}
+                      
+                      >Present</span>
+                    </div>
                   </li>
                   <li className="z-30 flex-auto text-center">
-                    <Link
-                      to={"/hr/leaveapplications/rejected"}
-                      className="z-30 flex items-center justify-center w-full px-0 py-1 mb-0 transition-colors ease-in-out border-0 rounded-lg bg-inherit text-slate-700"
+                    <div
+                      className=" cursor-pointer z-30 flex items-center justify-center w-full px-0 py-1 mb-0 transition-colors ease-in-out border-0 rounded-lg bg-inherit text-slate-700"
                       nav-link=""
                       href="/"
                       role="tab"
                       aria-selected="true"
                       active=""
                     >
-                      <span className="ml-2">Rejected</span>
-                    </Link>
+                      
+                      <span className="ml-2"
+                      onClick={props.getAbsent}
+                      
+                      >Absent</span>
+                    </div>
                   </li>
                   <div
                     className="piece-2 z-10 absolute text-slate-700 rounded-lg bg-inherit flex-auto text-center bg-none border-0 block"

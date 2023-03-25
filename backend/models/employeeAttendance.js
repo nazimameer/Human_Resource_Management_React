@@ -15,7 +15,7 @@ const AttendanceSchema = new mongoose.Schema({
             time:{
                 type:String,
             },
-            positon:{
+            position:{
                 type:String,
             },
             image:{

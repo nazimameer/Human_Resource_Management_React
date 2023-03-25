@@ -1,11 +1,26 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import "./SalarySlip.css";
+import axios from '../../../Api/EmployeeAxios'
 
 function SalarySlip() {
   const date = new Date();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
   const thismonth = `${year}-${month.toString().padStart(2, "0")}`;
+  const [Salary, SetSalary] =useState(null);
+  
+  useEffect(() => {
+    
+    axios.get('/employee/getSalaryInfo').then((response)=>{
+      const data = response.data.salary;
+      if(data){
+        SetSalary(data);
+      }
+    }).then((error)=>{
+      console.log(error)
+    })
+
+  }, []);
   return (
     <div className="my-20 bg-slate-900">
       <div class="w-full px-6 py-6 mx-auto">
@@ -33,16 +48,18 @@ function SalarySlip() {
                             <p class="mb-0 leading-normal text-black text-sm opacity-80">
                               Account Holder
                             </p>
-                            <h6 class="mb-0 text-black">Nazim Ameer</h6>
+                            <h6 class="mb-0 text-black text-sm">Nazim Ameer</h6>
                           </div>
                           <div>
                             <p class="mb-0 leading-normal text-black text-sm opacity-80">
                               IFSC
                             </p>
-                            <h6 class="mb-0 text-black">SBIN00000007</h6>
+                            
+                            <h6 class="mb-0 text-black text-sm">SBIN00000007</h6>
+                            
                           </div>
                         </div>
-                        <div className="flex justify-center items-center mx-3 cursor-pointer">
+                        <div className="flex justify-center items-center mx-3 cursor-pointer"  type="button">
                           <i class="bx bxs-pencil "></i>
                         </div>
                       </div>
@@ -63,7 +80,7 @@ function SalarySlip() {
                         <h6 class="mb-0 text-center">Yearly</h6>
                         <span class="leading-tight text-xs">Yearly CTC</span>
                         <hr class="h-px my-4 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent" />
-                        <h5 class="mb-0">2400000</h5>
+                        {Salary && <h5 class="mb-0">{Salary}/-</h5>}
                       </div>
                     </div>
                   </div>
@@ -78,7 +95,7 @@ function SalarySlip() {
                         <h6 class="mb-0 text-center">Monthly</h6>
                         <span class="leading-tight text-xs">Monthly CTC</span>
                         <hr class="h-px my-4 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent" />
-                        <h5 class="mb-0">200000</h5>
+                        {Salary && <h5 class="mb-0">{Math.round(Salary/12)}/-</h5>}
                       </div>
                     </div>
                   </div>
@@ -127,13 +144,13 @@ function SalarySlip() {
           <div class="w-full max-w-full px-3 lg:w-1/3 lg:flex-none">
             {/* <color:div class="relative flex flex-col h-full min-w-0 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl "> */}
             <div class="p-4 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
-              <div class="flex flex-wrap -mx-3">
-                <div class="flex items-center flex-none w-1/2 max-w-full px-3">
+              <div class="flex  -mx-3 overflow-hidden">
+                <div class="flex items-center  w-1/2 max-w-full px-3">
                   <h6 class="mb-0">Invoices</h6>
                 </div>
-                <div class="flex-none w-1/2 max-w-full px-3 text-right">
+                <div class="flex-none w-1/2 max-w-full  text-right">
                   <small>
-                    <input type="month" defaultValue={`${thismonth}`} />
+                    <input className="focus:outline-none outline-none focus:border-none border-none" type="month" defaultValue={`${thismonth}`} />
                   </small>
                 </div>
               </div>
@@ -324,13 +341,13 @@ function SalarySlip() {
           <div class="w-full max-w-full px-3 mt-6 md:w-5/12 md:flex-none">
             <div class="transaction relative flex flex-col h-full min-w-0 mb-6 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
               <div class="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
-                <div class="flex flex-wrap -mx-3">
+                <div class="flex -mx-3 overflow-hidden">
                   <div class="max-w-full px-3 md:w-1/2 md:flex-none">
                     <h6 class="mb-0">Your Transactions</h6>
                   </div>
                   <div class="flex items-center justify-end max-w-full px-3 md:w-1/2 md:flex-none">
                     <small>
-                      <input type="month" defaultValue={`${thismonth}`} />
+                      <input className="focus:outline-none outline-none focus:border-none border-none" type="month" defaultValue={`${thismonth}`} />
                     </small>
                   </div>
                 </div>
@@ -486,7 +503,16 @@ function SalarySlip() {
         </div>
         {/* footer here */}
       </div>
+
     </div>
+
+
+
+
+
+
+
+
   );
 }
 

@@ -1,21 +1,19 @@
-import React from "react";
+import React from 'react'
 import SideBar from "../../Components/HrComponents/SideBar/SideBar";
 import NavBar from "../../Components/HrComponents/NavBar/NavBar";
-import "./Home.css";
-import Attendances from "../../Components/HrComponents/Dashboard/Dashboard";
-function Home() {
+import EditEmployee from '../../Components/HrComponents/Employees/EditEmployee';
+import './Home.css'
+
+function editEmployee() {
   return (
     <div>
       <SideBar />
       <NavBar />
       <div className="content bg-slate-900">
-        
-        <Attendances/>
-        
-        
-        </div>
+        <EditEmployee/>
+      </div>
     </div>
-  );
+  )
 }
 
-export default Home;
+export default editEmployee

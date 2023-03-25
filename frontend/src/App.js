@@ -6,8 +6,9 @@ import HrRoutes from "./Routes/HrRoutes";
 import Login from "./Pages/HrPages/Login";
 import EmployeeLogin from "./Pages/EmployeePages/EmployeeLogin";
 import EmployeeRoutes from "./Routes/employeeRoutes";
-import VerifyCheckIn from './Authentication/CheckIn'
-import EmployeeCheckIn from './Pages/EmployeePages/EmployeeCheckIn'
+import VerifyCheckIn from './Authentication/CheckIn';
+import EmployeeCheckIn from './Pages/EmployeePages/EmployeeCheckIn';
+import BlockedorNot from "./Authentication/BlockedorNot";
 
 function App() {
   return (
@@ -17,8 +18,8 @@ function App() {
           <Route path="/" element={ <LandingPage /> } />
           <Route path="/hr/login" element={ <Login /> } />
           <Route path="/employee/login" element={ <EmployeeLogin />} />
-          <Route path="/employee/*" element={<EmployeeVerify> <VerifyCheckIn> <EmployeeRoutes /> </VerifyCheckIn> </EmployeeVerify>} />
-          <Route path='/employee/checkin' element={ <EmployeeVerify> <EmployeeCheckIn />  </EmployeeVerify>} />
+          <Route path="/employee/*" element={<BlockedorNot> <EmployeeVerify> <VerifyCheckIn> <EmployeeRoutes /> </VerifyCheckIn> </EmployeeVerify></BlockedorNot>} />
+          <Route path='/employee/checkin' element={<EmployeeVerify> <EmployeeCheckIn />  </EmployeeVerify>} />
           <Route path="/hr/*" element={ <HrVerify> <HrRoutes /> </HrVerify> } />
         </Routes>
       </>

@@ -30,6 +30,8 @@ router.get('/hobbies',Authentication.verifyToken,employeeController.getHobbies);
 router.post('/attendance',Authentication.verifyToken,Attendance,employeeController.markAttendance);
 router.get('/homeInfo',Authentication.verifyToken,employeeController.homeInfo);
 router.post('/verifyCheckIn',Authentication.verifyToken,employeeController.verifyCheckIn);
+router.get('/getSalaryInfo',Authentication.verifyToken,employeeController.getSalaryInfo);
+router.post('/checkBlocked',Authentication.verifyToken,employeeController.checkBlocked)
 
 
 module.exports = router;

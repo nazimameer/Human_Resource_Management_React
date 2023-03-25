@@ -36,5 +36,16 @@ router.get(
   Authentication.verifyToken,
   hrController.getRejected
 );
-router.get('/getAttendance',Authentication.verifyToken,hrController.getAttendace)
+router.get('/getAttendance',Authentication.verifyToken,hrController.getAttendace);
+router.post('/confirmPresent',Authentication.verifyToken,hrController.confirmAttendance)
+router.post('/confirmAbsent',Authentication.verifyToken,hrController.confirmAbsent)
+
+router.get('/getPresent',Authentication.verifyToken,hrController.getPresent);
+router.get('/getAbsent',Authentication.verifyToken,hrController.getAbsent);
+router.post('/blockEmployee',Authentication.verifyToken,hrController.blockEmployee);
+router.post('/unblockEmployee',Authentication.verifyToken,hrController.unblockEmployee);
+router.get('/employee/edit/:id',Authentication.verifyToken,hrController.geteditEmployee);
+router.post('/employee/edit',Authentication.verifyToken,hrController.posteditEmployee);
+router.post('/employee/edit/remove',Authentication.verifyToken,hrController.removeEmployee)
+router.post('/employee/edit/replace',Authentication.verifyToken,hrController.replaceEmployee)
 module.exports = router;

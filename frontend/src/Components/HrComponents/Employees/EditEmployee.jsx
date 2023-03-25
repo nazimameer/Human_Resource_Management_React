@@ -1,9 +1,24 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import axios from "../../../Api/HrAxios";
-import { message } from "antd";
 
-function AddEmployee() {
+function EditEmployee() {
+    const [Removed, setRemoved] = useState(false)
+    const {id} = useParams();
+    const uid = id;
+    useState(()=>{
+        axios.get(`/hr/employee/edit/${uid}`).then((response)=>{
+            const data = response.data.data;
+            if(data.status === 'Removed'){
+              setRemoved(true);
+            }else{
+              setRemoved(false);
+            }
+            if(data){
+                setFormData(data);
+            }
+        })
+    },[])
   const Navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullname: "",
@@ -24,7 +39,6 @@ function AddEmployee() {
   const [phoneError, setPhoneError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [salaryError, setSalaryError] = useState(false);
-
 
   const handleChange = (event) => {
     if (event.target.value === "") {
@@ -49,7 +63,7 @@ function AddEmployee() {
       } else if (event.target.name === "password") {
         setPasswordError(true);
         return;
-      }else if (event.target.name === "salary"){
+      } else if (event.target.name === 'salary'){
         setSalaryError(true);
         return;
       }
@@ -69,7 +83,7 @@ function AddEmployee() {
         setPhoneError(false);
       } else if (event.target.name === "password") {
         setPasswordError(false);
-      } else if (event.target.name === "salary"){
+      } else if (event.target.name === 'salary'){
         setSalaryError(false);
       }
     }
@@ -78,6 +92,33 @@ function AddEmployee() {
       [event.target.name]: event.target.value,
     });
   };
+
+  const handleRemove = (uid) =>{
+    const data = {
+      data:uid
+    }
+    axios.post('/hr/employee/edit/remove',data).then((response)=>{
+        if(response.status === 200){
+          console.log("haloo")
+           Navigate('/hr/employees')
+        }
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
+
+  const handleReplace = (uid)=>{
+    const data = {
+      data:uid
+    }
+    axios.post('/hr/employee/edit/replace',data).then((response)=>{
+      if(response.status === 200){
+        Navigate('/hr/employees')
+      }
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -103,29 +144,31 @@ function AddEmployee() {
     } else if (formData.password === "") {
       setPasswordError(true);
       return;
-    }else if (formData.salary === ""){
-      setSalaryError(true);
-      return;
+    } else if (formData.salary === ""){
+        setSalaryError(true)
+        return;
     }
+
+    console.log(formData)
 
     const email = formData.email;
     console.log(email);
-    axios
-      .post("/hr/checkemail", { email: email })
-      .then((response) => {
-        if (response.status === 200) {
-          axios.post("/hr/addemployee", formData).then((response) => {
-            if (response.data.success) {
+    // axios
+    //   .post("/hr/checkemail", { email: email })
+    //   .then((response) => {
+    //     if (response.status === 200) {
+          axios.post('/hr/employee/edit',{uid, formData }).then((response) => {
+            if (response.status === 200) {
               Navigate("/hr/employees");
             }
           });
-        }
-      })
-      .catch((error) => {
-        if (error.response.data.error) {
-          message.error("Email Already Taken", [2]);
-        }
-      });
+        // }
+      // })
+      // .catch((error) => {
+      //   if (error.response.data.error) {
+      //     message.error("Email Already Taken", [2]);
+      //   }
+      // });
   };
   return (
     <div className="bg-slate-900 h-screen">
@@ -141,7 +184,7 @@ function AddEmployee() {
               form="user"
               className="absolute top-0 left-0 flex flex-col visible w-full h-auto min-w-0 p-4 break-words bg-white border-0 shadow-xl opacity-100 dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border"
             >
-              <h5 className="mb-0 font-bold text-black">ADD EMPLOYEE</h5>
+              <h5 className="mb-0 font-bold text-black">EDIT EMPLOYEE</h5>
               <p className="mb-0 text-sm leading-normal">
                 Mandatory Informations
               </p>
@@ -158,6 +201,7 @@ function AddEmployee() {
                       type="text"
                       name="fullname"
                       placeholder="eg. Michael"
+                      defaultValue={formData.fullname}
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black  text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
@@ -182,6 +226,7 @@ function AddEmployee() {
                       type="text"
                       name="place"
                       placeholder="eg. Prior"
+                      defaultValue={formData.place}
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
@@ -208,6 +253,7 @@ function AddEmployee() {
                       type="text"
                       name="position"
                       placeholder="eg. Developer"
+                      defaultValue={formData.position}
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
@@ -233,6 +279,7 @@ function AddEmployee() {
                       type="text"
                       name="role"
                       placeholder="eg. frontend"
+                      defaultValue={formData.role}
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
@@ -260,6 +307,7 @@ function AddEmployee() {
                       type="email"
                       name="email"
                       placeholder="eg. employee@gmail.com"
+                      defaultValue={formData.email}
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
@@ -285,6 +333,7 @@ function AddEmployee() {
                       type="number"
                       name="phone"
                       placeholder="eg. 977834978"
+                      defaultValue={formData.phone}
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
@@ -326,18 +375,18 @@ function AddEmployee() {
                     )}
                   </div>
 
-
                   <div className="w-full max-w-full px-3 mt-4 flex-0 sm:mt-0 sm:w-6/12">
                     <label
                       className="mb-2 ml-1 text-xs font-bold text-black"
                       htmlFor="Password"
                     >
-                      Salary(LPA)
+                      Salary (LPA)
                     </label>
                     <input
                       type="number"
                       name="salary"
                       placeholder="eg. 100000"
+                      defaultValue={formData.salary}
                       onChange={handleChange}
                       className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                     />
@@ -354,6 +403,30 @@ function AddEmployee() {
                 </div>
 
                 <div className="flex mt-6">
+                  {Removed?
+
+                    
+
+                  <div
+                    aria-controls="address"
+                    next-form-btn=""
+                    onClick={()=>handleReplace(uid)}
+                    className="inline-block px-6 py-3 mb-0 ml-auto text-xs font-bold text-right text-white uppercase align-middle transition-all ease-in border-0 rounded-lg shadow-md cursor-pointer hover:-translate-y-px active:opacity-85 hover:shadow-xs dark:bg-gradient-to-tl dark:from-slate-750 dark:to-gray-850 bg-gradient-to-tl from-blue-800 to-blue-500 leading-pro tracking-tight-rem bg-150 bg-x-25"
+                  >
+                    Replace
+                  </div>
+
+                  :
+                  <div
+                    aria-controls="address"
+                    next-form-btn=""
+                    onClick={()=>handleRemove(uid)}
+                    className="inline-block px-6 py-3 mb-0 ml-auto text-xs font-bold text-right text-white uppercase align-middle transition-all ease-in border-0 rounded-lg shadow-md cursor-pointer hover:-translate-y-px active:opacity-85 hover:shadow-xs dark:bg-gradient-to-tl dark:from-slate-750 dark:to-gray-850 bg-gradient-to-tl from-red-800 to-red-500 leading-pro tracking-tight-rem bg-150 bg-x-25"
+                  >
+                    Remove
+                  </div>
+                  
+                  }
                   <button
                     type="submit"
                     aria-controls="address"
@@ -361,8 +434,10 @@ function AddEmployee() {
                     href="/"
                     className="inline-block px-6 py-3 mb-0 ml-auto text-xs font-bold text-right text-white uppercase align-middle transition-all ease-in border-0 rounded-lg shadow-md cursor-pointer hover:-translate-y-px active:opacity-85 hover:shadow-xs dark:bg-gradient-to-tl dark:from-slate-750 dark:to-gray-850 bg-gradient-to-tl from-lime-600 to-green-500 leading-pro tracking-tight-rem bg-150 bg-x-25"
                   >
-                    ADD
+                    EDIT
                   </button>
+
+                 
                 </div>
               </div>
             </div>
@@ -373,4 +448,4 @@ function AddEmployee() {
   );
 }
 
-export default AddEmployee;
+export default EditEmployee;

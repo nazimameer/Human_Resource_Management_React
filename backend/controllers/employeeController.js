@@ -49,7 +49,7 @@ module.exports = {
           // Secret Key
           const secretKey = "Brototype";
 
-          // Expire   
+          // Expire
           const expire = {
             expiresIn: 84000,
           };
@@ -341,13 +341,118 @@ module.exports = {
   },
 
   markAttendance: async (req, res) => {
-    const uid = req.uid;
-    const employee = await employeeModel.findOne({
-      UID: uid,
-    });
-    const fullname = employee.fullname;
-    const position = employee.position;
+    try {
+      const uid = req.uid;
+      const employee = await employeeModel.findOne({
+        UID: uid,
+      });
+      const fullname = employee.fullname;
 
+      // Today Date
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+      const day = today.getDate();
+      const date = `${day}-${month}-${year}`;
+      //
+
+      // Take Time
+      const hour = today.getHours() % 12 || 12; // converts to 12-hours format
+      const minute = today.getMinutes();
+      const second = today.getSeconds();
+      const amPm = hour >= 12 ? "Pm" : "Am";
+      const time = `${hour}:${minute}:${second} ${amPm}`;
+      const position = employee.position;
+      console.log(time);
+      //
+      console.log(position);
+      let status = "";
+
+      if (hour > 9 || (hour === 9 && minute === 0)) {
+        status = "Late";
+      } else {
+      }
+
+      const image = {
+        url: req.file.path,
+        filename: req.file.filename,
+      };
+
+      const dbdate = await attendanceModel
+        .findOne({ date: date })
+        .then((attendance) => {
+          console.log("Over here 1");
+          if (attendance) {
+            console.log("Over here 2");
+
+            attendanceModel
+              .findOneAndUpdate(
+                { date: date },
+                {
+                  $push: {
+                    attendance: {
+                      UID: uid,
+                      fullname: fullname,
+                      time: time,
+                      position: position,
+                      image: image,
+                    },
+                  },
+                }
+              )
+              .then(() => {
+                console.log("Over here 5");
+
+                res.status(200).json({ success: true });
+              });
+          } else {
+            console.log("Over here 3");
+
+            attendanceModel
+              .create({
+                date: date,
+                attendance: [
+                  {
+                    UID: uid,
+                    fullname: fullname,
+                    time: time,
+                    position: position,
+                    image: image,
+                  },
+                ],
+              })
+              .then(() => {
+                console.log("Over here 4");
+
+                res.status(200).json({ success: true });
+              });
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  homeInfo: (req, res) => {
+    try {
+      const uid = req.uid;
+
+      employeeModel
+        .findOne({
+          UID: uid,
+        })
+        .then((response) => {
+          if (response) {
+            const data = response;
+            res.status(200).json({ data });
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  verifyCheckIn: (req, res) => {
+    const uid = req.uid;
     // Today Date
     const today = new Date();
     const year = today.getFullYear();
@@ -356,109 +461,50 @@ module.exports = {
     const date = `${day}-${month}-${year}`;
     //
 
-    // Take Time
-    const hour = today.getHours() % 12 || 12; // converts to 12-hours format
-    const minute = today.getMinutes();
-    const second = today.getSeconds();
-    const amPm = hour >= 12 ? "Pm" : "Am";
-    const time = `${hour}:${minute}:${second} ${amPm}`;
-    console.log(time);
-    //
-    let status = '';
-
-     if(hour > 9 || (hour === 9 && minute === 0)){
-      status = 'Late' 
-    }else{
-
-    }
-
-    const image = {
-      url: req.file.path,
-      filename: req.file.filename,
-    };
-
-    const dbdate = await attendanceModel
-      .findOne({ date: date })
-      .then((attendance) => {
-        console.log('Over here 1')
-        if (attendance) {
-        console.log('Over here 2')
-
-          attendanceModel.findOneAndUpdate(
-            { date: date },
-            {
-              $push: {
-                attendance: {
-                  UID: uid,
-                  fullname: fullname,
-                  position:position,
-                  time: time,
-                  image: image,
-                },
-              },
-            }
-          ).then(()=>{
-        console.log('Over here 5')
-
-            res.status(200).json({success:true});
-          });
-        }else{
-        console.log('Over here 3')
-
-          attendanceModel
-      .create({
+    attendanceModel
+      .findOne({
         date: date,
-        attendance: [
-          {
-            UID: uid,
-            fullname: fullname,
-            time: time,
-            position:position,
-            image: image,
-          },
-        ],
+        attendance: { $elemMatch: { UID: uid } },
       })
-      .then(() => {
-        console.log('Over here 4')
-
-        res.status(200).json({ success: true });
-      });
+      .then((doc) => {
+        if (doc) {
+          res.status(200).json({ success: true });
+        } else if (!doc) {
+          res.status(404).json({ error: "no attendance marked" });
         }
       });
   },
-
-  homeInfo:(req,res)=>{
+  getSalaryInfo: (req, res) => {
     const uid = req.uid;
-
-    employeeModel.findOne({
-      UID:uid,
-    }).then((response)=>{
-      if(response){
-        const data = response
-        res.status(200).json({data})
-      }
-    })
+    employeeModel
+      .findOne({ UID: uid })
+      .then((doc) => {
+        if (doc) {
+          const salary = doc.salary;
+          console.log(salary);
+          res.status(200).json({ salary });
+        } else {
+          res.status(404).json({ error: "No Document Found " });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({ error: " Internal Server Error" });
+        console.log(error);
+      });
   },
-  verifyCheckIn:(req,res)=>{
+  checkBlocked: async (req, res) => {
     const uid = req.uid;
-    // Today Date
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
-    const day = today.getDate();
-    const date = `${day}-${month}-${year}`;
-    //
+    console.log(uid);
 
-    attendanceModel.findOne({
-      date:date,
-      attendance: { $elemMatch: { UID:uid  }}
-    }).then((doc)=>{
-      console.log(doc)
-      if(doc){
-        res.status(200).json({ success:true })
-      }else if(!doc){
-        res.status(404).json({error:"no attendance marked"})
-      }
-    })
-  }
+    const doc = await employeeModel.findOne({ UID: uid, status: "Blocked" });
+
+    if (doc) {
+      console.log("blocked");
+
+      res.status(400).json({ error: "YOU ARE BLOCKED" });
+    } else {
+      console.log("done");
+      res.status(200).json({ success: true });
+    }
+  },
 };

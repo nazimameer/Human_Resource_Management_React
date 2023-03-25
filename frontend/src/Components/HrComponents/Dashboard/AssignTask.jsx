@@ -1,36 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "../../../Api/HrAxios";
 
-function Employees() {
+function AssignTask() {
   const [employees, setEmployees] = useState([]);
   const [isLength, setIsLength] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const handleBlock = (uid) =>{
-    axios.post('/hr/blockEmployee',{uid}).then(()=>{
-      axios.get("/hr/employees").then((response) => {
-        if (response.data.status) {
-          if (response.data.length !== 0) {
-            setIsLength(true);
-            setEmployees(response.data.employees);
-          }
-        }
-      })
-    })
-  }
 
-  const handleUnBlock = (uid) =>{
-    axios.post('/hr/unblockEmployee',{uid}).then(()=>{
-      axios.get("/hr/employees").then((response) => {
-        if (response.data.status) {
-          if (response.data.length !== 0) {
-            setIsLength(true);
-            setEmployees(response.data.employees);
-          }
-        }
-      })
-    })
-  }
   const Navigate = useNavigate();
 
   useEffect(() => {
@@ -71,20 +47,13 @@ function Employees() {
 
   return (
     <div className="bg-slate-900">
-      <div className="sm:mx-5 md:mx-10 my-24">
-        <div className="my-3">
+      <div className="sm:mx-5 md:mx-10 mb-6">
+        <div className="">
           <div className="flex items-center justify-between">
-            <Link
-              to={"/hr/addemployee"}
-              className=" bg-green-500 p-2  rounded text-xs"
-            >
-              Add Employee
-            </Link>
-
             {isLength ? (
               <input
                 type="text"
-                className="p-3 w-28 h-7 sm:w-40 sm:h-9 md:h-10 rounded-lg focus:border-none bg-white py-2 text-gray-700 transition-all placeholder:text-gray-500 "
+                className="p-3 mb-3 w-28 h-7 sm:w-40 sm:h-9 md:h-10 rounded-lg focus:border-none bg-white py-2 text-gray-700 transition-all placeholder:text-gray-500 "
                 placeholder="Search..."
                 onChange={handleInputSearch}
               />
@@ -107,7 +76,7 @@ function Employees() {
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                   ID
                 </th>
-                
+
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                   Role
                 </th>
@@ -116,16 +85,14 @@ function Employees() {
                   Block/unBlock
                 </th>
 
-                <th className="p-3 text-sm font-semibold tracking-wide text-left">
-
-                </th>
+                <th className="p-3 text-sm font-semibold tracking-wide text-left"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {isLength ? (
                 filteredList.map((obj, index) => {
                   return (
-                    <tr key={index} className="bg-white">
+                    <tr key={index} className="bg-white cursor-pointer" onclick>
                       <td className="p-3 text-sm text-grey-700 flex items-center">
                         <div className="w-12 h-12  rounded-lg my-1 mx-2 shadow-lg shadow-gray-300 overflow-hidden">
                           <img
@@ -135,11 +102,9 @@ function Employees() {
                           />
                         </div>
                         <div className="mx-3">
-                          <div>
-                          {obj.fullname}
-                          </div>
-                        <div className="text-xs">{obj.email}</div>
-                          </div>
+                          <div>{obj.fullname}</div>
+                          <div className="text-xs">{obj.email}</div>
+                        </div>
                       </td>
                       <td className="p-3 text-sm text-grey-700 ">
                         {" "}
@@ -147,31 +112,32 @@ function Employees() {
                           Active
                         </span>{" "}
                       </td>
-                      <td className="p-3 text-sm text-grey-700">
-                        #{obj.UID}
-                      </td>
+                      <td className="p-3 text-sm text-grey-700">#{obj.UID}</td>
                       <td className="p-3 text-sm text-grey-700 ">
                         {obj.position}
                       </td>
-                      
-                      <td className="p-3 flex justify-center items-center">
 
-                    {obj.status === 'Blocked'?
-                      <button onClick={()=>handleUnBlock(obj.UID)}>
-                        <i class='bx bx-lock-open text-2xl text-green-500 p-3'></i>
-                      </button>
-                      :
-                      <button onClick={()=>handleBlock(obj.UID)}>
-                      <i class='bx bx-lock text-2xl text-red-600 p-3'></i>
-                      </button>
-
-                    }
+                      <td className="my-10">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                              <span class="text-sm font-medium text-green-700 ">
+                                45%
+                              </span>
+                            </div>
+                            <div
+                              class="w-full bg-gray-200 rounded-full h-2.5 "
+                              style={{ width: "200px" }}
+                            >
+                              <div 
+                                class="bg-green-600 h-2.5 rounded-full"
+                                style={{ width: `${150}px` }}
+                              ></div>
+                            </div>
+                        </div>
                       </td>
-                      <td className="p-3 cursor-pointer">
-                        <Link to={`/hr/employeee/edit/${obj.UID}`}>
-                        edit
-                        </Link>
-                        </td>
+                      <td className="p-3 cursor-pointer text-blue-400">
+                        <div>Assign Task</div>
+                      </td>
                     </tr>
                   );
                 })
@@ -283,7 +249,7 @@ function Employees() {
             return (
               <div
                 key={index}
-                className="bg-white p-4 rounded-lg shadow overflow-hidden"
+                className="bg-white p-4 rounded-lg shadow overflow-hidden cursor-pointer"
               >
                 <div className="flex justify-between item-center space-x-2 text-sm relative">
                   <div className="flex">
@@ -325,4 +291,4 @@ function Employees() {
   );
 }
 
-export default Employees;
+export default AssignTask;
