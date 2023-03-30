@@ -6,7 +6,7 @@ import AddEmployee from "../Pages/HrPages/AddEmployee";
 import LeaveApplications from "../Pages/HrPages/LeaveApplications";
 import ApprovedApplication from "../Pages/HrPages/ApprovedApplication";
 import RejectedApplication from "../Pages/HrPages/RejectedApplication";
-import EditEmployee from "../Pages/HrPages/editEmployee";
+import EditEmplo from "../Pages/HrPages/EditEmplo";
 import EachDepartment from "../Pages/HrPages/EachDepartment";
 import Chat from '../Pages/HrPages/Chat'
 
@@ -26,7 +26,7 @@ function HrRoutes() {
           path="/leaveapplications/rejected"
           element={<RejectedApplication />}
         />
-        <Route path="/employeee/edit/:id" element={<EditEmployee />} />
+        <Route path="/employeee/edit/:id" element={<EditEmplo />} />
         <Route path='/DepartmentPage/:id' element={<EachDepartment/>}/>
         <Route path="/messages" element={<Chat/>} />
       </Routes>

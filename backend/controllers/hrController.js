@@ -95,6 +95,24 @@ module.exports = {
       const applications = await applicationModel.find({ status: "Pending" });
       if (applications.length != 0) {
         applications.forEach((obj) => {
+          console.log(obj.from)
+          //from date retrive 
+          const from = obj.from;
+          const newdate = new Date(from);
+          const newMonth = newdate.toLocaleString("default", { month: "long" });
+          const newDay = newdate.getDate().toString().padStart(2, "0");
+          const newYear = newdate.getFullYear();
+          const datenew = `${newDay} ${newMonth} ${newYear}`;
+          //
+          //to date retrive
+          const to = obj.to;
+          const newto =new Date(to);
+          const tonewMonth = newto.toLocaleString("default", { month: "long" });
+          const tonewDay = newto.getDate().toString().padStart(2, "0");
+          const tonewYear = newto.getFullYear();
+          const todatenew = `${tonewDay} ${tonewMonth} ${tonewYear}`;
+          //
+          //submit time retrive
           const date = obj.submiton;
           const year = date.getFullYear();
           const month = date.toLocaleString("default", { month: "long" });
@@ -110,6 +128,18 @@ module.exports = {
           if (hours > 12) {
             hours -= 12;
           }
+          //
+
+          //from retrive
+          // const fromday = from.getDate().toString().padStart(2, "0");
+          // const fromYear = from.getFullYear();
+
+          //
+
+          //to retrive 
+
+          //
+
           const _id = obj._id;
           const uid = obj.UID;
           const period = obj.leavePeriod;
@@ -123,6 +153,8 @@ module.exports = {
             period: period,
             reason: reason,
             submiton: submitdate,
+            from:datenew,
+            to:todatenew,
           };
           applicationsinfo.push(alldata);
         });
@@ -232,6 +264,23 @@ module.exports = {
       if (applications.length != 0) {
         applications.forEach((obj) => {
           const date = obj.submiton;
+          //from date retrive 
+          const from = obj.from;
+          const newdate = new Date(from);
+          const newMonth = newdate.toLocaleString("default", { month: "long" });
+          const newDay = newdate.getDate().toString().padStart(2, "0");
+          const newYear = newdate.getFullYear();
+          const datenew = `${newDay} ${newMonth} ${newYear}`;
+          //
+          //to date retrive
+          const to = obj.to;
+          const newto =new Date(to);
+          const tonewMonth = newto.toLocaleString("default", { month: "long" });
+          const tonewDay = newto.getDate().toString().padStart(2, "0");
+          const tonewYear = newto.getFullYear();
+          const todatenew = `${tonewDay} ${tonewMonth} ${tonewYear}`;
+          //
+          //submit date retrive
           const year = date.getFullYear();
           const month = date.toLocaleString("default", { month: "long" });
           const day = date.getDate().toString().padStart(2, "0");
@@ -259,6 +308,8 @@ module.exports = {
             period: period,
             reason: reason,
             submiton: submitdate,
+            from:datenew,
+            to:todatenew
           };
           applicationsinfo.push(alldata);
         });
@@ -279,6 +330,23 @@ module.exports = {
       if (applications.length != 0) {
         applications.forEach((obj) => {
           const date = obj.submiton;
+          //from date retrive 
+          const from = obj.from;
+          const newdate = new Date(from);
+          const newMonth = newdate.toLocaleString("default", { month: "long" });
+          const newDay = newdate.getDate().toString().padStart(2, "0");
+          const newYear = newdate.getFullYear();
+          const datenew = `${newDay} ${newMonth} ${newYear}`;
+          //
+          //to date retrive
+          const to = obj.to;
+          const newto =new Date(to);
+          const tonewMonth = newto.toLocaleString("default", { month: "long" });
+          const tonewDay = newto.getDate().toString().padStart(2, "0");
+          const tonewYear = newto.getFullYear();
+          const todatenew = `${tonewDay} ${tonewMonth} ${tonewYear}`;
+          //
+          //submit date retrive/
           const year = date.getFullYear();
           const month = date.toLocaleString("default", { month: "long" });
           const day = date.getDate().toString().padStart(2, "0");
@@ -306,6 +374,8 @@ module.exports = {
             period: period,
             reason: reason,
             submiton: submitdate,
+            from:datenew,
+            to:todatenew,
           };
           applicationsinfo.push(alldata);
         });
@@ -596,17 +666,17 @@ module.exports = {
   removeEmployee: (req, res) => {
     try {
       const uid = req.body.data;
-
+      console.log(uid)
       employeeModel
         .findOneAndUpdate(
           { UID: uid },
           {
             $set: {
               status: "Removed",
-            },
+            }, 
           }
-        )
-        .then(() => {
+        ) 
+        .then((doc) => {
           res.status(200).json({ success: true });
         })
         .catch((error) => {
@@ -708,6 +778,18 @@ module.exports = {
           res.status(500).json({error:"Internal server error"})
           console.log(error);
         })
+      }
+    })
+  },
+
+  getHrName:(req,res)=>{
+    const id = req.id;
+    const uid = mongoose.Types.ObjectId(id);
+    hrModel.findOne({_id:uid}).then((doc)=>{
+      if(doc){
+        const {fullname} = doc;
+        console.log(fullname)
+        res.status(200).json({fullname})
       }
     })
   }

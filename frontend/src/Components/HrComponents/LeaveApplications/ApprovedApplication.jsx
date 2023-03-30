@@ -42,30 +42,53 @@ function ApprovedApplication() {
                           <span className="mb-2 leading-tight text-xs">
                             ID:{" "}
                             <span className="font-semibold text-slate-700 sm:ml-2">
-                              {obj.UID}
+                              {obj.uid}
                             </span>
                           </span>
                           <span className="mb-2 leading-tight text-xs">
                             Period:{" "}
                             <span className="font-semibold text-slate-700 sm:ml-2">
-                              {obj.leavePeriod === "Half Day"
-                                ? obj.leavePeriod
-                                : obj.leavePeriod + " Days"}
+                              {obj.period === "Half Day"
+                                ? "Half Day"
+                                : obj.period + " Days"}
+                            </span>
+
+                            
+                          </span>
+
+                         {obj.period !== "Half Day"? 
+                         <div className="flex flex-col">
+                         <span className="leading-tight text-xs">
+                            From:{" "}
+                            <span className="font-semibold text-slate-700 sm:ml-2">
+                              {obj.from}
                             </span>
                           </span>
-                          <span className="leading-tight text-xs">
+
+                          <span className="leading-tight text-xs mt-1">
+                            To:{" "}
+                            <span className="font-semibold text-slate-700 sm:ml-2">
+                              {obj.to}
+                            </span>
+                          </span>
+                         </div>
+                          :
+                          ""}
+                          <span className="leading-tight text-xs mt-1">
                             Reason:{" "}
                             <span className="font-semibold text-slate-700 sm:ml-2">
                               {obj.reason}
                             </span>
                           </span>
 
-                          <span className="leading-tight text-xs mt-2">
-                            submit on:{" "}
+                          <span className="leading-tight text-xs mt-1">
+                            Submit on:{" "}
                             <span className="font-semibold text-slate-700 sm:ml-2">
                               {obj.submiton}
                             </span>
                           </span>
+
+                          
                         </div>
                         <div className="ml-auto text-right flex">
                           <div

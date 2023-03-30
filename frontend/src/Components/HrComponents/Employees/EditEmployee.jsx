@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate,useParams } from "react-router-dom";
 import axios from "../../../Api/HrAxios";
 
-function EditEmployee() {
+function EditEmployee(props) {
     const [Removed, setRemoved] = useState(false)
     const {id} = useParams();
     const uid = id;
@@ -94,17 +94,9 @@ function EditEmployee() {
   };
 
   const handleRemove = (uid) =>{
-    const data = {
-      data:uid
-    }
-    axios.post('/hr/employee/edit/remove',data).then((response)=>{
-        if(response.status === 200){
-          console.log("haloo")
-           Navigate('/hr/employees')
-        }
-    }).catch((error)=>{
-      console.log(error)
-    })
+    props.openModal()
+    props.setUid(uid)
+    
   }
 
   const handleReplace = (uid)=>{

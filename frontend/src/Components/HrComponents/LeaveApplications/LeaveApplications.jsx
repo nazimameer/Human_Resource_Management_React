@@ -123,13 +123,27 @@ function LeaveApplications() {
                               {obj.reason}
                             </span>
                           </span>
+                          <span className="leading-tight text-xs mt-1">
+                            from:{" "}                                      
+                            <span className="font-semibold text-slate-700 sm:ml-2">
+                              {obj.from}
+                            </span>
+                          </span>
 
-                          <span className="leading-tight text-xs my-2">
+                          <span className="leading-tight text-xs mt-1">
+                            to:{" "}                                      
+                            <span className="font-semibold text-slate-700 sm:ml-2">
+                              {obj.to}
+                            </span>
+                          </span>
+
+                          <span className="leading-tight text-xs mt-2">
                             Submit at:{" "}                                      
                             <span className="font-semibold text-slate-700 sm:ml-2">
                               {obj.submiton}
                             </span>
                           </span>
+
                           
                         </div>
                         <div className="ml-auto text-right flex">

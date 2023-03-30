@@ -101,12 +101,38 @@ function EmployeesDepartment(props) {
                         <div className="text-xs">{obj.email}</div>
                           </div>
                       </td>
+                      
                       <td className="p-3 text-sm text-grey-700 ">
-                        {" "}
-                        <span className="p-1.5 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
-                          Active
-                        </span>{" "}
+                      {obj.status === "Removed"?
+                        <span className="p-1.5 text-xs  font-medium uppercase tracking-wider  text-yellow-800 
+                        bg-red-200 
+                        rounded-lg bg-opacity-50">
+                          {obj.status}
+                          </span>
+                          :
+                          obj.status === "Blocked"?
+                          <span className="p-1.5 text-xs  font-medium uppercase tracking-wider  text-yellow-800 
+                        bg-red-200 
+                        rounded-lg bg-opacity-50">
+                          {obj.status}
+                          </span>
+                          :
+                          obj.status === "Offline"?
+
+                          <span className="p-1.5 text-xs  font-medium uppercase tracking-wider  text-yellow-800 
+                        bg-slate-300
+                        rounded-lg bg-opacity-50">
+                          {obj.status}
+                          </span>
+                          :
+                          <span className="p-1.5 text-xs font-medium uppercase tracking-wider  text-yellow-800 
+                        bg-green-300
+                        rounded-lg bg-opacity-50">
+                          {obj.status}
+                          </span>
+                    }
                       </td>
+
                       <td className="p-3 text-sm text-grey-700">
                         #{obj.UID}
                       </td>

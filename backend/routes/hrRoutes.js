@@ -31,5 +31,7 @@ router.post('/employee/edit/replace',Authentication.verifyToken,hrController.rep
 router.post('/addDepartment',Authentication.verifyToken,hrController.addDepartment);
 router.post('/checkDepartment',Authentication.verifyToken,hrController.checkDepartment);
 router.get('/getDepartments',Authentication.verifyToken,hrController.getDepartments);
-router.get('/getDepartmentInfo/:id',Authentication.verifyToken,hrController.departmentInfo)
+router.get('/getDepartmentInfo/:id',Authentication.verifyToken,hrController.departmentInfo);
+router.get('/getAllEmployees',Authentication.verifyToken, hrController.getEmployees);
+router.get('/gethrname',Authentication.verifyToken,hrController.getHrName)
 module.exports = router;
