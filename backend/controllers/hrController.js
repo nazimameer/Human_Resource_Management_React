@@ -3,10 +3,12 @@ const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
 const attendanceModel = require("../models/employeeAttendance");
+const DepartmentModel = require('../models/departmentModal')
 
 const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
 const { default: mongoose } = require("mongoose");
+const departmentModal = require("../models/departmentModal");
 module.exports = {
   verifyLogin: (req, res) => {
     const authHeader = req.headers.authorization;
@@ -73,7 +75,6 @@ module.exports = {
   checkemail: async (req, res) => {
     try {
       const checkemail = req.body.email;
-      console.log("checked email:  " + checkemail);
       const gotit = await employeeModel.findOne({
         email: checkemail,
       });
@@ -90,7 +91,6 @@ module.exports = {
 
   getApplications: async (req, res) => {
     try {
-      console.log("eue");
       const applicationsinfo = [];
       const applications = await applicationModel.find({ status: "Pending" });
       if (applications.length != 0) {
@@ -137,7 +137,6 @@ module.exports = {
 
   applicApprove: async (req, res) => {
     const id = req.body.id;
-    console.log(id);
 
     const objid = mongoose.Types.ObjectId(id);
     applicationModel
@@ -165,15 +164,12 @@ module.exports = {
   addEmployee: async (req, res) => {
     try {
       const data = req.body; // Puting the data in to a variable
-      console.log(data);
       const { password } = data;
       const saltRounds = 10;
       const hashedPassword = bcrypt.hashSync(password, saltRounds);
       // Algorithm to generate unique user ID
-
       const UIDs = []; // Initialize an empty array
       const employees = await employeeModel.find({}); //taken all documents in employees collection
-
       // Taken all UID from each doc and stored in UIDs array
       employees.forEach((employee) => {
         if (employee.UID == undefined) {
@@ -182,9 +178,7 @@ module.exports = {
         }
         UIDs.push(employee.UID); // push in to array: UIDs
       });
-
       // Generate a random number and check its already in that array
-
       const RandomNumber = () => Math.floor(10000 + Math.random() * 90000); // Generate a random number with 5 digits
 
       // Puting unique number into UID variable
@@ -206,6 +200,7 @@ module.exports = {
           phone: data.phone,
           password: hashedPassword,
           salary: data.salary,
+          department: data.department,
         })
         .then(() => {
           res.json({ success: true }); // Send response after add user done
@@ -378,7 +373,6 @@ module.exports = {
               (record) => record.status === "Present"
             );
             if (matched.length !== 0) {
-              console.log(matched);
               res.status(200).json({ attendance: matched });
               return;
             } else {
@@ -415,7 +409,6 @@ module.exports = {
               (record) => record.status === "Absent"
             );
             if (matched.length !== 0) {
-              console.log(matched);
               res.status(200).json({ attendance: matched });
               return;
             } else {
@@ -483,7 +476,6 @@ module.exports = {
             { $set: { "attendance.$.status": "Absent" } }
           )
           .then(() => {
-            console.log("done");
             res.status(200).json({ success: true });
           })
           .catch((error) => {
@@ -550,7 +542,6 @@ module.exports = {
       const uid = req.body.uid;
       const data = req.body; // Puting the data in to a variable
       const { password } = data.formData;
-      console.log(password);
       if (uid) {
         employeeModel.findOne({ UID: uid }).then((doc) => {
           if (doc) {
@@ -649,4 +640,76 @@ module.exports = {
       console.log(error);
     }
   },
-};
+  checkDepartment:(req,res)=>{
+    try{
+
+      const name = req.body.name;
+      departmentModal.findOne({
+        name:name,
+      }).then((doc)=>{
+        if(doc){
+          res.status(409).json({error:"Name Already Exist"})
+        }else{
+          res.status(200).json({success:true})       
+        }
+      }).catch((error)=>{
+        console.log(error)
+        res.status(500).json({error:"Internal Server Error"})
+      })
+    }catch(error){
+      res.status(500).json({ error:"Internal Server Error" })
+      console.log(error)
+    }
+  },
+  addDepartment:(req,res)=>{
+    try{
+
+      const name = req.body.name;
+      if(name){
+        DepartmentModel.create({
+          name:name
+        }).then(()=>{
+          res.status(200).json({ success:true })
+        }).catch((error)=>{
+          console.log(error)
+          res.status(500).json({error:"Internal Server Error"});
+        })
+      }
+    }catch(error){
+      console.log(error);
+      res.status(500).json({error:"Internal Server Error"}) 
+    }
+  },
+  getDepartments:(req,res)=>{
+    departmentModal.find({}).then((doc)=>{
+      if(doc){
+        const data = doc;
+        res.status(200).json({data});
+      }else{
+        res.status(404).json({error:"No Documents found"})
+      }
+    }).catch((error)=>{
+      console.log(error);
+      res.status(500).json({error:"Internal Server Error"})
+    })
+  },
+  departmentInfo:(req,res)=>{
+    const id = req.params.id;
+    const objId = mongoose.Types.ObjectId(id)
+    departmentModal.findOne({_id:objId}).then((doc)=>{
+      if(doc){
+        const dep = doc.name;
+        employeeModel.find({
+          department:dep
+        }).then((document)=>{
+          const data = document;
+          res.status(200).json({data})
+        }).catch((error)=>{
+          res.status(500).json({error:"Internal server error"})
+          console.log(error);
+        })
+      }
+    })
+  }
+
+};  

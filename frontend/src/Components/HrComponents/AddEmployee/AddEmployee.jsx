@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../Api/HrAxios";
 import { message } from "antd";
 
 function AddEmployee() {
+  const [Departments, SetDepartments] = useState([])
+  useEffect(()=>{
+    axios.get('/hr/getDepartments').then((response)=>{
+      const data = response.data.data;
+      SetDepartments(data)
+    })
+  },[])
+  const [dropValue,SetDropValue] = useState(null)
   const Navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullname: "",
@@ -14,6 +22,7 @@ function AddEmployee() {
     phone: "",
     password: "",
     salary:"",
+    department:""
   });
 
   const [nameError, setNameError] = useState(false);
@@ -24,7 +33,7 @@ function AddEmployee() {
   const [phoneError, setPhoneError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [salaryError, setSalaryError] = useState(false);
-
+  const [DepartmentError,setDepartmentError] =useState(false);
 
   const handleChange = (event) => {
     if (event.target.value === "") {
@@ -52,6 +61,9 @@ function AddEmployee() {
       }else if (event.target.name === "salary"){
         setSalaryError(true);
         return;
+      }else if (event.target.name === "department" ){
+        setDepartmentError(true);
+        return;
       }
       return;
     } else {
@@ -71,6 +83,8 @@ function AddEmployee() {
         setPasswordError(false);
       } else if (event.target.name === "salary"){
         setSalaryError(false);
+      }else if (event.target.name === "department"){
+        setDepartmentError(false);
       }
     }
     setFormData({
@@ -78,6 +92,18 @@ function AddEmployee() {
       [event.target.name]: event.target.value,
     });
   };
+
+  const handledropchange = (event)=>{
+    
+    SetDropValue(event.target.value)
+    const name = "department"
+
+    setFormData({
+      ...formData,
+      [name]: event.target.value,
+    })
+    setDepartmentError(false)
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -105,6 +131,9 @@ function AddEmployee() {
       return;
     }else if (formData.salary === ""){
       setSalaryError(true);
+      return;
+    }else if (formData.department === ""){
+      setDepartmentError(true);
       return;
     }
 
@@ -353,6 +382,45 @@ function AddEmployee() {
                   </div>
                 </div>
 
+
+                <div className="flex flex-wrap mt-4 -mx-3">
+                  <div className="w-full max-w-full px-3 mt-4 flex-0 sm:mt-0 sm:w-6/12">
+                    <label
+                      className="mb-2 ml-1 text-xs font-bold text-black"
+                      htmlFor="Password"
+                    >
+                      Department
+                    </label>
+                    <select
+                      name="department"
+                      value={dropValue}
+                      onChange={handledropchange}
+                      className="focus:shadow-primary-outline dark:bg-slate-850 text-black text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                      required
+                    >
+
+                      <option value="Select" hidden>Select</option>
+                      {
+                      Departments.map((obj)=>{
+                        return(
+                          <option value={obj.name}>{obj.name}</option>
+                        )
+                      })
+                    }
+                      
+
+                    </select>
+                    {DepartmentError ? (
+                      <div className="bg-red-700 rounded w-44 my-2">
+                        <span className="ml-2 text-white ">
+                          This field is required
+                        </span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </div>
                 <div className="flex mt-6">
                   <button
                     type="submit"

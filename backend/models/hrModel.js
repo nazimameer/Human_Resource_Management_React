@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const hrSchema = new mongoose.Schema({
-  username: {
+  fullname: {
     type: String,
     required: true,
   },

@@ -3,15 +3,17 @@ import Attendances from "./Attendances";
 import Calender from "./Calender";
 import Activities from "./Activities";
 import TopBar from "./AttTopBar";
-import Departments from './Departments';
 import Footer from "./Footer";
 import axios from "../../../Api/HrAxios";
+
 function Dashboard() {
   const [attendance, setAttendace] = useState([]);
   const [today, setToday] = useState("");
   const [attLength, setAttLength] = useState(false);
   const [Present,SetPresent] = useState(false);
   const [Absent,SetAbsent] = useState(false);
+
+  
   useEffect(() => {
     const today = new Date().toLocaleDateString();
     setToday(today);
@@ -23,6 +25,8 @@ function Dashboard() {
           setAttendace(data);
           setAttLength(true);
         }
+
+       
       })
       .catch((error) => {
         console.log(error);
@@ -46,6 +50,8 @@ function Dashboard() {
       }
     });
   };
+
+
 
   const handleAbsent = (uid) => {
     const data = uid;
@@ -125,6 +131,8 @@ function Dashboard() {
         setAttLength(false);
       });
   };
+
+
   return (
     <div className="mt-20 bg-slate-900">
       <div className="calenderbar flex w-full h-2/3">
@@ -150,10 +158,7 @@ function Dashboard() {
       </div>
 
 
-      <div className="mt-16">
-    {/* <AssignTask/> */}
-    <Departments/>
-      </div>
+        
 
       <div>
       <Footer/>

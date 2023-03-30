@@ -1,60 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "../../../Api/HrAxios";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-function Employees() {
-  const [employees, setEmployees] = useState([]);
-  const [isLength, setIsLength] = useState(false);
+function EmployeesDepartment(props) {
+  
   const [searchQuery, setSearchQuery] = useState("");
   const handleBlock = (uid) =>{
-    axios.post('/hr/blockEmployee',{uid}).then(()=>{
-      axios.get("/hr/employees").then((response) => {
-        if (response.data.status) {
-          if (response.data.length !== 0) {
-            setIsLength(true);
-            setEmployees(response.data.employees);
-          }
-        }
-      })
-    })
+    
   }
-const handleUnBlock = (uid) =>{
-    axios.post('/hr/unblockEmployee',{uid}).then(()=>{
-      axios.get("/hr/employees").then((response) => {
-        if (response.data.status) {
-          if (response.data.length !== 0) {
-            setIsLength(true);
-            setEmployees(response.data.employees);
-          }
-        }
-      })
-    })
-  };
-  const Navigate = useNavigate();
-  useEffect(() => {
-    axios.get("/hr/employees").then((response) => {
-      console.log(response);
 
-      if (response.status === 401) {
-        Navigate("/hr/login");
-      } else if (response.status === 500) {
-        Navigate("/hr/login");
-      }
+  const handleUnBlock = (uid) =>{
+    
+  }
 
-      if (response.data.status) {
-        if (response.data.length !== 0) {
-          setIsLength(true);
-          setEmployees(response.data.employees);
-        }
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
   const handleInputSearch = (event) => {
     setSearchQuery(event.target.value);
   };
+
   const filteredList = searchQuery
-    ? employees.filter(
+    ? props.employees.filter(
         (employees) =>
           employees.fullname
             .toLowerCase()
@@ -63,19 +27,21 @@ const handleUnBlock = (uid) =>{
           employees.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
           employees.position.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : employees;
+    : props.employees;
+
   return (
     <div className="bg-slate-900">
-      <div className="sm:mx-5 md:mx-10 ">
+      <div className="sm:mx-5 md:mx-10 my-24">
         <div className="my-3">
           <div className="flex items-center justify-between">
             <Link
               to={"/hr/addemployee"}
               className=" bg-green-500 p-2  rounded text-xs"
-               >
+            >
               Add Employee
             </Link>
-            {isLength ? (
+
+            {props.isLength ? (
               <input
                 type="text"
                 className="p-3 w-28 h-7 sm:w-40 sm:h-9 md:h-10 rounded-lg focus:border-none bg-white py-2 text-gray-700 transition-all placeholder:text-gray-500 "
@@ -116,14 +82,14 @@ const handleUnBlock = (uid) =>{
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {isLength ? (
+              {props.isLength ? (
                 filteredList.map((obj, index) => {
                   return (
                     <tr key={index} className="bg-white">
                       <td className="p-3 text-sm text-grey-700 flex items-center">
                         <div className="w-12 h-12  rounded-lg my-1 mx-2 shadow-lg shadow-gray-300 overflow-hidden">
                           <img
-                            src="../images/adminlogo.jpeg"
+                            src="../../images/adminlogo.jpeg"
                             alt="fsdfd"
                             className="w-full h-full object-cover"
                           />
@@ -183,7 +149,7 @@ const handleUnBlock = (uid) =>{
                 </tr>
               )}
 
-              {isLength ? (
+              {props.isLength ? (
                 <tr className="h-16 relative" colSpan="6">
                   <td className="py-3 px-3 absolute right-0">
                     <nav
@@ -273,7 +239,7 @@ const handleUnBlock = (uid) =>{
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden mx-3">
-          {employees.map((obj, index) => {
+          {props.employees.map((obj, index) => {
             return (
               <div
                 key={index}
@@ -319,4 +285,4 @@ const handleUnBlock = (uid) =>{
   );
 }
 
-export default Employees;
+export default EmployeesDepartment;

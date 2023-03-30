@@ -1,13 +1,14 @@
 import React,{useEffect,useState} from "react";
 import "./SalarySlip.css";
 import axios from '../../../Api/EmployeeAxios'
-
+import Modal from "./Modal";
 function SalarySlip() {
   const date = new Date();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
   const thismonth = `${year}-${month.toString().padStart(2, "0")}`;
   const [Salary, SetSalary] =useState(null);
+  const [openModal,setOpenModal] = useState(false)
   
   useEffect(() => {
     
@@ -22,6 +23,7 @@ function SalarySlip() {
 
   }, []);
   return (
+    
     <div className="my-20 bg-slate-900">
       <div class="w-full px-6 py-6 mx-auto">
         <div class="flex flex-wrap -mx-3">
@@ -59,8 +61,10 @@ function SalarySlip() {
                             
                           </div>
                         </div>
-                        <div className="flex justify-center items-center mx-3 cursor-pointer"  type="button">
+                        <div className="flex justify-center items-center mx-3 cursor-pointer" onClick={()=>setOpenModal(true)}>
                           <i class="bx bxs-pencil "></i>
+
+                          <Modal open={openModal}/>
                         </div>
                       </div>
                     </div>

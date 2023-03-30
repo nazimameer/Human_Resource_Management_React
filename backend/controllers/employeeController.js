@@ -500,11 +500,16 @@ module.exports = {
 
     if (doc) {
       console.log("blocked");
-
       res.status(400).json({ error: "YOU ARE BLOCKED" });
     } else {
       console.log("done");
       res.status(200).json({ success: true });
     }
   },
+  allUsers:async(req,res)=>{
+    const keyword ={ fullname: req.query.search}
+
+    const users = await employeeModel.findOne(keyword.fullname)
+    console.log(users)
+  }
 };

@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const secretKey = "Brototype";
 module.exports = {
   verifyToken: (req, res, next) => {
-    console.log('halo') 
     try{
       const authHeader = req.headers.authorization;
       if (authHeader == undefined) {
@@ -15,6 +14,7 @@ module.exports = {
           res.status(500).send({ error: "Authentication failed" });
           return;
         } else {
+          req.id = decoded.id;
           req.uid = decoded.uid;
           next();
         }

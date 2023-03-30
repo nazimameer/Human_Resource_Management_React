@@ -28,10 +28,17 @@ const employeeSchema = new mongoose.Schema({
   salary:{ 
     type:Number,
   },
+  department:{
+    type: String
+  },
   status:{
     type:String,
     default: "Offline"
-  }
+  },
+  pic:{ type: String, default:"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"}
+},
+{
+  timestamps: true
 });
 
 module.exports = mongoose.model("employee", employeeSchema);
