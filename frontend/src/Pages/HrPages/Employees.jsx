@@ -6,11 +6,16 @@ import AddDepartment from "../../Components/HrComponents/Employees/AddDepartment
 import Departments from "../../Components/HrComponents/Employees/Departments";
 import axios from '../../Api/HrAxios'
 import Footer from "../../Components/HrComponents/Employees/Footer";
+import TaskAddDep from "../../Components/HrComponents/Employees/TaskAddDep";
 function Employees() {
   const [SearchQuery, SetSearchQuery] = useState("");
   const [Department, SetDepartments] = useState([]);
   const [openModal,SetOpenModal] = useState(false);
-
+  const [openTaskDep, SetOpenTaskDep] = useState(false);
+  const [id,SetId] = useState(null)
+  useEffect(() => {
+   console.log(id)
+  }, [id]);
   useEffect(() => {
     axios.get('/hr/getDepartments').then((response)=>{
       if(response.status === 200){
@@ -54,8 +59,9 @@ function Employees() {
       <div className="content bg-slate-900">
 
       <div className="mt-20 mx-5 ">
-    <Departments Department={filteredList} openModal={()=>SetOpenModal(true)}  Search={handleSearchChange}/>
+    <Departments setId={(id)=>SetId(id)} Department={filteredList} openModal={()=>SetOpenModal(true)} openTaskDep={()=>SetOpenTaskDep(true)}  Search={handleSearchChange}/>
     <AddDepartment open={openModal} closeModal={()=>SetOpenModal(false)} DepRefresh={()=>DepRefresh}/>
+    <TaskAddDep open={openTaskDep} id={id} closeModal={()=>SetOpenTaskDep(false)}/>
       </div>
       <div>
 

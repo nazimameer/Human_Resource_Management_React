@@ -6,6 +6,11 @@ function Departments(props) {
 const toDepartment =(id)=>{
   Navigate(`/hr/DepartmentPage/${id}`)
 }
+
+const handleOnclick = (id) =>{
+  props.setId(id)
+  props.openTaskDep()
+}
   return (
     <div className="mx-5 relative">
       <div class="flex flex-wrap my-6 -mx-3">
@@ -44,22 +49,20 @@ const toDepartment =(id)=>{
                       <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Completion
                       </th>
+
+                      <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                        Task
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
 { props.Department.map((obj,index)=>{
   return(
 
-                    <tr className="cursor-pointer" key={index} onClick={()=>toDepartment(obj._id)}>
-                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap">
+                    <tr className="cursor-pointer" key={index} >
+                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap" onClick={()=>toDepartment(obj._id)}>
                         <div class="flex px-2 py-1">
-                          <div>
-                            <img
-                              src="../images/adminlogo.jpeg"
-                              class="inline-flex items-center object-cover justify-center mr-4 text-white transition-all duration-200 ease-soft-in-out text-sm h-9 w-9 rounded-xl"
-                              alt="xd"
-                            />
-                          </div>
+                          
                           <div class="flex flex-col justify-center">
                             <h6 class="mb-0 leading-normal text-sm">
                               {obj.name}
@@ -207,6 +210,12 @@ const toDepartment =(id)=>{
                           </div>
                         </div>
                       </td>
+
+                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap"  onClick={()=>handleOnclick(obj._id)}>
+                            <div className="flex items-center justify-center" >
+                            <i class='bx bx-task text-xl'></i>
+                            </div>
+                      </td>
                     </tr>
   )
 })
@@ -221,34 +230,27 @@ const toDepartment =(id)=>{
         <div class="w-full max-w-full px-3 md:w-1/2 md:flex-none lg:w-1/3 lg:flex-none">
           <div class="border-black/12.5 shadow-soft-xl relative flex h-full min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
             <div class="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid bg-white p-6 pb-0">
-              <h6>Orders overview</h6>
-              <p class="leading-normal text-sm">
-                <i class="fa fa-arrow-up text-lime-500" aria-hidden="true"></i>
-                <span class="font-semibold">24%</span> this month
-              </p>
+              <h6> Task Status </h6>
             </div>
             <div class="flex-auto p-4">
-              <div class="before:border-r-solid relative before:absolute before:top-0 before:left-4 before:h-full before:border-r-2 before:border-r-slate-100 before:content-[''] before:lg:-ml-px">
+              <div >
                 <div class="relative mb-4 mt-0 after:clear-both after:table after:content-['']">
-                  <span class="w-6.5 h-6.5 text-base absolute left-4 z-10 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-white text-center font-semibold">
-                    <i class="relative z-10 text-transparent ni leading-none ni-bell-55 leading-pro bg-gradient-to-tl from-green-600 to-lime-400 bg-clip-text fill-transparent"></i>
-                  </span>
+                 
                   <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
                     <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                      $2400, Design changes
+                    New Completion #1832412
+
                     </h6>
                     <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
                       22 DEC 7:20 PM
                     </p>
                   </div>
                 </div>
-                <div class="relative mb-4 after:clear-both after:table after:content-['']">
-                  <span class="w-6.5 h-6.5 text-base absolute left-4 z-10 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-white text-center font-semibold">
-                    <i class="relative z-10 text-transparent ni leading-none ni-html5 leading-pro bg-gradient-to-tl from-red-600 to-rose-400 bg-clip-text fill-transparent"></i>
-                  </span>
+                <div class="relative mb-4 after:clear-both after:table ">
+                  
                   <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
                     <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                      New order #1832412
+                      New Completion #1832412
                     </h6>
                     <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
                       21 DEC 11 PM
@@ -256,12 +258,11 @@ const toDepartment =(id)=>{
                   </div>
                 </div>
                 <div class="relative mb-4 after:clear-both after:table after:content-['']">
-                  <span class="w-6.5 h-6.5 text-base absolute left-4 z-10 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-white text-center font-semibold">
-                    <i class="relative z-10 text-transparent ni leading-none ni-cart leading-pro bg-gradient-to-tl from-blue-600 to-cyan-400 bg-clip-text fill-transparent"></i>
-                  </span>
+                  
                   <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
                     <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                      Server payments for April
+                    New Completion #1832412
+
                     </h6>
                     <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
                       21 DEC 9:34 PM
@@ -269,12 +270,11 @@ const toDepartment =(id)=>{
                   </div>
                 </div>
                 <div class="relative mb-4 after:clear-both after:table after:content-['']">
-                  <span class="w-6.5 h-6.5 text-base absolute left-4 z-10 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-white text-center font-semibold">
-                    <i class="relative z-10 text-transparent ni leading-none ni-credit-card leading-pro bg-gradient-to-tl from-red-500 to-yellow-400 bg-clip-text fill-transparent"></i>
-                  </span>
+                 
                   <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
                     <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                      New card added for order #4395133
+                    New Completion #1832412
+
                     </h6>
                     <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
                       20 DEC 2:20 AM
@@ -287,7 +287,8 @@ const toDepartment =(id)=>{
                   </span>
                   <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
                     <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                      Unlock packages for development
+                    New Completion #1832412
+
                     </h6>
                     <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
                       18 DEC 4:54 AM
@@ -295,12 +296,11 @@ const toDepartment =(id)=>{
                   </div>
                 </div>
                 <div class="relative mb-0 after:clear-both after:table after:content-['']">
-                  <span class="w-6.5 h-6.5 text-base absolute left-4 z-10 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-white text-center font-semibold">
-                    <i class="relative z-10 text-transparent ni leading-none ni-money-coins leading-pro bg-gradient-to-tl from-gray-900 to-slate-800 bg-clip-text fill-transparent"></i>
-                  </span>
+                  
                   <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
                     <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                      New order #9583120
+                    New Completion #1832412
+
                     </h6>
                     <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
                       17 DEC

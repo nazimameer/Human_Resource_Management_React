@@ -1,15 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from '../../../Api/HrAxios'
 
 function EmployeesDepartment(props) {
   
   const [searchQuery, setSearchQuery] = useState("");
   const handleBlock = (uid) =>{
-    
+    axios.post('/hr/blockEmployee',{uid}).then((response)=>{
+      if(response.status === 200){
+        props.refresh()
+      }
+    })
   }
 
   const handleUnBlock = (uid) =>{
-    
+    axios.post('/hr/unblockEmployee',{uid}).then((response)=>{
+      if(response.status === 200){
+        props.refresh()
+      }
+    })
   }
 
 
@@ -70,6 +79,10 @@ function EmployeesDepartment(props) {
                 
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                   Role
+                </th>
+
+                <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                  Task
                 </th>
 
                 <th className="p-3 text-sm font-semibold tracking-wide text-left flex justify-center">
@@ -139,6 +152,10 @@ function EmployeesDepartment(props) {
                       <td className="p-3 text-sm text-grey-700 ">
                         {obj.position}
                       </td>
+
+                      <td className="p-3 cursor-pointer justify-center items-center" >
+                      <i class='bx bx-task text-xl'></i>
+                      </td>
                       
                       <td className="p-3 flex justify-center items-center">
 
@@ -153,6 +170,9 @@ function EmployeesDepartment(props) {
 
                     }
                       </td>
+
+                      
+
                       <td className="p-3 cursor-pointer">
                         <Link to={`/hr/employeee/edit/${obj.UID}`}>
                         edit

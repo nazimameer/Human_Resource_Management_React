@@ -4,6 +4,7 @@ const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
 const attendanceModel = require("../models/employeeAttendance");
 const DepartmentModel = require('../models/departmentModal')
+const DepTaskModal = require('../models/departmentTaskModal')
 
 const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
@@ -792,6 +793,49 @@ module.exports = {
         res.status(200).json({fullname})
       }
     })
+  },
+
+  addTaskToDepartment:async(req,res)=>{
+    const hr = req.id;
+    const data = req.body.data;
+    const depID = mongoose.Types.ObjectId(data.Depid);
+    const startDate = new Date(data.from)
+    const endDate = new Date(data.to)
+    const assignedBy = mongoose.Types.ObjectId(hr)
+    const task = data.task;
+
+    const DepTaskExist = await DepTaskModal.findOne({
+      departmentId:depID
+    })
+
+
+    if(DepTaskExist){
+      console.log("Exist")
+    DepTaskModal.updateOne(
+      {departmentId:depID},
+      {$push:{ tasks:{ startdate:startDate , enddate: endDate, task: task}}}
+      ).then((doc)=>{
+        res.status(200).json({success:true});
+      }).catch((error)=>{
+        console.log(error)
+        res.status(500).json({error:"Internal Server Error"})
+      })
+    }else{
+      DepTaskModal.create({
+        departmentId:depID,
+        tasks:[{
+          startdate:startDate,
+          enddate:endDate,
+          task:task
+        }],
+        assignedby:assignedBy,
+      }).then((doc)=>{
+        res.status(200).json({success:true});
+      }).catch((error)=>{
+        console.log(error)
+        res.status(500).json({error:"Internal Server Error"})
+      })
+    }
   }
 
 };  

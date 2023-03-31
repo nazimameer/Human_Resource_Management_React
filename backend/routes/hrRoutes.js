@@ -33,5 +33,6 @@ router.post('/checkDepartment',Authentication.verifyToken,hrController.checkDepa
 router.get('/getDepartments',Authentication.verifyToken,hrController.getDepartments);
 router.get('/getDepartmentInfo/:id',Authentication.verifyToken,hrController.departmentInfo);
 router.get('/getAllEmployees',Authentication.verifyToken, hrController.getEmployees);
-router.get('/gethrname',Authentication.verifyToken,hrController.getHrName)
+router.get('/gethrname',Authentication.verifyToken,hrController.getHrName);
+router.post('/addTasktoDepartment',Authentication.verifyToken,hrController.addTaskToDepartment)
 module.exports = router;

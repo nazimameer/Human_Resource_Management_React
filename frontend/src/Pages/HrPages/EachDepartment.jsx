@@ -22,12 +22,21 @@ function EachDepartment() {
         })
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const handleRefresh = ()=>{
+      axios.get(`/hr/getDepartmentInfo/${id}`).then((response)=>{
+        const data = response.data.data;
+        if(data.length !== 0){
+            setIsLength(true)
+            SetEmployees(data)
+        }
+    })
+    }
   return (
     <div>
       <SideBar />
       <NavBar />
       <div className="content bg-slate-900">
-        <EmployeesDepartment isLength={isLength} employees={employees}/>
+        <EmployeesDepartment isLength={isLength} employees={employees} refresh={handleRefresh}/>
       </div>
     </div>
   )
