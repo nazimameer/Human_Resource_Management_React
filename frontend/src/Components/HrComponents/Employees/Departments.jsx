@@ -43,9 +43,9 @@ const handleOnclick = (id) =>{
                       <th class="px-6 py-3 pl-2 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Members
                       </th>
-                      <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                      {/* <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Budget
-                      </th>
+                      </th> */}
                       <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Completion
                       </th>
@@ -182,12 +182,12 @@ const handleOnclick = (id) =>{
                       </td>
 
 
-                      <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap">
+                      {/* <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap">
                         <span class="font-semibold leading-tight text-xs">
                           {" "}
                           $14,000{" "}
                         </span>
-                      </td>
+                      </td> */}
 
 
                       <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap">

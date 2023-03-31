@@ -5,7 +5,7 @@ const applicationModel = require("../models/leaveApplication");
 const attendanceModel = require("../models/employeeAttendance");
 const DepartmentModel = require('../models/departmentModal')
 const DepTaskModal = require('../models/departmentTaskModal')
-
+const IntTaskModel = require('../models/individualTaskModal')
 const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
 const { default: mongoose } = require("mongoose");
@@ -807,13 +807,11 @@ module.exports = {
     const DepTaskExist = await DepTaskModal.findOne({
       departmentId:depID
     })
-
-
-    if(DepTaskExist){
+      if(DepTaskExist){
       console.log("Exist")
     DepTaskModal.updateOne(
       {departmentId:depID},
-      {$push:{ tasks:{ startdate:startDate , enddate: endDate, task: task}}}
+      {$push:{ tasks:{ startdate:startDate , enddate: endDate, task: task, assignedby:assignedBy}}}
       ).then((doc)=>{
         res.status(200).json({success:true});
       }).catch((error)=>{
@@ -826,9 +824,9 @@ module.exports = {
         tasks:[{
           startdate:startDate,
           enddate:endDate,
-          task:task
+          task:task,
+          assignedby:assignedBy,
         }],
-        assignedby:assignedBy,
       }).then((doc)=>{
         res.status(200).json({success:true});
       }).catch((error)=>{
@@ -836,6 +834,45 @@ module.exports = {
         res.status(500).json({error:"Internal Server Error"})
       })
     }
+  },
+  addTaskToInt:async(req,res)=>{
+    const hr = req.id;
+    const assignedBy = mongoose.Types.ObjectId(hr)
+    const data = req.body.data;
+    console.log(data)
+    const Intfrom = new Date(data.from)
+    const Intto = new Date(data.to)
+    const IntTask = data.task;
+    const IntId = data.uid;
+    const IntTaskExist = await IntTaskModel.findOne({
+      UID:IntId
+    })
+    if(IntTaskExist){
+      console.log("exist")
+      IntTaskModel.updateOne(
+        {UID:IntId},
+        {$push:{ tasks:{ startdate:Intfrom, enddate: Intto, task: IntTask, assignedBy:assignedBy}}}
+      ).then(()=>{
+        res.status(200).json({success:true})
+      }).catch((error)=>{
+        console.log(error);
+        res.status(500).json({error:"Internal Server Error"})
+      })
+    }else{
+      IntTaskModel.create({
+        UID:IntId,
+        tasks:[{
+          startdate:Intfrom,
+          enddate:Intto,
+          task:IntTask,
+          assignedby:assignedBy,
+        }],
+      }).then((doc)=>{
+        res.status(200).json({success:true})
+      }).catch((error)=>{
+        console.log(error);
+        res.status(500).json({error:"Internal Server Error"})
+      })
+    }
   }
-
-};  
+};

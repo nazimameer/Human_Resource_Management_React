@@ -4,11 +4,18 @@ import axios from '../../Api/HrAxios'
 import SideBar from "../../Components/HrComponents/SideBar/SideBar";
 import NavBar from "../../Components/HrComponents/NavBar/NavBar";
 import EmployeesDepartment from '../../Components/HrComponents/Dashboard/EmployeesDepartment'
+import TaskAddInt from '../../Components/HrComponents/Employees/TaskAddInt';
 
 
 function EachDepartment() {
     const [employees,SetEmployees] = useState([]);
+    const [uid,SetuId] = useState(null)
   const [isLength, setIsLength] = useState(false);
+  const [openModal,SetOpenModal] = useState(false);
+
+  useEffect(() => {
+    console.log(uid)
+  }, [uid]);
 
     const {id} = useParams();
     useEffect(() => {
@@ -36,7 +43,8 @@ function EachDepartment() {
       <SideBar />
       <NavBar />
       <div className="content bg-slate-900">
-        <EmployeesDepartment isLength={isLength} employees={employees} refresh={handleRefresh}/>
+        <EmployeesDepartment setId={(uid)=>SetuId(uid)} isLength={isLength} employees={employees} refresh={handleRefresh} openModal={()=>SetOpenModal(true)}/>
+        <TaskAddInt open={openModal} closeModal={()=>SetOpenModal(false)} uid={uid}/>
       </div>
     </div>
   )

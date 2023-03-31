@@ -5,6 +5,11 @@ import axios from '../../../Api/HrAxios'
 function EmployeesDepartment(props) {
   
   const [searchQuery, setSearchQuery] = useState("");
+  const handleTaskclick = (uid)=>{
+    console.log(uid)
+    props.setId(uid)
+    props.openModal();
+  }
   const handleBlock = (uid) =>{
     axios.post('/hr/blockEmployee',{uid}).then((response)=>{
       if(response.status === 200){
@@ -153,7 +158,7 @@ function EmployeesDepartment(props) {
                         {obj.position}
                       </td>
 
-                      <td className="p-3 cursor-pointer justify-center items-center" >
+                      <td className="p-3 cursor-pointer justify-center items-center" onClick={()=>handleTaskclick(obj.UID)}>
                       <i class='bx bx-task text-xl'></i>
                       </td>
                       
