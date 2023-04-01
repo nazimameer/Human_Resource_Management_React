@@ -113,7 +113,7 @@ function LeaveApplications() {
                             Period:{" "}
                             <span className="font-semibold text-slate-700 sm:ml-2">
                               {obj.period === "Half Day"
-                                ? obj.period
+                                ? obj.period +" ("+obj.section+")"
                                 : obj.period + " Days"}
                             </span>
                           </span>
@@ -123,19 +123,27 @@ function LeaveApplications() {
                               {obj.reason}
                             </span>
                           </span>
-                          <span className="leading-tight text-xs mt-1">
-                            from:{" "}                                      
-                            <span className="font-semibold text-slate-700 sm:ml-2">
-                              {obj.from}
-                            </span>
-                          </span>
 
-                          <span className="leading-tight text-xs mt-1">
-                            to:{" "}                                      
-                            <span className="font-semibold text-slate-700 sm:ml-2">
-                              {obj.to}
+                          {obj.period !== "Half Day"?
+                            <div className="flex flex-col">
+
+                            <span className="leading-tight text-xs mt-1">
+                              from:{" "}                                      
+                              <span className="font-semibold text-slate-700 sm:ml-2">
+                                {obj.from}
+                              </span>
                             </span>
-                          </span>
+
+                            <span className="leading-tight text-xs mt-1">
+                              to:{" "}                                      
+                              <span className="font-semibold text-slate-700 sm:ml-2">
+                                {obj.to}
+                              </span>
+                            </span>
+                            </div>
+                          :
+                        ""}
+
 
                           <span className="leading-tight text-xs mt-2">
                             Submit at:{" "}                                      

@@ -146,6 +146,7 @@ module.exports = {
           const period = obj.leavePeriod;
           const reason = obj.reason;
           const name = obj.name;
+          const section = obj.section;
           const submitdate = `${day} ${month} ${year} at ${hours}:${minutes} ${AmorPm}`;
           const alldata = {
             _id: _id,
@@ -156,6 +157,7 @@ module.exports = {
             submiton: submitdate,
             from: datenew,
             to: todatenew,
+            section:section,
           };
           applicationsinfo.push(alldata);
         });
@@ -301,6 +303,7 @@ module.exports = {
           const period = obj.leavePeriod;
           const reason = obj.reason;
           const name = obj.name;
+          const section = obj.section;
           const submitdate = `${day} ${month} ${year} at ${hours}:${minutes} ${AmorPm}`;
           const alldata = {
             _id: _id,
@@ -311,6 +314,7 @@ module.exports = {
             submiton: submitdate,
             from: datenew,
             to: todatenew,
+            section:section,
           };
           applicationsinfo.push(alldata);
         });
@@ -367,6 +371,7 @@ module.exports = {
           const period = obj.leavePeriod;
           const reason = obj.reason;
           const name = obj.name;
+          const section = obj.section;
           const submitdate = `${day} ${month} ${year} at ${hours}:${minutes} ${AmorPm}`;
           const alldata = {
             _id: _id,
@@ -377,6 +382,7 @@ module.exports = {
             submiton: submitdate,
             from: datenew,
             to: todatenew,
+            section:section
           };
           applicationsinfo.push(alldata);
         });

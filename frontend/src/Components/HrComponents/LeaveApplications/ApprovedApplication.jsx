@@ -49,7 +49,8 @@ function ApprovedApplication() {
                             Period:{" "}
                             <span className="font-semibold text-slate-700 sm:ml-2">
                               {obj.period === "Half Day"
-                                ? "Half Day"
+                                // eslint-disable-next-line no-useless-concat
+                                ? "Half Day" + " ("+obj.section+")"
                                 : obj.period + " Days"}
                             </span>
 

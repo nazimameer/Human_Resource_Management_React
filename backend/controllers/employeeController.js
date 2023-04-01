@@ -79,12 +79,14 @@ module.exports = {
         const name = employee.fullname;
         const now = new Date();
         const reason = data.reason;
+        const section = data.period;
         await applicationModel.create({
           UID: UID,
           name: name,
           submiton: now,
           leavePeriod: "Half Day",
           reason: reason,
+          section:section,
         });
       } else if (leavePeriod === "Full Day") {
         const now = new Date();

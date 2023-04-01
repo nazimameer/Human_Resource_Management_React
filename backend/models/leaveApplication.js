@@ -22,6 +22,9 @@ const leaveApplicationSchema = new mongoose.Schema({
   reason: {
     type: String,
   },
+  section:{
+    type:String,
+  },
   status: {
     type: String,
     default: "Pending",

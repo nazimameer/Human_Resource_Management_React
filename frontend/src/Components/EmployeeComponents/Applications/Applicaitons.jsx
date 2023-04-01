@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import "./Applications.css";
 import axios from "../../../Api/EmployeeAxios";
 import { Link } from "react-router-dom";
+import { message } from "antd";
 
 function Applicaitons() {
   const [isLength, setIsLength] = useState(false);
   const [Applications, setApplications] = useState([]);
   const [InputError, setInputError] = useState(false);
   const [FullDay, setFullDay] = useState(true);
-  const [period,setPeriod] = useState(false);
+  const [period, setPeriod] = useState(false);
   useEffect(() => {
     axios.get("/employee/previousApplication").then((response) => {
-      console.log(response);
       const data = response.data.applicationsinfo;
       if (data.length !== 0) {
         setIsLength(true);
@@ -20,25 +20,30 @@ function Applicaitons() {
     });
   }, []);
 
+  
+
   const [formData, setFormData] = useState({
     leaveperiod: "Full Day",
     from: "",
     to: "",
     reason: "",
-    period:"",
+    period: "",
   });
+
+  
+
   const handleClick = (event) => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
     });
     const value = event.target.value;
-    console.log(value);
     if (value === "Half Day") {
       setFullDay(false);
-      setPeriod(true)
+      setPeriod(true);
     } else {
       setFullDay(true);
+      setPeriod(false)
     }
   };
 
@@ -48,6 +53,14 @@ function Applicaitons() {
     } else {
       setInputError(false);
     }
+
+    const today = new Date()
+
+    if(event.target.value < today.toISOString().slice(0, 10)){
+      message.error("Invalid Date")
+      return;
+    }
+
     setFormData({
       ...formData,
       [event.target.name]: event.target.value,
@@ -56,15 +69,25 @@ function Applicaitons() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const today = new Date();
     if (formData.reason === "") {
       setInputError(true);
+      return;
+    }else if(formData.leaveperiod === "Half Day" && formData.period === ""){
+      message.error("Choose any Period")
+      return;
+    }else if(formData.from < today.toISOString().slice(0, 10)){
+      message.error("Invalid Date")
+      return;
+    }else if(formData.to < today.toISOString().slice(0, 10)){
+      message.error("Invalid Date")
       return;
     }
 
     axios.post("/employee/leave_application", formData).then((response) => {
       if (response.status === 200) {
+        message.success("Application Submitted")
         axios.get("/employee/previousApplication").then((response) => {
-          console.log(response);
           const data = response.data.applicationsinfo;
           if (data.length !== 0) {
             setIsLength(true);
@@ -97,7 +120,6 @@ function Applicaitons() {
                   <option>Full Day</option>
                   <option>Half Day</option>
                 </select>
-                
               </div>
             </div>
 
@@ -139,13 +161,47 @@ function Applicaitons() {
               </div>
             )}
 
-            {period?
-            <div>
+            {period ? (
+              <div className="flex justify-between">
+                <div class="flex items-center ">
+                  <input
+                    id="default-radio-1"
+                    type="radio"
+                    value="Before Noon"
+                    name="period"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  onChange={handleChange}
+                  />
+                  <label
+                    for="default-radio-1"
+                    class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Before Noon{" "}
+                  </label>
+                </div>
 
-            </div>
-            :
-            ""
-            }
+
+
+                <div class="flex items-center">
+                  <input
+                    id="default-radio-2"
+                    type="radio"
+                    value="After Noon"
+                    onChange={handleChange}
+                    name="period"
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    for="default-radio-2"
+                    class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    After Noon
+                  </label>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
 
             <div class="flex flex-wrap -mx-3 mb-6">
               <div class="w-full px-3">
@@ -217,28 +273,20 @@ function Applicaitons() {
                           </div>
                         </div>
                         <div className="absolute right-0">
-                          {
-                          obj.status === "Rejected" ?
-                          
-                          <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-red-200 rounded-lg bg-opacity-50">
-                          {obj.status}
-                        </span>
-
-                        :
-                        obj.status === "Pending"?
-
-                        <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">
-                          {obj.status}
-                        </span>
-
-                        :
-
-                        <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
-                          {obj.status}
-                        </span>
-                          }
+                          {obj.status === "Rejected" ? (
+                            <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-red-200 rounded-lg bg-opacity-50">
+                              {obj.status}
+                            </span>
+                          ) : obj.status === "Pending" ? (
+                            <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">
+                              {obj.status}
+                            </span>
+                          ) : (
+                            <span className="p-1 px-2 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
+                              {obj.status}
+                            </span>
+                          )}
                         </div>
-                        
                       </Link>
                     );
                   })
