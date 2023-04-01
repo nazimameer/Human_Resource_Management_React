@@ -1,4 +1,3 @@
-
 const Chat = require("../models/chatModel");
 const employeeModel = require("../models/employeeModel");
 const hrModel = require("../models/hrModel");
@@ -58,22 +57,22 @@ module.exports = {
     }
   },
 
-  fetchChats:async(req,res)=>{
-    try{
-        Chat.find({users:{$elemMatch:{$eq: req.user._id}}})
+  fetchChats: async (req, res) => {
+    try {
+      Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
         .populate("employee", "-password")
         .populate("groupAdmin", "-password")
         .populate("latestMessage")
-        .sort({ updatedAt: -1})
-        .then(async(results)=>{
-            results = await employeeModel.populate(results, {
-                path:"latestMessage",
-                select:"fullnam pic email"
-            })
-        })
-    }catch(error){
-        res.status(400);
-        throw new Error(error.message);
+        .sort({ updatedAt: -1 })
+        .then(async (results) => {
+          results = await employeeModel.populate(results, {
+            path: "latestMessage",
+            select: "fullnam pic email",
+          });
+        });
+    } catch (error) {
+      res.status(400);
+      throw new Error(error.message);
     }
-  }
+  },
 };

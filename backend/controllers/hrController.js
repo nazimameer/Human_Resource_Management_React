@@ -3,9 +3,9 @@ const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
 const attendanceModel = require("../models/employeeAttendance");
-const DepartmentModel = require('../models/departmentModal')
-const DepTaskModal = require('../models/departmentTaskModal')
-const IntTaskModel = require('../models/individualTaskModal')
+const DepartmentModel = require("../models/departmentModal");
+const DepTaskModal = require("../models/departmentTaskModal");
+const IntTaskModel = require("../models/individualTaskModal");
 const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
 const { default: mongoose } = require("mongoose");
@@ -96,8 +96,8 @@ module.exports = {
       const applications = await applicationModel.find({ status: "Pending" });
       if (applications.length != 0) {
         applications.forEach((obj) => {
-          console.log(obj.from)
-          //from date retrive 
+          console.log(obj.from);
+          //from date retrive
           const from = obj.from;
           const newdate = new Date(from);
           const newMonth = newdate.toLocaleString("default", { month: "long" });
@@ -107,7 +107,7 @@ module.exports = {
           //
           //to date retrive
           const to = obj.to;
-          const newto =new Date(to);
+          const newto = new Date(to);
           const tonewMonth = newto.toLocaleString("default", { month: "long" });
           const tonewDay = newto.getDate().toString().padStart(2, "0");
           const tonewYear = newto.getFullYear();
@@ -137,7 +137,7 @@ module.exports = {
 
           //
 
-          //to retrive 
+          //to retrive
 
           //
 
@@ -154,8 +154,8 @@ module.exports = {
             period: period,
             reason: reason,
             submiton: submitdate,
-            from:datenew,
-            to:todatenew,
+            from: datenew,
+            to: todatenew,
           };
           applicationsinfo.push(alldata);
         });
@@ -265,7 +265,7 @@ module.exports = {
       if (applications.length != 0) {
         applications.forEach((obj) => {
           const date = obj.submiton;
-          //from date retrive 
+          //from date retrive
           const from = obj.from;
           const newdate = new Date(from);
           const newMonth = newdate.toLocaleString("default", { month: "long" });
@@ -275,7 +275,7 @@ module.exports = {
           //
           //to date retrive
           const to = obj.to;
-          const newto =new Date(to);
+          const newto = new Date(to);
           const tonewMonth = newto.toLocaleString("default", { month: "long" });
           const tonewDay = newto.getDate().toString().padStart(2, "0");
           const tonewYear = newto.getFullYear();
@@ -309,8 +309,8 @@ module.exports = {
             period: period,
             reason: reason,
             submiton: submitdate,
-            from:datenew,
-            to:todatenew
+            from: datenew,
+            to: todatenew,
           };
           applicationsinfo.push(alldata);
         });
@@ -331,7 +331,7 @@ module.exports = {
       if (applications.length != 0) {
         applications.forEach((obj) => {
           const date = obj.submiton;
-          //from date retrive 
+          //from date retrive
           const from = obj.from;
           const newdate = new Date(from);
           const newMonth = newdate.toLocaleString("default", { month: "long" });
@@ -341,7 +341,7 @@ module.exports = {
           //
           //to date retrive
           const to = obj.to;
-          const newto =new Date(to);
+          const newto = new Date(to);
           const tonewMonth = newto.toLocaleString("default", { month: "long" });
           const tonewDay = newto.getDate().toString().padStart(2, "0");
           const tonewYear = newto.getFullYear();
@@ -375,8 +375,8 @@ module.exports = {
             period: period,
             reason: reason,
             submiton: submitdate,
-            from:datenew,
-            to:todatenew,
+            from: datenew,
+            to: todatenew,
           };
           applicationsinfo.push(alldata);
         });
@@ -449,7 +449,7 @@ module.exports = {
             } else {
               res.status(404).json({ error: "no documents found" });
               return;
-            } 
+            }
           } else {
             res.status(404).json({ error: "no documents found" });
             return;
@@ -667,16 +667,16 @@ module.exports = {
   removeEmployee: (req, res) => {
     try {
       const uid = req.body.data;
-      console.log(uid)
+      console.log(uid);
       employeeModel
         .findOneAndUpdate(
           { UID: uid },
           {
             $set: {
               status: "Removed",
-            }, 
+            },
           }
-        ) 
+        )
         .then((doc) => {
           res.status(200).json({ success: true });
         })
@@ -711,168 +711,207 @@ module.exports = {
       console.log(error);
     }
   },
-  checkDepartment:(req,res)=>{
-    try{
-
+  checkDepartment: (req, res) => {
+    try {
       const name = req.body.name;
-      departmentModal.findOne({
-        name:name,
-      }).then((doc)=>{
-        if(doc){
-          res.status(409).json({error:"Name Already Exist"})
-        }else{
-          res.status(200).json({success:true})       
-        }
-      }).catch((error)=>{
-        console.log(error)
-        res.status(500).json({error:"Internal Server Error"})
-      })
-    }catch(error){
-      res.status(500).json({ error:"Internal Server Error" })
-      console.log(error)
-    }
-  },
-  addDepartment:(req,res)=>{
-    try{
-
-      const name = req.body.name;
-      if(name){
-        DepartmentModel.create({
-          name:name
-        }).then(()=>{
-          res.status(200).json({ success:true })
-        }).catch((error)=>{
-          console.log(error)
-          res.status(500).json({error:"Internal Server Error"});
+      departmentModal
+        .findOne({
+          name: name,
         })
-      }
-    }catch(error){
-      console.log(error);
-      res.status(500).json({error:"Internal Server Error"}) 
-    }
-  },
-  getDepartments:(req,res)=>{
-    departmentModal.find({}).then((doc)=>{
-      if(doc){
-        const data = doc;
-        res.status(200).json({data});
-      }else{
-        res.status(404).json({error:"No Documents found"})
-      }
-    }).catch((error)=>{
-      console.log(error);
-      res.status(500).json({error:"Internal Server Error"})
-    })
-  },
-  departmentInfo:(req,res)=>{
-    const id = req.params.id;
-    const objId = mongoose.Types.ObjectId(id)
-    departmentModal.findOne({_id:objId}).then((doc)=>{
-      if(doc){
-        const dep = doc.name;
-        employeeModel.find({
-          department:dep
-        }).then((document)=>{
-          const data = document;
-          res.status(200).json({data})
-        }).catch((error)=>{
-          res.status(500).json({error:"Internal server error"})
+        .then((doc) => {
+          if (doc) {
+            res.status(409).json({ error: "Name Already Exist" });
+          } else {
+            res.status(200).json({ success: true });
+          }
+        })
+        .catch((error) => {
           console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+      console.log(error);
+    }
+  },
+  addDepartment: (req, res) => {
+    try {
+      const name = req.body.name;
+      if (name) {
+        DepartmentModel.create({
+          name: name,
         })
+          .then(() => {
+            res.status(200).json({ success: true });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
       }
-    })
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
+  getDepartments: (req, res) => {
+    departmentModal
+      .find({})
+      .then((doc) => {
+        if (doc) {
+          const data = doc;
+          res.status(200).json({ data });
+        } else {
+          res.status(404).json({ error: "No Documents found" });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      });
+  },
+  departmentInfo: (req, res) => {
+    const id = req.params.id;
+    const objId = mongoose.Types.ObjectId(id);
+    departmentModal.findOne({ _id: objId }).then((doc) => {
+      if (doc) {
+        const dep = doc.name;
+        employeeModel
+          .find({
+            department: dep,
+          })
+          .then((document) => {
+            const data = document;
+            res.status(200).json({ data });
+          })
+          .catch((error) => {
+            res.status(500).json({ error: "Internal server error" });
+            console.log(error);
+          });
+      }
+    });
   },
 
-  getHrName:(req,res)=>{
+  getHrName: (req, res) => {
     const id = req.id;
     const uid = mongoose.Types.ObjectId(id);
-    hrModel.findOne({_id:uid}).then((doc)=>{
-      if(doc){
-        const {fullname} = doc;
-        console.log(fullname)
-        res.status(200).json({fullname})
+    hrModel.findOne({ _id: uid }).then((doc) => {
+      if (doc) {
+        const { fullname } = doc;
+        console.log(fullname);
+        res.status(200).json({ fullname });
       }
-    })
+    });
   },
 
-  addTaskToDepartment:async(req,res)=>{
+  addTaskToDepartment: async (req, res) => {
     const hr = req.id;
     const data = req.body.data;
     const depID = mongoose.Types.ObjectId(data.Depid);
-    const startDate = new Date(data.from)
-    const endDate = new Date(data.to)
-    const assignedBy = mongoose.Types.ObjectId(hr)
+    const startDate = data.from;
+    const endDate = data.to;
+    const assignedBy = mongoose.Types.ObjectId(hr);
     const task = data.task;
 
     const DepTaskExist = await DepTaskModal.findOne({
-      departmentId:depID
-    })
-      if(DepTaskExist){
-      console.log("Exist")
-    DepTaskModal.updateOne(
-      {departmentId:depID},
-      {$push:{ tasks:{ startdate:startDate , enddate: endDate, task: task, assignedby:assignedBy}}}
-      ).then((doc)=>{
-        res.status(200).json({success:true});
-      }).catch((error)=>{
-        console.log(error)
-        res.status(500).json({error:"Internal Server Error"})
-      })
-    }else{
+      departmentId: depID,
+    });
+    if (DepTaskExist) {
+      console.log("Exist");
+      DepTaskModal.updateOne(
+        { departmentId: depID },
+        {
+          $push: {
+            tasks: {
+              startdate: startDate,
+              enddate: endDate,
+              task: task,
+              assignedby: assignedBy,
+            },
+          },
+        }
+      )
+        .then((doc) => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } else {
       DepTaskModal.create({
-        departmentId:depID,
-        tasks:[{
-          startdate:startDate,
-          enddate:endDate,
-          task:task,
-          assignedby:assignedBy,
-        }],
-      }).then((doc)=>{
-        res.status(200).json({success:true});
-      }).catch((error)=>{
-        console.log(error)
-        res.status(500).json({error:"Internal Server Error"})
+        departmentId: depID,
+        tasks: [
+          {
+            startdate: startDate,
+            enddate: endDate,
+            task: task,
+            assignedby: assignedBy,
+          },
+        ],
       })
+        .then((doc) => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
     }
   },
-  addTaskToInt:async(req,res)=>{
+  addTaskToInt: async (req, res) => {
     const hr = req.id;
-    const assignedBy = mongoose.Types.ObjectId(hr)
+    const assignedBy = mongoose.Types.ObjectId(hr);
     const data = req.body.data;
-    console.log(data)
-    const Intfrom = new Date(data.from)
-    const Intto = new Date(data.to)
+    console.log(data);
+    const Intfrom = data.from;
+    const Intto = data.to;
     const IntTask = data.task;
     const IntId = data.uid;
     const IntTaskExist = await IntTaskModel.findOne({
-      UID:IntId
-    })
-    if(IntTaskExist){
-      console.log("exist")
+      UID: IntId,
+    });
+    if (IntTaskExist) {
+      console.log("exist");
       IntTaskModel.updateOne(
-        {UID:IntId},
-        {$push:{ tasks:{ startdate:Intfrom, enddate: Intto, task: IntTask, assignedBy:assignedBy}}}
-      ).then(()=>{
-        res.status(200).json({success:true})
-      }).catch((error)=>{
-        console.log(error);
-        res.status(500).json({error:"Internal Server Error"})
-      })
-    }else{
+        { UID: IntId },
+        {
+          $push: {
+            tasks: {
+              startdate: Intfrom,
+              enddate: Intto,
+              task: IntTask,
+              assignedBy: assignedBy,
+            },
+          },
+        }
+      )
+        .then(() => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } else {
       IntTaskModel.create({
-        UID:IntId,
-        tasks:[{
-          startdate:Intfrom,
-          enddate:Intto,
-          task:IntTask,
-          assignedby:assignedBy,
-        }],
-      }).then((doc)=>{
-        res.status(200).json({success:true})
-      }).catch((error)=>{
-        console.log(error);
-        res.status(500).json({error:"Internal Server Error"})
+        UID: IntId,
+        tasks: [
+          {
+            startdate: Intfrom,
+            enddate: Intto,
+            task: IntTask,
+            assignedby: assignedBy,
+          },
+        ],
       })
+        .then((doc) => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
     }
-  }
+  },
 };

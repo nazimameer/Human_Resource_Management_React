@@ -8,6 +8,7 @@ function Applicaitons() {
   const [Applications, setApplications] = useState([]);
   const [InputError, setInputError] = useState(false);
   const [FullDay, setFullDay] = useState(true);
+  const [period,setPeriod] = useState(false);
   useEffect(() => {
     axios.get("/employee/previousApplication").then((response) => {
       console.log(response);
@@ -24,6 +25,7 @@ function Applicaitons() {
     from: "",
     to: "",
     reason: "",
+    period:"",
   });
   const handleClick = (event) => {
     setFormData({
@@ -34,6 +36,7 @@ function Applicaitons() {
     console.log(value);
     if (value === "Half Day") {
       setFullDay(false);
+      setPeriod(true)
     } else {
       setFullDay(true);
     }
@@ -135,6 +138,14 @@ function Applicaitons() {
                 </div>
               </div>
             )}
+
+            {period?
+            <div>
+
+            </div>
+            :
+            ""
+            }
 
             <div class="flex flex-wrap -mx-3 mb-6">
               <div class="w-full px-3">

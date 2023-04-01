@@ -6,6 +6,7 @@ const secretKey = "Brototype";
 const skillModel = require("../models/skillModel");
 const hobbieModel = require("../models/hobbieModel");
 const attendanceModel = require("../models/employeeAttendance");
+const IntTaskModel = require("../models/individualTaskModal");
 module.exports = {
   LoginPageAuth: (req, res) => {
     try {
@@ -506,10 +507,105 @@ module.exports = {
       res.status(200).json({ success: true });
     }
   },
-  allUsers:async(req,res)=>{
-    const keyword ={ fullname: req.query.search}
+  allUsers: async (req, res) => {
+    const keyword = { fullname: req.query.search };
 
-    const users = await employeeModel.findOne(keyword.fullname)
-    console.log(users)
-  }
+    const users = await employeeModel.findOne(keyword.fullname);
+    console.log(users);
+  },
+  getAllTasks: (req, res) => {
+    const uid = req.uid;
+
+    IntTaskModel.findOne({
+      UID: uid,
+    })
+      .then((doc) => {
+        const data = doc;
+        const tasks = data.tasks;
+        res.status(200).json({ tasks });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      });
+  },
+
+  taskFinished: (req, res) => {
+    const id = req.uid;
+    const data = req.body.id;
+
+    IntTaskModel.findOneAndUpdate(
+      {
+        UID: id,
+        "tasks._id": data,
+      },
+      {
+        $set: {
+          "tasks.$.status": "Finished",
+        },
+      },
+      {
+        new: true,
+      }
+    )
+      .then((doc) => {
+        res.status(200).json({ success: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      });
+  },
+  taskPending: (req, res) => {
+    const id = req.uid;
+    const data = req.body.id;
+
+    IntTaskModel.findOneAndUpdate(
+      {
+        UID: id,
+        "tasks._id": data,
+      },
+      {
+        $set: {
+          "tasks.$.status": "Pending",
+        },
+      },
+      {
+        new: true,
+      }
+    )
+      .then((doc) => {
+        res.status(200).json({ success: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      });
+  },
+
+  taskIncomplete: (req, res) => {
+    const id = req.uid;
+    const data = req.body.id;
+    IntTaskModel.findOneAndUpdate(
+      {
+        UID: id,
+        "tasks._id": data,
+      },
+      {
+        $set: {
+          "tasks.$.status": "Incomplete",
+        },
+      },
+      {
+        new: true,
+      }
+    )
+      .then((doc) => {
+        res.status(200).json({ success: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      });
+  },
 };

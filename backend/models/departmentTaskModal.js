@@ -7,16 +7,20 @@ const depTaskSchema = new mongoose.Schema({
     },
     tasks:[{
         startdate:{
-            type:Date,
+            type:String,
         },
         enddate:{
-            type:Date,
+            type:String,
         },
         task:{
             type:String
         },
         assignedby:{
             type:mongoose.Schema.Types.ObjectId
+        },
+        status:{
+            type:String,
+            default:"Pending"
         }
     }],
 })

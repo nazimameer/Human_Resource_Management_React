@@ -2,11 +2,10 @@ import React from "react";
 import "./SideBar.css";
 import { useState, useEffect } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 function SideBar() {
   const [isActive, setIsActive] = useState(true);
   const [value, setValue] = useState("");
-  const Navigate = useNavigate();
 
   const handleButtonClick = () => {
     setIsActive(!isActive);
@@ -16,10 +15,7 @@ function SideBar() {
     setIsActive(true);
   };
 
-  const HandleLogout = () => {
-    localStorage.removeItem("employeejwt");
-    Navigate("/employee/login");
-  };
+  
 
   useEffect(() => {
     if (window.innerWidth < 768) {
@@ -73,13 +69,13 @@ function SideBar() {
             </a>
             <span className="tooltip">Messages</span>
           </li>
-          <li key={"analytics"}>
+          {/* <li key={"analytics"}>
             <a href="/">
               <i className="bx bx-pie-chart-alt-2"></i>
               <span className="links_name">Analytics</span>
             </a>
             <span className="tooltip">Analytics</span>
-          </li>
+          </li> */}
           <li key={"announcement"}>
             <a href="/">
               <i className="bx bx-folder"></i>
@@ -109,7 +105,7 @@ function SideBar() {
             <span className="tooltip">Settings</span>
         </li> */}
         </div>
-        <div className="profile_content">
+        {/* <div className="profile_content">
           <div className="profile">
             <div className="profile_details">
               <img
@@ -129,7 +125,7 @@ function SideBar() {
               <i className="bx bx-log-out cursor-pointer" id="log_out"></i>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

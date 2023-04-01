@@ -1,9 +1,48 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import "@fullcalendar/common/main.css";
 import "./Dashboard.css";
-function Dashboard() {
+import axios from '../../../Api/EmployeeAxios'
+function Dashboard(props) {
+  const [tasks,SetTasks] = useState([]);
+  const [isLength, SetIsLength] = useState(false)
+
+  useEffect(() => {
+    axios.get('/employee/getAllTasks').then((response)=>{
+      const data = response.data.tasks;
+      if(data.length !== 0){
+        SetTasks(data);
+        SetIsLength(true);
+      }
+      console.log(data)
+     }).catch((error)=>{
+      console.log(error)
+      SetIsLength(false);
+     })
+     props.falserefreshTask()
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.refreshTask]);
+  useEffect(() => {
+   axios.get('/employee/getAllTasks').then((response)=>{
+    const data = response.data.tasks;
+    if(data.length !== 0){
+      SetTasks(data);
+      SetIsLength(true);
+    }
+    console.log(data)
+   }).catch((error)=>{
+    console.log(error)
+    SetIsLength(false);
+   })
+  }, []);
+  const handleEditStatus =(id)=>{
+    console.log(id)
+    props.SetTaskId(id)
+    props.SetOpenModal()
+  }
+
   const handleDateClick = (event) => {
     console.log(event);
   };
@@ -23,17 +62,26 @@ function Dashboard() {
         </div>
 
         <div className=" w-1/3 mx-20 mt-20 p-5 rounded-xl bg-white  flex flex-col ">
+          <div>
           <div className="text-xl font-medium">Task Due Today</div>
+          </div>
           <div className="taskdue flex flex-col overflow-y-scroll ">
+              {isLength?
+              tasks.map((obj)=>{
+                return(
 
             <div className="mt-5 border p-3 rounded-xl">
-              <div>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+              <div className="flex justify-between">
+
+              <div >
+                {obj.task}
               </div>
+              <div className="cursor-pointer" onClick={()=>handleEditStatus(obj._id)}><i class='bx bxs-edit-alt' ></i></div>
+              </div>
+
               <div className="text-xs mt-2 flex justify-between">
                 <div>
-                  <div>Start Time: 04/03/2023 4 pm</div>
+                  <div>Assigned: {obj.startdate}</div>
 
                   <div>
                     <div class="flex justify-between mb-1">
@@ -54,17 +102,20 @@ function Dashboard() {
                 </div>
 
                 <div className="w-1/2 flex flex-col ">
-                  <div className="flex justify-end">Duration: 3 days</div>
+                  <div className="flex justify-end">End Date: {obj.enddate}</div>
                   <div className="mt-3 flex justify-end">
                     <span className="p-1.5 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
-                      Finished
+                      {obj.status}
                     </span>
                   </div>
                 </div>
               </div>
             </div>
-
-
+                )
+              })
+            :
+            ""
+              }
             </div>
           </div>
         </div>

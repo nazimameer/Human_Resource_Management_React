@@ -23,7 +23,11 @@ router.get('/homeInfo', Authentication.verifyToken,employeeController.homeInfo);
 router.post('/verifyCheckIn', Authentication.verifyToken,employeeController.verifyCheckIn);
 router.get('/getSalaryInfo', Authentication.verifyToken,employeeController.getSalaryInfo);
 router.post('/checkBlocked', Authentication.verifyToken,employeeController.checkBlocked);
+router.get('/getAllTasks',Authentication.verifyToken,employeeController.getAllTasks);
+router.post('/taskfinished',Authentication.verifyToken,employeeController.taskFinished)
+router.post('/taskPending',Authentication.verifyToken,employeeController.taskPending)
+router.post('/taskIncomplete',Authentication.verifyToken,employeeController.taskIncomplete)
 
-
+ 
 module.exports = router;
  
