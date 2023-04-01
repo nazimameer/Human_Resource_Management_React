@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
 function NavBar() {
+  const Navigate = useNavigate();
   const [menu, SetMenu] = useState(false);
   const HandleLogout = () => {
     localStorage.removeItem("employeejwt");

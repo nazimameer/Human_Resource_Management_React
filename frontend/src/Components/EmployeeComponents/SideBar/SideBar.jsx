@@ -15,8 +15,6 @@ function SideBar() {
     setIsActive(true);
   };
 
-  
-
   useEffect(() => {
     if (window.innerWidth < 768) {
       setIsActive(false);
