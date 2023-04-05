@@ -1,8 +1,10 @@
+import { Pagination } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../../Api/HrAxios";
 
 function Employees() {
+  
   const [employees, setEmployees] = useState([]);
   const [isLength, setIsLength] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,6 +20,7 @@ function Employees() {
       })
     })
   }
+  
 const handleUnBlock = (uid) =>{
     axios.post('/hr/unblockEmployee',{uid}).then(()=>{
       axios.get("/hr/employees").then((response) => {
@@ -64,6 +67,20 @@ const handleUnBlock = (uid) =>{
           employees.position.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : employees;
+// paginations//
+// eslint-disable-next-line no-unused-vars
+const [itemsPerPage, setItemsPerPage] = useState(5);
+const [currentPage, setCurrentPage] = useState(1);
+const startIndex = (currentPage - 1) * itemsPerPage;
+const endIndex = startIndex + itemsPerPage;
+
+const displayedItems = filteredList.slice(startIndex, endIndex);
+const handleChangePage = (event, value) => {
+  setCurrentPage(value);
+};
+const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+//
+
   return (
     <div className="bg-slate-900">
       <div className="sm:mx-5 md:mx-10 ">
@@ -117,7 +134,7 @@ const handleUnBlock = (uid) =>{
             </thead>
             <tbody className="divide-y divide-gray-100">
               {isLength ? (
-                filteredList.map((obj, index) => {
+                displayedItems.map((obj, index) => {
                   return (
                     <tr key={index} className="bg-white">
                       <td className="p-3 text-sm text-grey-700 flex items-center">
@@ -136,10 +153,10 @@ const handleUnBlock = (uid) =>{
                           </div>
                       </td>
                       <td className="p-3 text-sm text-grey-700 ">
-                        {" "}
+                        
                         <span className="p-1.5 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
                           Active
-                        </span>{" "}
+                        </span>
                       </td>
                       <td className="p-3 text-sm text-grey-700">
                         #{obj.UID}
@@ -186,83 +203,8 @@ const handleUnBlock = (uid) =>{
               {isLength ? (
                 <tr className="h-16 relative" colSpan="6">
                   <td className="py-3 px-3 absolute right-0">
-                    <nav
-                      aria-label="Pagination"
-                      className="flex items-center text-gray-600"
-                    >
-                      {" "}
-                      <a href="/" className="p-2 rounded hover:bg-gray-100">
-                        {" "}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          {" "}
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M15 19l-7-7 7-7"
-                          />{" "}
-                        </svg>{" "}
-                      </a>{" "}
-                      <a
-                        href="/"
-                        className="px-4 py-2 rounded hover:bg-gray-100"
-                      >
-                        {" "}
-                        1{" "}
-                      </a>{" "}
-                      <a
-                        href="/"
-                        className="px-4 py-2 rounded bg-gray-200 text-gray-900 font-medium hover:bg-gray-100"
-                      >
-                        {" "}
-                        2{" "}
-                      </a>{" "}
-                      <a
-                        href="/"
-                        className="px-4 py-2 rounded hover:bg-gray-100"
-                      >
-                        {" "}
-                        3{" "}
-                      </a>{" "}
-                      <a
-                        href="/"
-                        className="px-4 py-2 rounded hover:bg-gray-100"
-                      >
-                        {" "}
-                        ...{" "}
-                      </a>{" "}
-                      <a
-                        href="/"
-                        className="px-4 py-2 rounded hover:bg-gray-100"
-                      >
-                        {" "}
-                        9{" "}
-                      </a>{" "}
-                      <a href="/" className="p-2 rounded hover:bg-gray-100">
-                        {" "}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          {" "}
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M9 5l7 7-7 7"
-                          />{" "}
-                        </svg>{" "}
-                      </a>{" "}
-                    </nav>
+
+<Pagination count={totalPages} page={currentPage} onChange={handleChangePage} variant="outlined" shape="rounded" />
                   </td>
                 </tr>
               ) : (

@@ -920,4 +920,19 @@ module.exports = {
         });
     }
   },
+  getHrInfo:(req,res)=>{
+    const hrid = req.id;
+    if(hrid){
+
+      hrModel.findOne({
+        _id:hrid
+      }).then((doc)=>{
+        const data = doc;
+        res.status(200).json({data})
+      }).catch((error)=>{
+        console.log(error)
+        res.status(500).json({error:"Internal Server Error"})
+      })
+    }
+  }
 };

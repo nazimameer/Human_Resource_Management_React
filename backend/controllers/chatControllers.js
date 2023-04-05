@@ -59,17 +59,45 @@ module.exports = {
 
   fetchChats: async (req, res) => {
     try {
-      Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
-        .populate("employee", "-password")
-        .populate("groupAdmin", "-password")
-        .populate("latestMessage")
-        .sort({ updatedAt: -1 })
-        .then(async (results) => {
-          results = await employeeModel.populate(results, {
-            path: "latestMessage",
-            select: "fullnam pic email",
-          });
-        });
+      const data = req.body;
+      if(data){
+        const  uid1  = req.id;
+        const { uid } = data;
+        const chatId = uid1+uid;
+        console.log(uid1+" "+ uid)
+        Chat.findOne({
+          users:{$all:[ uid1, uid ]}
+        }).then((doc)=>{
+          if(doc){
+            const data ={
+              chat:doc,
+              chatId:doc.chatId
+            } 
+            res.status(200).json({data})
+          }else{
+            console.log("NO DOC");
+            Chat.create({
+              chatId:chatId,
+              users:[uid1, uid]
+            }).then((newDoc)=>{
+              if(newDoc){
+                const data = {
+                  chat:newDoc,
+                  chatId:newDoc.chatId
+                }
+                res.status(200).json({data})
+              }
+            }).catch((error)=>{
+              console.log(error)
+              res.status(500).json({error:"Internal Server Error"})
+            })
+            res.status(200).json({data})
+          }
+        }).catch((error)=>{
+          console.log(error)
+          res.status(500).json({error:"Internal Server Error"})
+        })
+      }
     } catch (error) {
       res.status(400);
       throw new Error(error.message);

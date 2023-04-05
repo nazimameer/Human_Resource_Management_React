@@ -2,22 +2,27 @@ const mongoose = require('mongoose');
 
 const chatSchema = new mongoose.Schema(
     {
-        chatName: { type: String, trim: true },
-        isGroupChat: { type: Boolean, default: false },
+        chatId: { type: String },
+        // isGroupChat: { type: Boolean, default: false },
         users:[
             {
             type:mongoose.Schema.Types.ObjectId,
-            ref:'employee'    
         }
         ],
+        message:[{ 
+            senderId:{
+                type:mongoose.Schema.Types.ObjectId
+            },
+            content:{
+                type:String,
+            },
+            time:{
+                type: Date,
+            }
+        }],
         latestMessage:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Message"
+            type:String
         },
-        groupAdmin: {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"hr"
-        }
     },
     {
         timestamps:true, 

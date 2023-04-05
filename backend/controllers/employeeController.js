@@ -341,7 +341,7 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-  },
+  },  
 
   markAttendance: async (req, res) => {
     try {
@@ -350,16 +350,16 @@ module.exports = {
         UID: uid,
       });
       const fullname = employee.fullname;
-
+  
       // Today Date
       const today = new Date();
       const year = today.getFullYear();
       const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
       const day = today.getDate();
       const date = `${day}-${month}-${year}`;
-      //
+      // 
 
-      // Take Time
+      // Take Time 
       const hour = today.getHours() % 12 || 12; // converts to 12-hours format
       const minute = today.getMinutes();
       const second = today.getSeconds();
@@ -523,8 +523,10 @@ module.exports = {
     })
       .then((doc) => {
         const data = doc;
-        const tasks = data.tasks;
-        res.status(200).json({ tasks });
+        if(data){
+          const tasks = data.tasks;
+          res.status(200).json({ tasks });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -610,4 +612,18 @@ module.exports = {
         res.status(500).json({ error: "Internal Server Error" });
       });
   },
+  getUserName:(req,res)=>{
+    const uid = req.uid;
+    employeeModel.findOne({
+      UID:uid,
+    }).then((doc)=>{
+      if(doc){
+        const data = doc.fullname;
+        res.status(200).json({ data })
+      }
+    }).catch((error)=>{
+      console.log(error);
+      res.status(500).json({error:"Internal Server Error"})
+    })
+  }
 };

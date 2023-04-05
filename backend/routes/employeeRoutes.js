@@ -26,7 +26,9 @@ router.post('/checkBlocked', Authentication.verifyToken,employeeController.check
 router.get('/getAllTasks',Authentication.verifyToken,employeeController.getAllTasks);
 router.post('/taskfinished',Authentication.verifyToken,employeeController.taskFinished)
 router.post('/taskPending',Authentication.verifyToken,employeeController.taskPending)
-router.post('/taskIncomplete',Authentication.verifyToken,employeeController.taskIncomplete)
+router.post('/taskIncomplete',Authentication.verifyToken,employeeController.taskIncomplete);
+router.get('/getEmployeename',Authentication.verifyToken,employeeController.getUserName);
+// router.get('/getAllEmployeesAtMyDepartment',Aut)
 
  
 module.exports = router;

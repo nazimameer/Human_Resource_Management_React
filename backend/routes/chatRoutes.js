@@ -5,7 +5,7 @@ const { accessChat } = require('../controllers/chatControllers')
 const { fetchChats } = require('../controllers/chatControllers')
 
 // router.post('/',Authentication.verifyToken,accessChat);
-// router.get('/',Authentication.verifyToken,fetchChats);
+router.post('/getAllMessages',Authentication.verifyToken,fetchChats);
 // router.post('/group',Authentication.verifyToken,createGroup);
 // router.put('/rename',Authentication.verifyToken,renameGroup);
 // router.put('/groupremove',Authentication.verifyToken, removeFromGroup);

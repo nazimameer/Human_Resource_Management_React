@@ -61,10 +61,10 @@ function SideBar() {
             <span className="tooltip">My Profile</span>
           </li>
           <li key={"messages"}>
-            <a href="/">
+            <Link to={'/employee/messages'}>
               <i className="bx bx-chat"></i>
               <span className="links_name">Messages</span>
-            </a>
+            </Link>
             <span className="tooltip">Messages</span>
           </li>
           {/* <li key={"analytics"}>
