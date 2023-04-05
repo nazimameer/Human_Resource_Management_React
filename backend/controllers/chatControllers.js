@@ -64,7 +64,6 @@ module.exports = {
         const  uid1  = req.id;
         const { uid } = data;
         const chatId = uid1+uid;
-        console.log(uid1+" "+ uid)
         Chat.findOne({
           users:{$all:[ uid1, uid ]}
         }).then((doc)=>{
@@ -91,7 +90,6 @@ module.exports = {
               console.log(error)
               res.status(500).json({error:"Internal Server Error"})
             })
-            res.status(200).json({data})
           }
         }).catch((error)=>{
           console.log(error)

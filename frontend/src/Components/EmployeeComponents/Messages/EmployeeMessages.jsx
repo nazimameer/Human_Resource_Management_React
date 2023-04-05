@@ -1,38 +1,55 @@
 import React, { useEffect, useState} from "react";
 import axios from "../../../Api/EmployeeAxios";
 import "./Messages.css";
-import { ChatState } from "../../../Context/ChatProvider";
 import io from 'socket.io-client';
-const socket = io('http://localhost:3000');
-// import { ChatState } from '../../../Context/ChatProvider'
+const socket = io('http://localhost:8000');
 function EmployeeMessages() {
-  const { userInfo, setSelectedChat, selectedChat } = ChatState();
   const [noRecent, setNoRecent] = useState(true);
-  const [selectId, setSelectId] = useState(null);
-  const [IsLoading, setIsLoading] = useState(false);
+  const [displayMsg, setDisplayMsg] = useState(null)
   const [messages, setMessages] = useState([]);
   const [recieved, setRecieved] = useState([]);
-  const [displayMsg, SetDisplayMsg] = useState(null);
   const [room, setRoom] = useState(null);
 
-  socket.on("connect", () => {
-    SetDisplayMsg(`You Connected With Id: ${socket.id}`);
-  });
-
-  const [allEmployees, setAllEmployees] = useState([]);
+  const [allHr, setAllHr] = useState([]);
   const [userName, setUserName] = useState(null);
   const [isLength, setIsLength] = useState(false);
+
+  // socket.io connect
+  socket.on('connect',()=>{
+    setDisplayMsg(`socket connected id: ${socket.id}`)
+  })
+
+    //recieve - message 
+    socket.on("recieve-message", (message) => {
+      setRecieved([...recieved, message]);
+      setNoRecent(false);
+    });
+  
+    // join room
+    const joinroom = ()=>{
+      socket.emit("join-room", room, message=>{
+      setDisplayMsg(`Joined in room : ${room}`)
+      });
+    }
+  
+
+  //
+
+  useEffect(() => {
+  joinroom()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [room]);
   useEffect(() => {
     axios.get("/employee/getEmployeename").then((response) => {
       const fullname = response.data.data;
       setUserName(fullname);
-    });
+    }); 
     axios
-      .get("/employee/getAllEmployeesAtMyDepartment")
+      .get("/employee/getAllhr")
       .then((response) => {
-        const { employees } = response.data;
-        if (employees.length !== 0) {
-          setAllEmployees(employees);
+        const hr = response.data.data
+        if (hr.length !== 0) {
+          setAllHr(hr)
           setIsLength(true);
         }
       })
@@ -40,44 +57,42 @@ function EmployeeMessages() {
         setIsLength(false);
       });
   }, []);
+
+  
+
+
   const handleSelect = (uid) => {
-    socket.emit("setup", userInfo._id, uid);
-    socket.on("connection");
-    const ChatId = userInfo._id + uid;
-    setSelectedChat(ChatId);
-    fetchChat(userInfo._id, uid);
-    // setRoom(ChatId);
-    setSelectId(uid);
+    fetchChat(uid);
   };
 
-  const fetchChat = (hrId, uid) => {
-    setIsLoading(true);
+  const fetchChat = (uid) => {
+    console.log("fetching....")
+    // setIsLoading(true);
     const data = {
-      hrId: hrId,
       uid: uid,
     };
     axios.post("/chat/getAllMessages", data).then((response) => {
       const data = response.data.data;
-      console.log(data);
+      const roomId = data.chatId;
+          setRoom(roomId)
     });
-    socket.emit("join chat", selectedChat);
+    
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const message = event.target.elements.message.value;
     setMessages([...messages, message]);
+    // send message
+
     socket.emit("send-message", message, room);
+
+    //
     event.target.elements.message.value = "";
     setNoRecent(false);
   };
 
-  socket.on("recieve-message", (message) => {
-    setRecieved([...recieved, message]);
-
-    setNoRecent(false);
-  });
-
+ 
   return (
     <>
       <div className="body">
@@ -113,10 +128,10 @@ function EmployeeMessages() {
 
             <div className="users-list max-h-[390px] overflow-y-auto">
               {isLength
-                ? allEmployees.map((obj, index) => {
+                ? allHr.map((obj, index) => {
                     return (
                       <div
-                        className="flex items-center justify-between pb-[20px] mb-[15px] pr-[15px]"
+                        className="flex items-center justify-between pb-[20px] mb-[15px] pr-[15px] cursor-pointer hover:bg-gray-100"
                         key={index}
                         onClick={() => handleSelect(obj._id)}
                       >
@@ -159,15 +174,15 @@ function EmployeeMessages() {
                 className="mesImg h-[45px] w-[45px] rounded-[50%] object-cover"
               />
               <div className="details">
-                <span className="text-[17px] font-medium">Coding Nepal</span>
+                <span className="text-[17px] font-medium">{userName}</span>
                 <p className="text-sm">Active now</p>
               </div>
             </header>
 
             <div className="chat-box h-[466px] bg-[#f7f7f7] overflow-y-auto">
-              {/* <div className="w-full h-6 flex justify-center">
+              <div className="w-full h-6 flex justify-center">
                 {displayMsg}
-              </div> */}
+              </div>
 
               {noRecent ? (
                 <div className="flex justify-center">

@@ -28,7 +28,8 @@ router.post('/taskfinished',Authentication.verifyToken,employeeController.taskFi
 router.post('/taskPending',Authentication.verifyToken,employeeController.taskPending)
 router.post('/taskIncomplete',Authentication.verifyToken,employeeController.taskIncomplete);
 router.get('/getEmployeename',Authentication.verifyToken,employeeController.getUserName);
-// router.get('/getAllEmployeesAtMyDepartment',Aut)
+router.get('/getAllhr',Authentication.verifyToken,employeeController.getAllhr);
+router.get('/getUserInfo',Authentication.verifyToken,employeeController.getMyInfo)
 
  
 module.exports = router;

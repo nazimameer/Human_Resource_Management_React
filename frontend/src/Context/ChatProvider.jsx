@@ -13,23 +13,19 @@ const ChatProvider = ({children})=>{
      useEffect(() => {
 
       if(localStorage.getItem('hrjwt')){
-
         axios.get('/hr/getHrInfo').then((response)=>{
           const hrInfos = response.data.data;
           setHrInfo(hrInfos)
-        }).catch((error)=>{
-          console.log(error)
-          setHrInfo(null)
         })
       }
 
       if(localStorage.getItem('employeejwt')){
 
         axios.get('/employee/getUserInfo').then((response)=>{
+          console.log(response)
           const userInfos = response.data.data;
           setUserInfo(userInfos)
-        }).catch((error)=>{
-          setUserInfo(null)
+          console.log("hei")
         })
       }
      }, []);

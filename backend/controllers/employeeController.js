@@ -7,6 +7,7 @@ const skillModel = require("../models/skillModel");
 const hobbieModel = require("../models/hobbieModel");
 const attendanceModel = require("../models/employeeAttendance");
 const IntTaskModel = require("../models/individualTaskModal");
+const hrModel = require("../models/hrModel");
 module.exports = {
   LoginPageAuth: (req, res) => {
     try {
@@ -624,6 +625,28 @@ module.exports = {
     }).catch((error)=>{
       console.log(error);
       res.status(500).json({error:"Internal Server Error"})
+    })
+  },
+  getAllhr:(req,res)=>{
+    hrModel.find({}).then((doc)=>{
+      if(doc){
+        const data = doc
+        res.status(200).json({ data })
+      }
+    }).catch((error)=>{
+      console.log(error)
+      res.status(500).json({error:"Internal Server Error"})
+    })
+  },
+  getMyInfo:(req,res)=>{
+    const id = req.id;
+    employeeModel.findOne({
+      _id:id
+    }).then((doc)=>{
+      if(doc){
+        const data = doc;
+        res.status(200).json({data})
+      }
     })
   }
 };

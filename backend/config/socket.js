@@ -9,29 +9,25 @@ const socketIo = (server) => {
 
 
   ioServer.on('connection',(socket)=>{
+    
     socket.on('send-message', (message, room)=>{
+      console.log("room is :"+ room)
       if(room === ''){
         socket.broadcast.emit('recieve-message', message)
       }else{
         socket.broadcast.to(room).emit('recieve-message', message)
       }
-    // console.log(message)
    })
 
-   socket.on('setup',(hrid,userId, )=>{
-        socket.join(hrid+userId)
-        // console.log(hrid+userId);
+   socket.on('join-room',(room, cd)=>{
+        socket.join(room)
         socket.emit("connected")
+        cd(`joined :${room}`)
+        console.log(`USER JOINED ROOM : ${room}`)
    })
 
-   socket.on('join chat',(room)=>{
-    socket.join(room);
-    // console.log('User Joined Room : '+ room)
-   })
-
-   socket.on('disconnect', () => {
-    // console.log(`Socket disconnected: ${socket.id}`);
-  });
+  //  socket.on('disconnect', () => {
+  // });
   })
 
   return ioServer;
