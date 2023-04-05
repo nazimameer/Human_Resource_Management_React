@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "../../../Api/HrAxios";
 import "./Messages.css";
 import { io } from "socket.io-client";
+import { ChatState } from "../../../Context/ChatProvider"
 const socket = io("http://localhost:8000");
-
 function Messages() {
+  const { hrInfo } = ChatState()
   const [noRecent, setNoRecent] = useState(true);
   const [messages, setMessages] = useState([]);
+  const [allMsg, SetAllMsg] = useState([])
+  const [lengthMsg, setLengthMsg] = useState(false)
+  const [eachUser, setEachUser] = useState({})
   const [recieved, setRecieved] = useState([]);
   const [displayMsg, SetDisplayMsg] = useState(null);
   const [room, setRoom] = useState(null);
@@ -60,19 +64,39 @@ function Messages() {
 
   const handleSelect = (uid) => {
     fetchChat(uid);
+    axios.get(`/chat/getUserInfo/${uid}`).then((response)=>{
+      const data = response.data.data;
+      if(data){
+        setEachUser(data)
+      }
+    })
   };
-
+  
   const fetchChat = (uid) => {
     console.log("fetching....")
     const data = {
       uid: uid,
     };
     axios.post("/chat/getAllMessages", data).then((response) => {
-      const data = response.data.data;
+
+      const data = response.data.data.chat.message;
       const roomId = data.chatId;
       setRoom(roomId)
+      console.log(data)
+      if(data.length !== 0){
+
+        SetAllMsg(data)
+        setLengthMsg(true)
+      }
+    }).catch((error)=>{
+      console.log(error);
+      setLengthMsg(false)
     });
   };
+
+  useEffect(() => {
+    console.log(allMsg)
+  }, [allMsg]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -82,6 +106,19 @@ function Messages() {
     //send message 
 
     socket.emit("send-message", message, room);
+
+    //
+  
+
+    //save to db
+    const data = {
+      message:message,
+      room:room,
+    }
+
+      axios.post('/chat/storeMsg',data).then((response)=>{
+        console.log(response)
+      })
 
     //
     event.target.elements.message.value = "";
@@ -134,7 +171,7 @@ function Messages() {
                       >
                         <div className="users-conten flex items-center">
                           <img
-                            src="../images/adminlogo.jpeg"
+                            src={obj.pic}
                             alt=""
                             className="h-[40px] w-[40px] object-cover rounded-[50%]"
                           />
@@ -165,13 +202,13 @@ function Messages() {
                 {" "}
                 <i className="bx bx-left-arrow-alt"></i>
               </a>
-              <img
-                src="../images/adminlogo.jpeg"
+              {eachUser && <img
+                src={eachUser.pic}
                 alt=""
                 className="mesImg h-[45px] w-[45px] rounded-[50%] object-cover"
-              />
+              />}
               <div className="details">
-                <span className="text-[17px] font-medium">{hrName}</span>
+                <span className="text-[17px] font-medium">{eachUser.fullname}</span>
                 <p className="text-sm">Active now</p>
               </div>
             </header>
@@ -191,7 +228,42 @@ function Messages() {
                 ""
               )}
 
-              {messages.map((obj) => {
+
+              
+
+
+              {/* {
+              lengthMsg &&
+              
+              allMsg.filter(obj =>{
+                if(obj.senderId === hrInfo._id){
+                    return (
+                          <div className="chat outgoing flex">
+                            <div className="details ml-auto">
+                              <p className="bg-[#333] text-[#fff]">{obj.content}</p>
+                            </div>
+                          </div>
+                   );
+                }else{
+                  return (
+                        <div className="chat incoming flex items-end">
+                          <img
+                            src="../images/adminlogo.jpeg"
+                            alt=""
+                            className="h-[35px] w-[35px] rounded-[50%] object-cover"
+                          />
+                          <div className="details ml-[10px] mr-auto">
+                            <p className="bg-[#fff]">{obj.content}</p>
+                          </div>
+                        </div>
+                      );
+                }
+              })
+              
+            } */}
+
+
+            {messages.map((obj) => {
                 return (
                   <div className="chat outgoing flex">
                     <div className="details ml-auto">
@@ -201,7 +273,7 @@ function Messages() {
                 );
               })}
 
-              {recieved.map((obj) => {
+               {recieved.map((obj) => {
                 return (
                   <div className="chat incoming flex items-end">
                     <img
@@ -214,9 +286,26 @@ function Messages() {
                     </div>
                   </div>
                 );
-              })}
-            </div>
+             })}
 
+{allMsg.length !==0  && allMsg.map((obj)=>{
+  return(
+    <div className="chat incoming flex items-end">
+                    <img
+                      src="../images/adminlogo.jpeg"
+                      alt=""
+                      className="h-[35px] w-[35px] rounded-[50%] object-cover"
+                    />
+                    <div className="details ml-[10px] mr-auto">
+                      <p className="bg-[#fff]">{obj.content}</p>
+                    </div>
+                  </div>
+  )
+})
+  
+  
+              }
+            </div>
             <form
               className="text-area flex justify-between"
               onSubmit={handleSubmit}

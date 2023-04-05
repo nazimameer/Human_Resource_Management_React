@@ -9,9 +9,8 @@ const socketIo = (server) => {
 
 
   ioServer.on('connection',(socket)=>{
-    
+
     socket.on('send-message', (message, room)=>{
-      console.log("room is :"+ room)
       if(room === ''){
         socket.broadcast.emit('recieve-message', message)
       }else{

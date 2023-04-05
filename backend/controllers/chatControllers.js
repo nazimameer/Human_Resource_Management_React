@@ -101,4 +101,46 @@ module.exports = {
       throw new Error(error.message);
     }
   },
+
+
+  fetchUserInfo:(req,res)=>{
+    const id = req.params.id;
+
+    employeeModel.findOne({
+      _id:id
+    }).then((doc)=>{
+      if(doc){
+        const data = doc
+        res.status(200).json({data})
+      }
+    }).catch((error)=>{
+      console.log(error);
+      res.status(500).json({error:"Internal Server Error"})
+    })
+  },
+
+  storeMsg:(req,res)=>{
+    const id = req.id;
+    const data = req.body;
+    const { message } = data;
+    const { room } = data;
+
+   const newMessage = {
+    senderId: id, // Example sender ID
+    content: message, // Example message content
+    time: new Date().toLocaleString() // Current date and time
+   }
+
+   console.log(newMessage)
+
+    Chat.updateOne(
+      { chatId:room },
+      { $push: { message: newMessage },
+      $set:{latestMessage: newMessage.content }}
+      ).then((doc)=>{
+        if(doc){
+          res.status(200).json({ success:true })
+        }
+      })
+    },
 };
