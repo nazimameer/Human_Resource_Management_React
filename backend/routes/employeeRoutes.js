@@ -31,6 +31,7 @@ router.get('/getEmployeename',Authentication.verifyToken,employeeController.getU
 router.get('/getAllhr',Authentication.verifyToken,employeeController.getAllhr);
 router.get('/getUserInfo',Authentication.verifyToken,employeeController.getMyInfo)
 router.post('/setAccount',Authentication.verifyToken,employeeController.setAccount)
+router.get('/getPayslips',Authentication.verifyToken,employeeController.getPayslips)
  
 module.exports = router;
  

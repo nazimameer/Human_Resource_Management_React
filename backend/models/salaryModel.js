@@ -24,6 +24,9 @@ const salarySchema = new mongoose.Schema({
             },
             cutoff:{
                 type:Number,
+            },
+            submiton:{
+                type:String,
             }
         }
     ]

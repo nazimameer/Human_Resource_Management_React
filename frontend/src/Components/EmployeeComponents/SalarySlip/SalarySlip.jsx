@@ -32,6 +32,12 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
   }, []);
 
   useEffect(() => {
+    axios.get("/employee/getPayslips").then((response)=>{
+      console.log(response)
+    })
+  }, []);
+
+  useEffect(() => {
     axios.get('/employee/getSalaryInfo').then((response)=>{
       const data = response.data.data;
       console.log(data)

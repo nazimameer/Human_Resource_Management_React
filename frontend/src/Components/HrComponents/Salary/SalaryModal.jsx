@@ -7,7 +7,11 @@ function SalaryModal({ open, closeModal, uid }) {
     const [currentSal, setCurrentSal] = useState(null);
     const [cutoff, setCutoff] = useState(null)
     const options = { month: 'long', day: 'numeric', year: 'numeric' }
-    const month = new Date().toLocaleDateString('en-US', options);
+    const options2 = { month:'long' }
+    const today = new Date()
+    const month = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate())
+    const lastMonth = month.toLocaleDateString('en-US', options2)
+    const thisMoment = today.toLocaleDateString('en-US', options); 
     useEffect(() => {
        axios.get(`/hr/getEmployeeSalary/${uid}`).then((response)=>{
         const data = response.data.data;
@@ -19,20 +23,26 @@ function SalaryModal({ open, closeModal, uid }) {
        })
     }, [uid]);
     const handleChange = (event)=>{
-        const cuttoff = event.target.value;
-        setCutoff(cuttoff)
         const current = currentSal;
-        const newSal = current-cutoff;
+        const newSal = current-event.target.value;
+        setCutoff(event.target.value)
         setSalary(newSal)
     }
     const handleSubmit = (event)=>{
         event.preventDefault();
+        let originalSal;
+        if (!cutoff || cutoff.trim() === "") {
+          originalSal = currentSal
+        }else{
+          originalSal = salary;
+        }
         const data = {
             UID:uid,
             accountDetails:accDetails,
-            salary:salary,
+            salary:originalSal,
             cutoff:cutoff,
-            month:month,
+            month:thisMoment,
+            lastMonth:lastMonth,
         }
         axios.post('/hr/initiateSalary',{data}).then((response)=>{
             if(response.status === 200){
@@ -98,9 +108,8 @@ function SalaryModal({ open, closeModal, uid }) {
                       </div>
                       <input
                         type="number"
-                        name="name"
+                        name="cutoff"
                         placeholder="eg. 2000"
-                        value={cutoff}
                         onChange={handleChange}
                         className="focus:shadow-primary-outline dark:bg-slate-850 text-black  text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
@@ -121,7 +130,6 @@ function SalaryModal({ open, closeModal, uid }) {
                       type="submit"
                       aria-controls="address"
                       next-form-btn=""
-                      href="/"
                       className="inline-block px-6 py-3 mb-0 ml-auto text-xs font-bold text-right text-white uppercase align-middle transition-all ease-in border-0 rounded-lg shadow-md cursor-pointer hover:-translate-y-px active:opacity-85 hover:shadow-xs dark:bg-gradient-to-tl dark:from-slate-750 dark:to-gray-850 bg-gradient-to-tl from-lime-600 to-green-500 leading-pro tracking-tight-rem bg-150 bg-x-25"
                     >
                       Initiate

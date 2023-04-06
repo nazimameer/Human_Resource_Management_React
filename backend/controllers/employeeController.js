@@ -8,6 +8,7 @@ const hobbieModel = require("../models/hobbieModel");
 const attendanceModel = require("../models/employeeAttendance");
 const IntTaskModel = require("../models/individualTaskModal");
 const hrModel = require("../models/hrModel");
+const salaryModel = require('../models/salaryModel')
 module.exports = {
   LoginPageAuth: (req, res) => {
     try {
@@ -666,5 +667,17 @@ module.exports = {
           res.status(200).json({success:true})
         }
       })
+  },
+  getPayslips:(req,res)=>{
+    const uid = req.uid;  
+
+    if(uid){
+      salaryModel.findOne({UID:uid}).then((doc)=>{
+        if(doc){
+          const data = doc.salaries;
+          console.log(data)
+        }
+      })
+    }
   }
 };

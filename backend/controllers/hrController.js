@@ -973,12 +973,13 @@ module.exports = {
       cutoff = data.cutoff
     }
     const newSalary = {
-     month : data.month,
+     month : data.lastMonth,
      salary : data.salary,
      holdername : accountDetails.holder,
      accountNo : accountDetails.accNo,
      ifsc : accountDetails.ifsc,
      cutoff : cutoff,
+     submiton:data.month
     }
 
 
