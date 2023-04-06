@@ -53,8 +53,8 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
     <div className="my-20 bg-slate-900">
       <div class="w-full px-6 py-6 mx-auto">
         <div class="flex flex-wrap -mx-3">
-          <div class="max-w-full px-3 lg:w-2/3 lg:flex-none">
-            <div class="flex flex-wrap -mx-3">
+          <div class="max-w-full px-3 lg:w-2/3 lg:flex items-center justify-center">
+            <div class="flex flex-wrap -mx-3 w-full">
               <div class="w-full max-w-full px-3 mb-4 xl:mb-0 xl:w-1/2 xl:flex-none">
                 <div class="relative flex flex-col min-w-0 break-words bg-transparent border-0 border-transparent border-solid shadow-xl rounded-2xl bg-clip-border">
                   <div
@@ -131,7 +131,9 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
                   </div>
                 </div>
               </div>
-              <div class="w-full px-3 mb-4 lg:mb-0  ">
+
+
+              {/* <div class="w-full px-3 mb-4 lg:mb-0  ">
                 <div class="relative flex flex-col min-w-0 mt-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
                   <div class="p-4 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                     <div class="flex flex-wrap -mx-3">
@@ -168,7 +170,9 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
+
+
             </div>
           </div>
           <div class="w-full max-w-full px-3 lg:w-1/3 lg:flex-none">
@@ -176,7 +180,7 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
             <div class="p-4 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
               <div class="flex  -mx-3 overflow-hidden">
                 <div class="flex items-center  w-1/2 max-w-full px-3">
-                  <h6 class="mb-0">Invoices</h6>
+                  <h6 class="mb-0">Pay Slips</h6>
                 </div>
                 <div class="flex-none w-1/2 max-w-full  text-right">
                   <small>
@@ -277,8 +281,8 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
             {/* </color:div> */}
           </div>
         </div>
-        <div class="flex flex-wrap -mx-3">
-          <div class="w-full max-w-full px-3 mt-6 md:w-7/12 md:flex-none">
+        <div class="flex flex-wrap  w-2/3">
+          <div class="w-full max-w-full px-3 mt-6 md:w-full md:flex-none">
             <div class="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
               <div class="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
                 <h6 class="mb-0">Overtime Pay Slip </h6>
@@ -368,7 +372,7 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
               </div>
             </div>
           </div>
-          <div class="w-full max-w-full px-3 mt-6 md:w-5/12 md:flex-none">
+          {/* <div class="w-full max-w-full px-3 mt-6 md:w-5/12 md:flex-none">
             <div class="transaction relative flex flex-col h-full min-w-0 mb-6 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
               <div class="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
                 <div class="flex -mx-3 overflow-hidden">
@@ -529,7 +533,7 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
                 </ul>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         {/* footer here */}
       </div>

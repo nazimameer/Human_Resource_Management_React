@@ -6,7 +6,8 @@ function SalaryModal({ open, closeModal, uid }) {
     const [salary, setSalary] = useState(null)
     const [currentSal, setCurrentSal] = useState(null);
     const [cutoff, setCutoff] = useState(null)
-    const month = new Date().toLocaleString('default', { month: 'long' })
+    const options = { month: 'long', day: 'numeric', year: 'numeric' }
+    const month = new Date().toLocaleDateString('en-US', options);
     useEffect(() => {
        axios.get(`/hr/getEmployeeSalary/${uid}`).then((response)=>{
         const data = response.data.data;
