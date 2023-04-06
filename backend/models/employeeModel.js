@@ -25,9 +25,7 @@ const employeeSchema = new mongoose.Schema({
   password: {
     type: String,
   },
-  salary:{ 
-    type:Number,
-  },
+  
   department:{
     type: String
   },
@@ -35,7 +33,22 @@ const employeeSchema = new mongoose.Schema({
     type:String,
     default: "Offline"
   },
-  pic:{ type: String, default:"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"}
+  pic:{ type: String, default:"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"},
+  salary:{ 
+    type:Number,
+  },
+  accountNo:{
+    type:Number,
+    default:0000000000000
+  },
+  ifsc:{
+    type:String,
+    default:"Not Provided"
+  },
+  holdername:{
+    type:String,
+    default:"Not Provided"
+  }
 },
 {
   timestamps: true

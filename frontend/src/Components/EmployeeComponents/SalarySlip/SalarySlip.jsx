@@ -1,27 +1,53 @@
 import React,{useEffect,useState} from "react";
 import "./SalarySlip.css";
 import axios from '../../../Api/EmployeeAxios'
-import Modal from "./Modal";
-function SalarySlip() {
+
+function SalarySlip({ openModal, refresh,setRefresh }) {
   const date = new Date();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
   const thismonth = `${year}-${month.toString().padStart(2, "0")}`;
   const [Salary, SetSalary] =useState(null);
-  const [openModal,setOpenModal] = useState(false)
+  const [accountDetails, setAccountDetails] = useState({
+    holder:'',
+    accountNo:'',
+    ifsc:'', 
+  });
   
   useEffect(() => {
     
     axios.get('/employee/getSalaryInfo').then((response)=>{
-      const data = response.data.salary;
-      if(data){
-        SetSalary(data);
-      }
+      const data = response.data.data;
+      console.log(data)
+      setAccountDetails({
+        holder:data.holdername,
+        accountNo:data.accNo,
+        ifsc:data.ifsc
+      })
+      SetSalary(data.salary)
     }).then((error)=>{
       console.log(error)
     })
 
   }, []);
+
+  useEffect(() => {
+    axios.get('/employee/getSalaryInfo').then((response)=>{
+      const data = response.data.data;
+      console.log(data)
+      setAccountDetails({
+        holder:data.holdername,
+        accountNo:data.accNo,
+        ifsc:data.ifsc
+      })
+      SetSalary(data.salary)
+
+      setRefresh()
+    }).then((error)=>{
+      console.log(error)
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refresh]);
   return (
     
     <div className="my-20 bg-slate-900">
@@ -42,7 +68,7 @@ function SalarySlip() {
                         aria-hidden="true"
                       ></i>
                       <h5 class="pb-2 mt-6 mb-12 text-black">
-                        4 5 6 2 1 1 2 2 4 5 9 4 7 8 5 2
+                        {accountDetails.accountNo}
                       </h5>
                       <div class="flex justify-between">
                         <div class="flex">
@@ -50,21 +76,21 @@ function SalarySlip() {
                             <p class="mb-0 leading-normal text-black text-sm opacity-80">
                               Account Holder
                             </p>
-                            <h6 class="mb-0 text-black text-sm">Nazim Ameer</h6>
+                            <h6 class="mb-0 text-black text-sm">{accountDetails.holder}</h6>
                           </div>
                           <div>
                             <p class="mb-0 leading-normal text-black text-sm opacity-80">
                               IFSC
                             </p>
                             
-                            <h6 class="mb-0 text-black text-sm">SBIN00000007</h6>
+                            <h6 class="mb-0 text-black text-sm">{accountDetails.ifsc}</h6>
                             
                           </div>
                         </div>
-                        <div className="flex justify-center items-center mx-3 cursor-pointer" onClick={()=>setOpenModal(true)}>
+                        <div className="flex justify-center items-center mx-3 cursor-pointer" onClick={openModal}>
                           <i class="bx bxs-pencil "></i>
 
-                          <Modal open={openModal}/>
+                          
                         </div>
                       </div>
                     </div>

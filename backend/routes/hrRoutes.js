@@ -36,6 +36,8 @@ router.get('/getAllEmployees',Authentication.verifyToken, hrController.getEmploy
 router.get('/gethrname',Authentication.verifyToken,hrController.getHrName);
 router.post('/addTasktoDepartment',Authentication.verifyToken,hrController.addTaskToDepartment);
 router.post('/addTasktoInt',Authentication.verifyToken,hrController.addTaskToInt);
-router.get('/getHrInfo',Authentication.verifyToken,hrController.getHrInfo)
+router.get('/getHrInfo',Authentication.verifyToken,hrController.getHrInfo);
+router.get('/getEmployeeSalary/:id',Authentication.verifyToken,hrController.getEmployeeSalary);
+router.post('/initiateSalary',Authentication.verifyToken,hrController.initiateSalary)
 
 module.exports = router;

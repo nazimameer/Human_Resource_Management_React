@@ -30,7 +30,7 @@ router.post('/taskIncomplete',Authentication.verifyToken,employeeController.task
 router.get('/getEmployeename',Authentication.verifyToken,employeeController.getUserName);
 router.get('/getAllhr',Authentication.verifyToken,employeeController.getAllhr);
 router.get('/getUserInfo',Authentication.verifyToken,employeeController.getMyInfo)
-
+router.post('/setAccount',Authentication.verifyToken,employeeController.setAccount)
  
 module.exports = router;
  

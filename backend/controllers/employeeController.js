@@ -377,7 +377,7 @@ module.exports = {
       } else {
       }
 
-      const image = {
+      const image = { 
         url: req.file.path,
         filename: req.file.filename,
       };
@@ -484,11 +484,15 @@ module.exports = {
       .findOne({ UID: uid })
       .then((doc) => {
         if (doc) {
-          const salary = doc.salary;
-          console.log(salary);
-          res.status(200).json({ salary });
+          const data ={
+            salary:doc.salary,
+            holdername:doc.holdername,
+            accNo:doc.accountNo,
+            ifsc:doc.ifsc
+          } 
+          res.status(200).json({ data });
         } else {
-          res.status(404).json({ error: "No Document Found " });
+          res.status(404).json({ error: "No Document Found" });
         }
       })
       .catch((error) => {
@@ -648,5 +652,19 @@ module.exports = {
         res.status(200).json({data})
       }
     })
+  }, 
+
+  setAccount:(req,res)=>{
+    const uid = req.uid;
+    const data = req.body.formData;
+    const holder = data.holdername;
+    const accNo = data.accountno;
+    const ifsc = data.ifsc
+    employeeModel.updateOne({UID:uid},
+      {$set:{ accountNo:accNo, holdername:holder,ifsc:ifsc }}).then((doc)=>{
+        if(doc){
+          res.status(200).json({success:true})
+        }
+      })
   }
 };

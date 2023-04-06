@@ -91,10 +91,10 @@ function SideBar() {
             <span className="tooltip">Applications</span>
           </li>
           <li key={"salary slip"}>
-            <a href="/">
+            <Link to={"/hr/payslips"}>
               <i className="bx bx-purchase-tag"></i>
               <span className="links_name">Salary slip</span>
-            </a>
+            </Link>
             <span className="tooltip">Salary slip</span>
           </li>
           {/* <li>

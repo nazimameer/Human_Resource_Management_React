@@ -260,7 +260,7 @@ function Messages() {
                 }
               })
               
-            } */}
+            } */} 
 
 
             {messages.map((obj) => {
@@ -288,19 +288,29 @@ function Messages() {
                 );
              })}
 
-{allMsg.length !==0  && allMsg.map((obj)=>{
-  return(
-    <div className="chat incoming flex items-end">
-                    <img
-                      src="../images/adminlogo.jpeg"
-                      alt=""
-                      className="h-[35px] w-[35px] rounded-[50%] object-cover"
-                    />
-                    <div className="details ml-[10px] mr-auto">
-                      <p className="bg-[#fff]">{obj.content}</p>
+{allMsg.length !==0  && allMsg.map((obj, i)=>{
+  if(obj.senderId === hrInfo._id){
+    return (
+      <div className="chat outgoing flex">
+        <div className="details ml-auto">
+          <p className="bg-[#333] text-[#fff]">{obj.content}</p>
+        </div>
+      </div>
+    );
+  }else{
+    return(
+      <div className="chat incoming flex items-end">
+                      <img
+                        src="../images/adminlogo.jpeg"
+                        alt=""
+                        className="h-[35px] w-[35px] rounded-[50%] object-cover"
+                      />
+                      <div className="details ml-[10px] mr-auto">
+                        <p className="bg-[#fff]">{obj.content}</p>
+                      </div>
                     </div>
-                  </div>
-  )
+    )
+  }
 })
   
   

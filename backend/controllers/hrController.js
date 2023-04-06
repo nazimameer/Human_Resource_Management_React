@@ -10,6 +10,8 @@ const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
 const { default: mongoose } = require("mongoose");
 const departmentModal = require("../models/departmentModal");
+const { parse } = require("path");
+const salaryModel = require("../models/salaryModel");
 module.exports = {
   verifyLogin: (req, res) => {
     const authHeader = req.headers.authorization;
@@ -934,5 +936,85 @@ module.exports = {
         res.status(500).json({error:"Internal Server Error"})
       })
     }
+  },
+  getEmployeeSalary:(req,res)=>{
+    const  id = req.params.id;
+    const intId = parseInt(id)
+
+    if (!Number.isInteger(intId)) {
+      return res.status(400).json({ message: 'Invalid employee ID' });
+    }
+      employeeModel.findOne({UID:intId}).then((doc)=>{
+        if(doc){
+          const sal = (doc.salary)/12; 
+          const salary = Math.ceil(sal)
+          const accNo = doc.accountNo;
+          const ifsc = doc.ifsc
+          const holder = doc.holdername;
+          const data = {
+            salary,
+            accNo,
+            holder,
+            ifsc
+          }
+          res.status(200).json({ data }) 
+        }
+      }) 
+    
+  },
+  initiateSalary:(req,res)=>{
+    const data = req.body.data;
+    const { accountDetails } = data;
+    const uid = data.UID;
+    let cutoff;
+    if(data.cutoff === null){
+      cutoff = 0
+    }else{
+      cutoff = data.cutoff
+    }
+    const newSalary = {
+     month : data.month,
+     salary : data.salary,
+     holdername : accountDetails.holder,
+     accountNo : accountDetails.accNo,
+     ifsc : accountDetails.ifsc,
+     cutoff : cutoff,
+    }
+
+
+    if(uid){
+      salaryModel.findOne({
+        UID:uid
+      }).then((doc)=>{
+        if(doc){
+
+          salaryModel.findOne({ salaries: { $elemMatch: { month: newSalary.month } } }).then((doc)=>{
+            if(doc){
+              res.status(400).json({error:" Salary Already Initiated "})
+            }else{
+              salaryModel.updateOne({UID:uid},
+                {$push:{salaries: newSalary }}).then((doc)=>{
+                  if(doc){
+                    res.status(200).json({success:true})
+                  }
+                })
+            }
+          })
+        }else{
+          salaryModel.create({
+            UID:uid,
+            salaries:[
+              newSalary
+            ]
+          }).then((doc)=>{
+            res.status(200).json({success:true})
+          })
+        }
+      }).catch((error)=>{
+        console.log(error)
+        res.status(500).json({error:"Internal Server Error"})
+      })
+    }
+   
   }
 };

@@ -9,6 +9,8 @@ import RejectedApplication from "../Pages/HrPages/RejectedApplication";
 import EditEmplo from "../Pages/HrPages/EditEmplo";
 import EachDepartment from "../Pages/HrPages/EachDepartment";
 import Chat from '../Pages/HrPages/Chat'
+import Payslips from "../Pages/HrPages/Payslips";
+import EachDepPayslip from "../Pages/HrPages/EachDepPayslip";
 
 function HrRoutes() {
   return (
@@ -29,6 +31,8 @@ function HrRoutes() {
         <Route path="/employeee/edit/:id" element={<EditEmplo />} />
         <Route path='/DepartmentPage/:id' element={<EachDepartment/>}/>
         <Route path="/messages" element={<Chat/>} />
+        <Route path='/payslips' element={<Payslips/>}/>
+        <Route path="/Departmentpayslip/:id" element={<EachDepPayslip/>}/>
       </Routes>
     </div>
   );
