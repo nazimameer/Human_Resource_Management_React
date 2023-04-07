@@ -3,6 +3,7 @@ const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
 const jwt = require("jsonwebtoken");
 const secretKey = "Brototype";
+const { default: mongoose } = require("mongoose");
 const skillModel = require("../models/skillModel");
 const hobbieModel = require("../models/hobbieModel");
 const attendanceModel = require("../models/employeeAttendance");
@@ -675,9 +676,36 @@ module.exports = {
       salaryModel.findOne({UID:uid}).then((doc)=>{
         if(doc){
           const data = doc.salaries;
-          console.log(data)
+          res.status(200).json({data})
         }
       })
     }
+  },
+  getPayslip:(req,res)=>{
+    const uid = req.uid;
+    const id = req.params.id;
+    console.log(id)
+    const objid = mongoose.Types.ObjectId(id);
+    salaryModel.findOne({
+      UID:uid
+    }).then((doc)=>{
+      if(doc){
+        salaryModel.findOne({
+          UID:uid,
+          salaries: {
+            $elemMatch: {
+              _id: objid
+            }
+          }
+        }).then((doc)=>{
+          console.log(doc)
+          res.status(200).json({ doc })
+        })
+      }else{
+        console.log("not done here ")
+
+        res.status(404).json({error:"Salary Slip Not Found"})
+      }
+    })
   }
 };

@@ -2,23 +2,25 @@ import React,{useEffect,useState} from "react";
 import "./SalarySlip.css";
 import axios from '../../../Api/EmployeeAxios'
 
-function SalarySlip({ openModal, refresh,setRefresh }) {
+function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
   const date = new Date();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
   const thismonth = `${year}-${month.toString().padStart(2, "0")}`;
   const [Salary, SetSalary] =useState(null);
+  const [Slips, SetSlips] = useState(null)
+  
   const [accountDetails, setAccountDetails] = useState({
     holder:'',
     accountNo:'',
     ifsc:'', 
   });
   
+
   useEffect(() => {
     
     axios.get('/employee/getSalaryInfo').then((response)=>{
       const data = response.data.data;
-      console.log(data)
       setAccountDetails({
         holder:data.holdername,
         accountNo:data.accNo,
@@ -33,14 +35,16 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
 
   useEffect(() => {
     axios.get("/employee/getPayslips").then((response)=>{
-      console.log(response)
+      if(response.status === 200){
+        const data = response.data.data;
+        SetSlips(data)
+      }
     })
   }, []);
 
   useEffect(() => {
     axios.get('/employee/getSalaryInfo').then((response)=>{
       const data = response.data.data;
-      console.log(data)
       setAccountDetails({
         holder:data.holdername,
         accountNo:data.accNo,
@@ -54,6 +58,11 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
+
+  const handleInvoiceClick = (invId)=>{
+    setInvId(invId);
+    OpenInvoice()
+  }
   return (
     
     <div className="my-20 bg-slate-900">
@@ -181,6 +190,7 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
 
             </div>
           </div>
+
           <div class="w-full max-w-full px-3 lg:w-1/3 lg:flex-none">
             {/* <color:div class="relative flex flex-col h-full min-w-0 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl "> */}
             <div class="p-4 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
@@ -198,12 +208,16 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
 
             <div class="invoices flex-auto p-4 pb-0 bg-white rounded-b-2xl ">
               <ul class="flex flex-col pl-0 mb-0 rounded-lg">
-                <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-t-inherit text-inherit rounded-xl">
-                  <div class="flex flex-col">
-                    <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                      March, 01, 2023
+
+              {Slips && Slips.map((obj,i)=>{
+                return(
+
+                <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-t-inherit text-inherit rounded-xl" key={obj._id}>
+                  <div class="flex flex-col" onClick={()=>handleInvoiceClick(obj._id)}>
+                    <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700 cursor-pointer" >
+                     {obj.submiton}
                     </h6>
-                    <span class="leading-tight text-xs">#415646</span>
+                    <span class="leading-tight text-xs cursor-pointer">#{obj.month}</span> 
                   </div>
                   <div class="flex items-center leading-normal text-sm">
                     {/* 200 */}
@@ -212,81 +226,20 @@ function SalarySlip({ openModal, refresh,setRefresh }) {
                     </button>
                   </div>
                 </li>
-                <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-t-inherit text-inherit rounded-xl">
-                  <div class="flex flex-col">
-                    <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                      February, 01, 2023
-                    </h6>
-                    <span class="leading-tight text-xs">#415646</span>
-                  </div>
-                  <div class="flex items-center leading-normal text-sm">
-                    {/* $180 */}
-                    <button class="inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer ease-soft-in bg-150 text-sm active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 text-slate-700">
-                      <i class="bx bxs-file-pdf"></i> PDF
-                    </button>
-                  </div>
-                </li>
-                <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-xl text-inherit">
-                  <div class="flex flex-col">
-                    <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                      January, 01, 2023
-                    </h6>
-                    <span class="leading-tight text-xs">#126749</span>
-                  </div>
-                  <div class="flex items-center leading-normal text-sm">
-                    {/* $250 */}
-                    <button class="inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer ease-soft-in bg-150 text-sm active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 text-slate-700">
-                      <i class="bx bxs-file-pdf"></i> PDF
-                    </button>
-                  </div>
-                </li>
-                <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-xl text-inherit">
-                  <div class="flex flex-col">
-                    <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                      December, 01, 2022
-                    </h6>
-                    <span class="leading-tight text-xs">#212562</span>
-                  </div>
-                  <div class="flex items-center leading-normal text-sm">
-                    {/* $560 */}
-                    <button class="inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer ease-soft-in bg-150 text-sm active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 text-slate-700">
-                      <i class="bx bxs-file-pdf"></i> PDF
-                    </button>
-                  </div>
-                </li>
-                <li class="relative flex justify-between px-4 py-2 pl-0 mb-2 bg-white border-0 rounded-xl text-inherit">
-                  <div class="flex flex-col">
-                    <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                      November, 01, 2022
-                    </h6>
-                    <span class="leading-tight text-xs">#103578</span>
-                  </div>
-                  <div class="flex items-center leading-normal text-sm">
-                    {/* $120 */}
-                    <button class="inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer ease-soft-in bg-150 text-sm active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 text-slate-700">
-                      <i class="bx bxs-file-pdf"></i> PDF
-                    </button>
-                  </div>
-                </li>
-                <li class="relative flex justify-between px-4 py-2 pl-0 bg-white border-0 rounded-b-inherit rounded-xl text-inherit">
-                  <div class="flex flex-col">
-                    <h6 class="mb-1 font-semibold leading-normal text-sm text-slate-700">
-                      October, 01, 2022
-                    </h6>
-                    <span class="leading-tight text-xs">#803481</span>
-                  </div>
-                  <div class="flex items-center leading-normal text-sm">
-                    {/* $300 */}
-                    <button class="inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer ease-soft-in bg-150 text-sm active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 text-slate-700">
-                      <i class="bx bxs-file-pdf"></i> PDF
-                    </button>
-                  </div>
-                </li>
+                )
+              })
+
+              }
+
+
+                
               </ul>
             </div>
             {/* </color:div> */}
           </div>
         </div>
+
+
         <div class="flex flex-wrap  w-2/3">
           <div class="w-full max-w-full px-3 mt-6 md:w-full md:flex-none">
             <div class="relative flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
