@@ -3,42 +3,32 @@ import axios from "../../../Api/HrAxios";
 import { message } from "antd";
 import './AddDe.css'
 
-function TaskAddInt({ open , closeModal, uid }) {
+function AddAnnouncement({ open , closeModal ,setRefresh}) {
     const [formData, setFormData] = useState({
-        from: "",
-        to: "",
-        task: "",
-        uid:"",
+        title:"",
+        content:"",
       });
-      const [fromError, setFromError] = useState(false);
-      const [toError, setToError] = useState(false);
-      const [taskError, setTaskError] = useState(false);
+      const [contentError, setContentError] = useState(false);
+      const [titleError, setTittleError] = useState(false);
       const handleChange = (event) => {
         if (event.target.value === "") {
-          if (event.target.name === "from") {
-            setFromError(true);
+
+          if (event.target.name === "title") { 
+            setTittleError(true);
             return;
-          }else if(event.target.name === "to"){
-            setToError(true);
-            return;
-          }else if(event.target.name === "task"){
-            setTaskError(true);
+          }else if(event.target.name === 'content'){
+            setContentError(true)
             return;
           }
+
         } else {
-          if (event.target.name === "from") {
-            setFromError(false);
-          }else if(event.target.name === "to"){
-            setToError(false);
-          }else if(event.target.name === "task"){
-            setTaskError(false);
+          if (event.target.name === "title") {
+            setTittleError(false);
+          }else if(event.target.name === "content"){
+            setContentError(false);
           }
         }
-          const today = new Date()
-        if(event.target.value < today.toISOString().slice(0,10)){
-          message.error("Invalid Date");
-          return;
-        }
+        
         setFormData({
           ...formData,
           [event.target.name]: event.target.value,
@@ -47,31 +37,21 @@ function TaskAddInt({ open , closeModal, uid }) {
     
       const handleSubmit = async (event) => {
         event.preventDefault();
-        const today = new Date();
-        formData.uid = uid;
-        if (formData.from === "") {
-            setFromError(true);
+        if (formData.title === "") {
+            setTittleError(true);
           return;
-        }else if(formData.to === ""){
-            setToError(true);
+        }else if(formData.content === ""){
+            setContentError(true);
             return;
-        }else if(formData.task === ""){
-            setTaskError(true);
-          return;
-        }else if(formData.from < today.toISOString().slice(0, 10)){
-          message.error("Invalid Date");
-          return;
-        }else if(formData.to < today.toISOString().slice(0, 10)){
-          message.error("Invalid Date");
-          return;
         }
     
         axios
-          .post("/hr/addTasktoInt", { data: formData })
+          .post("/hr/addNewAnnouncement", { data: formData })
           .then((response) => {
             if (response.status === 200) {
                   closeModal();
-                  message.success("Task Added Successfully", [2])
+                  setRefresh()
+                  message.success("Announcement Submited Successfully", [2])
                 }
               })
           .catch((error) => {
@@ -98,9 +78,7 @@ function TaskAddInt({ open , closeModal, uid }) {
             <div  className="flex justify-between">
               <div>
             <h5 className="mb-0 font-bold text-black">Assign Task To Department</h5>
-            <p className="mb-0 text-sm leading-normal">
-              Employee Id: {uid}
-            </p>
+            
               </div>
 
             <div className="pr-5 cursor-pointer" onClick={closeModal}>
@@ -115,71 +93,17 @@ function TaskAddInt({ open , closeModal, uid }) {
                     className="mb-3 ml-1 text-xs font-bold text-black"
                     htmlFor="fullname"
                   >
-                    Start Date
-                  </label>
-                  </div>
-                  <input
-                    type="date"
-                    name="from"
-                    placeholder="eg. Michael"
-                    onChange={handleChange}
-                    className="focus:shadow-primary-outline dark:bg-slate-850 text-black  text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                  />
-                  {fromError ? (
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-
-                <div className="w-full max-w-full px-3 flex-0 ">
-                  <div className="">
-                  <label
-                    className="mb-3 ml-1 text-xs font-bold text-black"
-                    htmlFor="fullname"
-                  >
-                    End Date
-                  </label>
-                  </div>
-                  <input
-                    type="date"
-                    name="to"
-                    placeholder="eg. Michael"
-                    onChange={handleChange}
-                    className="focus:shadow-primary-outline dark:bg-slate-850 text-black  text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                  />
-                  {toError ? (
-                    <div className="bg-red-700 rounded w-44 my-2">
-                      <span className="ml-2 text-white ">
-                        This field is required
-                      </span>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-
-                <div className="w-full max-w-full px-3 flex-0 ">
-                  <div className="">
-                  <label
-                    className="mb-3 ml-1 text-xs font-bold text-black"
-                    htmlFor="fullname"
-                  >
-                    Task
+                    Title
                   </label>
                   </div>
                   <input
                     type="text"
-                    name="task"
-                    placeholder="task..."
+                    name="title"
+                    placeholder="eg. tittle"
                     onChange={handleChange}
-                    className="focus:shadow-primary-outline dark:bg-slate-850 text-black h-20  text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                    className="focus:shadow-primary-outline dark:bg-slate-850 text-black  text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                   />
-                  {taskError ? (
+                  {titleError ? (
                     <div className="bg-red-700 rounded w-44 my-2">
                       <span className="ml-2 text-white ">
                         This field is required
@@ -189,6 +113,34 @@ function TaskAddInt({ open , closeModal, uid }) {
                     ""
                   )}
                 </div>
+
+                <div className="w-full max-w-full px-3 flex-0 ">
+                  <div className="">
+                  <label
+                    className="mb-3 ml-1 text-xs font-bold text-black"
+                    htmlFor="fullname"
+                  >
+                    content
+                  </label>
+                  </div>
+                  <input
+                    type="text"
+                    name="content"
+                    placeholder="eg. this is the new announcement"
+                    onChange={handleChange}
+                    className="focus:shadow-primary-outline dark:bg-slate-850 text-black  text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal  outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none h-14"
+                  />
+                  {contentError ? (
+                    <div className="bg-red-700 rounded w-44 my-2">
+                      <span className="ml-2 text-white ">
+                        This field is required
+                      </span>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+
     
               </div>
 
@@ -213,4 +165,4 @@ function TaskAddInt({ open , closeModal, uid }) {
   )
 }
 
-export default TaskAddInt;
+export default AddAnnouncement;

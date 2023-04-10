@@ -57,6 +57,8 @@ function Applicaitons() {
     const today = new Date()
 
     if(event.target.value < today.toISOString().slice(0, 10)){
+      console.log("here3")
+
       message.error("Invalid Date")
       return;
     }
@@ -76,10 +78,13 @@ function Applicaitons() {
     }else if(formData.leaveperiod === "Half Day" && formData.period === ""){
       message.error("Choose any Period")
       return;
-    }else if(formData.from < today.toISOString().slice(0, 10)){
+    }else if(formData.leaveperiod!=="Half Day" && formData.from < today.toISOString().slice(0, 10)){
+      console.log("here2")
+
       message.error("Invalid Date")
       return;
-    }else if(formData.to < today.toISOString().slice(0, 10)){
+    }else if(formData.leaveperiod!=="Half Day" && formData.to < today.toISOString().slice(0, 10)){
+      console.log("here1")
       message.error("Invalid Date")
       return;
     }

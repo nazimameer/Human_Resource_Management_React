@@ -83,22 +83,7 @@ function Dashboard(props) {
                 <div>
                   <div>Assigned: {obj.startdate}</div>
 
-                  <div>
-                    <div class="flex justify-between mb-1">
-                      <span class="text-sm font-medium text-green-700 ">
-                        45%
-                      </span>
-                    </div>
-                    <div
-                      class="w-full bg-gray-200 rounded-full h-2.5 "
-                      style={{ width: "200px" }}
-                    >
-                      <div
-                        class="bg-green-600 h-2.5 rounded-full"
-                        style={{ width: `${150}px` }}
-                      ></div>
-                    </div>
-                  </div>
+                  
                 </div>
 
                 <div className="w-1/2 flex flex-col ">

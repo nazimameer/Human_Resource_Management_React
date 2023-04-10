@@ -2,7 +2,7 @@ import React from 'react'
 
 function Contactus() {
   return (
-<div class="py-10 sm:px-[10%] px-6 mx-auto bg-slate-900">
+ <div class="py-10 sm:px-[10%] px-6 mx-auto bg-slate-900 ">
 
   <section class="text-center text-gray-800">
     <div class="max-w-[700px] mx-auto px-3 lg:px-6">
@@ -85,6 +85,8 @@ function Contactus() {
   </section>
 
 </div>
+
+
   )
 }
 

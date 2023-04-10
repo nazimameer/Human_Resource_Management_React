@@ -12,6 +12,7 @@ const { default: mongoose } = require("mongoose");
 const departmentModal = require("../models/departmentModal");
 const { parse } = require("path");
 const salaryModel = require("../models/salaryModel");
+const announcementModel = require("../models/announcementModel");
 module.exports = {
   verifyLogin: (req, res) => {
     const authHeader = req.headers.authorization;
@@ -1017,5 +1018,51 @@ module.exports = {
       })
     }
    
+  },
+  getAllTasks:(req,res)=>{
+    IntTaskModel.find({
+    })
+      .then((doc) => {
+        const data = doc;
+        if(data){
+          
+          res.status(200).json({ doc });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      });
+  },
+  addAnnouncement:(req,res)=>{
+    const id = req.id;
+    const data = req.body.data;
+    const time = new Date()
+    const timeString = time.toLocaleString();
+    const tittle = data.title;
+    const content = data.content;
+
+    console.log(tittle, content)
+
+    announcementModel.create({
+      senderId:id,
+      tittle:tittle, 
+      content:content,
+      time:timeString,
+    }).then((doc)=>{
+      res.status(200).json({success:true})
+    }).catch((error)=>{
+      console.log(error);
+      res.status(500).json({error:"Internal Server Error"})
+    })
+  },
+  getAllAnnou:(req,res)=>{
+    announcementModel.find({}).then((doc)=>{
+      if(doc){
+        res.status(200).json({doc})
+      }else{
+        res.status(404).json({error:"No Documents Found"})
+      }
+    })
   }
 };

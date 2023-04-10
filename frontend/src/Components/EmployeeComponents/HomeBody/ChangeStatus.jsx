@@ -3,7 +3,7 @@ import axios from '../../../Api/EmployeeAxios'
 
 function ChangeStatus({open, closeModal,refreshTask, taskId}) {
   const handleFinished = (taskId)=>{
-    axios.post('/employee/taskfinished',{id:taskId}).then((response)=>{
+    axios.patch('/employee/taskfinished',{id:taskId}).then((response)=>{
       if(response.status === 200){
         closeModal()
         refreshTask()
@@ -12,7 +12,7 @@ function ChangeStatus({open, closeModal,refreshTask, taskId}) {
   }
 
   const handlePending = (taskId) =>{
-    axios.post('/employee/taskPending',{id:taskId}).then((response)=>{
+    axios.patch('/employee/taskPending',{id:taskId}).then((response)=>{
       if(response.status === 200){
         closeModal()
         refreshTask()
@@ -22,7 +22,7 @@ function ChangeStatus({open, closeModal,refreshTask, taskId}) {
   }
 
   const handleIncomplete = (taskId) =>{
-    axios.post('/employee/taskIncomplete',{id:taskId}).then((response)=>{
+    axios.patch('/employee/taskIncomplete',{id:taskId}).then((response)=>{
       if(response.status === 200){
         closeModal()
         refreshTask()

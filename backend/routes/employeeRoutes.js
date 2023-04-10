@@ -24,15 +24,16 @@ router.post('/verifyCheckIn', Authentication.verifyToken,employeeController.veri
 router.get('/getSalaryInfo', Authentication.verifyToken,employeeController.getSalaryInfo);
 router.post('/checkBlocked', Authentication.verifyToken,employeeController.checkBlocked);
 router.get('/getAllTasks',Authentication.verifyToken,employeeController.getAllTasks);
-router.post('/taskfinished',Authentication.verifyToken,employeeController.taskFinished)
-router.post('/taskPending',Authentication.verifyToken,employeeController.taskPending)
-router.post('/taskIncomplete',Authentication.verifyToken,employeeController.taskIncomplete);
+router.patch('/taskfinished',Authentication.verifyToken,employeeController.taskFinished)
+router.patch('/taskPending',Authentication.verifyToken,employeeController.taskPending)
+router.patch('/taskIncomplete',Authentication.verifyToken,employeeController.taskIncomplete);
 router.get('/getEmployeename',Authentication.verifyToken,employeeController.getUserName);
 router.get('/getAllhr',Authentication.verifyToken,employeeController.getAllhr);
 router.get('/getUserInfo',Authentication.verifyToken,employeeController.getMyInfo)
 router.post('/setAccount',Authentication.verifyToken,employeeController.setAccount)
 router.get('/getPayslips',Authentication.verifyToken,employeeController.getPayslips);
-router.get('/getSalarySlip/:id',Authentication.verifyToken,employeeController.getPayslip)
+router.get('/getSalarySlip/:id',Authentication.verifyToken,employeeController.getPayslip);
+router.get('/getAllAnnounce',Authentication.verifyToken,employeeController.getAllAnnou)
  
 module.exports = router;
  

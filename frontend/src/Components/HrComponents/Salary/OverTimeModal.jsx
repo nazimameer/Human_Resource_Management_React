@@ -18,10 +18,10 @@ function OverTimeModal({ open,closeModal }) {
               >
                 <div  className="flex justify-between">
                   <div>
-                <h5 className="mb-0 font-bold text-black">Add Department</h5>
-                <p className="mb-0 text-sm leading-normal">
+                <h5 className="mb-0 font-bold text-black">OverTime Payment</h5>
+                {/* <p className="mb-0 text-sm leading-normal">
                   Mandatory Informations
-                </p>
+                </p> */}
                   </div>
   
                 <div className="pr-5 cursor-pointer" onClick={closeModal}>
@@ -36,7 +36,7 @@ function OverTimeModal({ open,closeModal }) {
                         className="mb-3 ml-1 text-xs font-bold text-black"
                         htmlFor="fullname"
                       >
-                        Department Name
+                        Amount
                       </label>
                       </div>
                       <input

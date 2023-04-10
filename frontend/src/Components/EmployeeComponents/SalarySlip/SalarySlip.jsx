@@ -251,7 +251,7 @@ function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
                   <li class="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50">
                     <div class="flex flex-col">
                       <h6 class="mb-4 leading-normal text-sm">
-                        Net pay :{" "}
+                       Amount :{" "}
                         <span className="text-green-500 text-lg"> + 1909</span>
                       </h6>
                       <span class="mb-2 leading-tight text-xs">
@@ -266,18 +266,13 @@ function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
                           10-02-2023
                         </span>
                       </span>
-                      <span class="leading-tight text-xs">
-                        VAT Number:{" "}
-                        <span class="font-semibold text-slate-700 sm:ml-2">
-                          FRB1235476
-                        </span>
-                      </span>
+                      
                     </div>
                   </li>
                   <li class="relative flex p-6 mt-4 mb-2 border-0 rounded-xl bg-gray-50">
                     <div class="flex flex-col">
                       <h6 class="mb-4 leading-normal text-sm">
-                        Net pay :{" "}
+                        Amount :{" "}
                         <span className="text-green-500 text-lg"> + 1209</span>
                       </h6>
                       <span class="mb-2 leading-tight text-xs">
@@ -292,18 +287,13 @@ function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
                           10-02-2023
                         </span>
                       </span>
-                      <span class="leading-tight text-xs">
-                        VAT Number:{" "}
-                        <span class="font-semibold text-slate-700 sm:ml-2">
-                          FRB1235476
-                        </span>
-                      </span>
+                      
                     </div>
                   </li>
                   <li class="relative flex p-6 mt-4 mb-2 border-0 rounded-b-inherit rounded-xl bg-gray-50">
                     <div class="flex flex-col">
                       <h6 class="mb-4 leading-normal text-sm">
-                        Net pay :{" "}
+                        Amount :{" "}
                         <span className="text-green-500 text-lg"> + 1800</span>
                       </h6>
 
@@ -319,12 +309,7 @@ function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
                           10-02-2023
                         </span>
                       </span>
-                      <span class="leading-tight text-xs">
-                        VAT Number:{" "}
-                        <span class="font-semibold text-slate-700 sm:ml-2">
-                          FRB1235476
-                        </span>
-                      </span>
+                      
                     </div>
                   </li>
                 </ul>

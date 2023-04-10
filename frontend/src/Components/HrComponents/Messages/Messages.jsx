@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "../../../Api/HrAxios";
 import "./Messages.css";
 import { io } from "socket.io-client";
-import { ChatState } from "../../../Context/ChatProvider"
+import { ChatState } from "../../../Context/ChatProvider";
 const socket = io("http://localhost:8000");
 function Messages() {
-  const { hrInfo } = ChatState()
+  const { hrInfo } = ChatState();
   const [noRecent, setNoRecent] = useState(true);
   const [messages, setMessages] = useState([]);
-  const [allMsg, SetAllMsg] = useState([])
-  const [lengthMsg, setLengthMsg] = useState(false)
-  const [eachUser, setEachUser] = useState({})
+  const [allMsg, SetAllMsg] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [lengthMsg, setLengthMsg] = useState(false);
+  const [eachUser, setEachUser] = useState({});
   const [recieved, setRecieved] = useState([]);
   const [displayMsg, SetDisplayMsg] = useState(null);
   const [room, setRoom] = useState(null);
@@ -18,31 +19,45 @@ function Messages() {
   const [allEmployees, setAllEmployees] = useState([]);
   const [hrName, setHrName] = useState(null);
   const [isLength, setIsLength] = useState(false);
-
+  const [allNewMessage, setAllNewMessage] = useState([{ text: "", type: "" }]);
+  const [allNewLength, setAllNewLength] = useState(false);
   // socket.io connect
-  socket.on('connect',()=>{
-    SetDisplayMsg(`socket connected id: ${socket.id}`)
-  })
+  socket.on("connect", () => {
+    SetDisplayMsg(`socket connected id: ${socket.id}`);
+  });
 
   socket.on("recieve-message", (message) => {
     setRecieved([...recieved, message]);
+    const received = { text: message, type: "received" };
+    setAllNewMessage([...allNewMessage, received]);
     setNoRecent(false);
   });
+  const chatWindowRef = useRef(null);
+  useEffect(() => {
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+  }, [recieved]);
 
+  useEffect(() => {
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+  }, [messages]);
+
+  useEffect(() => {
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+  }, [allMsg]);
   //join room
 
-  const joinroom = ()=>{
-    socket.emit("join-room", room, message=>{
-      SetDisplayMsg(`Joined in room : ${room}`)
-      });
-  }
+  const joinroom = () => {
+    socket.emit("join-room", room, (message) => {
+      SetDisplayMsg(`Joined in room : ${room}`);
+    });
+  };
 
   //
 
   useEffect(() => {
-    joinroom()
+    joinroom();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [room]);
+  }, [room]);
   useEffect(() => {
     axios.get("/hr/gethrname").then((response) => {
       const { fullname } = response.data;
@@ -64,68 +79,68 @@ function Messages() {
 
   const handleSelect = (uid) => {
     fetchChat(uid);
-    axios.get(`/chat/getUserInfo/${uid}`).then((response)=>{
+    axios.get(`/chat/getUserInfo/${uid}`).then((response) => {
       const data = response.data.data;
-      if(data){
-        setEachUser(data)
+      if (data) {
+        setEachUser(data);
       }
-    })
-  };
-  
-  const fetchChat = (uid) => {
-    console.log("fetching....")
-    const data = {
-      uid: uid,
-    };
-    axios.post("/chat/getAllMessages", data).then((response) => {
-
-      const data = response.data.data.chat.message;
-      const roomId = data.chatId;
-      setRoom(roomId)
-      console.log(data)
-      if(data.length !== 0){
-
-        SetAllMsg(data)
-        setLengthMsg(true)
-      }
-    }).catch((error)=>{
-      console.log(error);
-      setLengthMsg(false)
     });
   };
 
+  const fetchChat = (uid) => {
+    console.log("fetching....");
+    const data = {
+      uid: uid,
+    };
+    axios
+      .post("/chat/getAllMessages", { data })
+      .then((response) => {
+        const chatId = response.data.data.chatId;
+        const data = response.data.data.chat.message;
+        setRoom(chatId);
+
+        console.log(data);
+        if (data.length !== 0) {
+          SetAllMsg(data);
+          setLengthMsg(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setLengthMsg(false);
+      });
+  };
+
   useEffect(() => {
-    console.log(allMsg)
+    console.log(allMsg);
   }, [allMsg]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const message = event.target.elements.message.value;
     setMessages([...messages, message]);
-
-    //send message 
+    const sent = { text: message, type: "sent" };
+    setAllNewMessage([...allNewMessage, sent]);
+    //send message
 
     socket.emit("send-message", message, room);
 
     //
-  
 
     //save to db
     const data = {
-      message:message,
-      room:room,
-    }
+      message: message,
+      room: room,
+    };
 
-      axios.post('/chat/storeMsg',data).then((response)=>{
-        console.log(response)
-      })
+    axios.post("/chat/storeMsg", data).then((response) => {
+      console.log(response);
+    });
 
     //
     event.target.elements.message.value = "";
     setNoRecent(false);
   };
-
-  
 
   return (
     <>
@@ -202,21 +217,26 @@ function Messages() {
                 {" "}
                 <i className="bx bx-left-arrow-alt"></i>
               </a>
-              {eachUser && <img
-                src={eachUser.pic}
-                alt=""
-                className="mesImg h-[45px] w-[45px] rounded-[50%] object-cover"
-              />}
+              {eachUser && (
+                <img
+                  src={eachUser.pic}
+                  alt=""
+                  className="mesImg h-[45px] w-[45px] rounded-[50%] object-cover"
+                />
+              )}
               <div className="details">
-                <span className="text-[17px] font-medium">{eachUser.fullname}</span>
+                <span className="text-[17px] font-medium">
+                  {eachUser.fullname}
+                </span>
                 <p className="text-sm">Active now</p>
               </div>
             </header>
 
-            <div className="chat-box h-[466px] bg-[#f7f7f7] overflow-y-auto">
-              <div className="w-full h-6 flex justify-center">
-                {displayMsg}
-              </div>
+            <div
+              className="chat-box h-[466px] bg-[#f7f7f7] overflow-y-auto "
+              ref={chatWindowRef}
+            >
+              <div className="w-full h-6 flex justify-center">{displayMsg}</div>
 
               {noRecent ? (
                 <div className="flex justify-center">
@@ -228,94 +248,62 @@ function Messages() {
                 ""
               )}
 
-
-              
-
-
-              {/* {
-              lengthMsg &&
-              
-              allMsg.filter(obj =>{
-                if(obj.senderId === hrInfo._id){
+              {allMsg.length !== 0 &&
+                allMsg.map((obj, i) => {
+                  if (obj.senderId === hrInfo._id) {
                     return (
-                          <div className="chat outgoing flex">
-                            <div className="details ml-auto">
-                              <p className="bg-[#333] text-[#fff]">{obj.content}</p>
-                            </div>
-                          </div>
-                   );
-                }else{
-                  return (
-                        <div className="chat incoming flex items-end">
-                          <img
-                            src="../images/adminlogo.jpeg"
-                            alt=""
-                            className="h-[35px] w-[35px] rounded-[50%] object-cover"
-                          />
-                          <div className="details ml-[10px] mr-auto">
-                            <p className="bg-[#fff]">{obj.content}</p>
-                          </div>
+                      <div className="chat outgoing flex" key={i}>
+                        <div className="details ml-auto">
+                          <p className="bg-[#333] text-[#fff]">{obj.content}</p>
                         </div>
-                      );
-                }
-              })
-              
-            } */} 
-
-
-            {messages.map((obj) => {
-                return (
-                  <div className="chat outgoing flex">
-                    <div className="details ml-auto">
-                      <p className="bg-[#333] text-[#fff]">{obj}</p>
-                    </div>
-                  </div>
-                );
-              })}
-
-               {recieved.map((obj) => {
-                return (
-                  <div className="chat incoming flex items-end">
-                    <img
-                      src="../images/adminlogo.jpeg"
-                      alt=""
-                      className="h-[35px] w-[35px] rounded-[50%] object-cover"
-                    />
-                    <div className="details ml-[10px] mr-auto">
-                      <p className="bg-[#fff]">{obj}</p>
-                    </div>
-                  </div>
-                );
-             })}
-
-{allMsg.length !==0  && allMsg.map((obj, i)=>{
-  if(obj.senderId === hrInfo._id){
-    return (
-      <div className="chat outgoing flex">
-        <div className="details ml-auto">
-          <p className="bg-[#333] text-[#fff]">{obj.content}</p>
-        </div>
-      </div>
-    );
-  }else{
-    return(
-      <div className="chat incoming flex items-end">
-                      <img
-                        src="../images/adminlogo.jpeg"
-                        alt=""
-                        className="h-[35px] w-[35px] rounded-[50%] object-cover"
-                      />
-                      <div className="details ml-[10px] mr-auto">
-                        <p className="bg-[#fff]">{obj.content}</p>
                       </div>
-                    </div>
-    )
-  }
-})
-  
-  
-              }
+                    );
+                  } else {
+                    return (
+                      <div className="chat incoming flex items-end" key={i}>
+                        <img
+                          src="../images/adminlogo.jpeg"
+                          alt=""
+                          className="h-[35px] w-[35px] rounded-[50%] object-cover"
+                        />
+                        <div className="details ml-[10px] mr-auto">
+                          <p className="bg-[#fff]">{obj.content}</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+
+              {allNewMessage
+                .filter((obj) => obj.text !== "" && obj.type !== "")
+                .map((obj) => {
+                  if (obj.type === "received") {
+                    return (
+                      <div className="chat incoming flex items-end">
+                        <img
+                          src="../images/adminlogo.jpeg"
+                          alt=""
+                          className="h-[35px] w-[35px] rounded-[50%] object-cover"
+                        />
+                        <div className="details ml-[10px] mr-auto">
+                          <p className="bg-[#fff]">{obj.text}</p>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className="chat outgoing flex">
+                        <div className="details ml-auto">
+                          <p className="bg-[#333] text-[#fff]">{obj.text}</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+
+              
             </div>
+
             <form
               className="text-area flex justify-between"
               onSubmit={handleSubmit}

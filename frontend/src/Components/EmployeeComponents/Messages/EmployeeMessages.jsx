@@ -2,11 +2,17 @@ import React, { useEffect, useState} from "react";
 import axios from "../../../Api/EmployeeAxios";
 import "./Messages.css";
 import io from 'socket.io-client';
+import { ChatState } from "../../../Context/ChatProvider";
 const socket = io('http://localhost:8000');
+
 function EmployeeMessages() {
+  const { userInfo } = ChatState()
   const [noRecent, setNoRecent] = useState(true);
   const [displayMsg, setDisplayMsg] = useState(null)
   const [messages, setMessages] = useState([]);
+  const [allMsg, SetAllMsg] = useState([]);
+  const [lengthMsg, setLengthMsg] = useState(false);
+  const [eachUser, setEachUser] = useState({});
   const [recieved, setRecieved] = useState([]);
   const [room, setRoom] = useState(null);
 
@@ -34,6 +40,8 @@ function EmployeeMessages() {
   
 
   //
+
+  
 
   useEffect(() => {
   joinroom()
@@ -63,21 +71,42 @@ function EmployeeMessages() {
 
   const handleSelect = (uid) => {
     fetchChat(uid);
+    axios.get(`/chat/getUserInfo/${uid}`).then((response) => {
+      const data = response.data.data;
+      if (data) {
+        setEachUser(data);
+      }
+    });
   };
 
-  const fetchChat = (uid) => {
+  const fetchChat = (uid) => { 
     console.log("fetching....")
     // setIsLoading(true);
     const data = {
       uid: uid,
     };
-    axios.post("/chat/getAllMessages", data).then((response) => {
-      const data = response.data.data;
-      const roomId = data.chatId;
-          setRoom(roomId)
+    axios.post("/chat/getAllMessages", {data}).then((response) => {
+      // const data = response.data.data.chat;
+      const chatId = response.data.data.chatId;
+      const data = response.data.data.chat.message;
+          setRoom(chatId)
+
+          if (data.length !== 0) {
+            SetAllMsg(data);
+            setLengthMsg(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setLengthMsg(false);
     });
     
   };
+
+  useEffect(() => {
+    console.log(allMsg);
+  }, [allMsg]);
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -86,6 +115,18 @@ function EmployeeMessages() {
     // send message
 
     socket.emit("send-message", message, room);
+
+    //
+
+     //save to db
+     const data = {
+      message: message,
+      room: room,
+    };
+
+    axios.post("/chat/storeMsg", data).then((response) => {
+      console.log(response);
+    });
 
     //
     event.target.elements.message.value = "";
@@ -218,6 +259,33 @@ function EmployeeMessages() {
                   </div>
                 );
               })}
+
+{allMsg.length !== 0 &&
+                allMsg.map((obj, i) => {
+                  if (obj.senderId === userInfo._id) {
+                    return (
+                      <div className="chat outgoing flex">
+                        <div className="details ml-auto">
+                          <p className="bg-[#333] text-[#fff]">{obj.content}</p>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className="chat incoming flex items-end">
+                        <img
+                          src="../images/adminlogo.jpeg"
+                          alt=""
+                          className="h-[35px] w-[35px] rounded-[50%] object-cover"
+                        />
+                        <div className="details ml-[10px] mr-auto">
+                          <p className="bg-[#fff]">{obj.content}</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+
             </div>
 
             <form

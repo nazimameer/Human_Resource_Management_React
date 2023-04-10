@@ -9,7 +9,7 @@ function Employees() {
   const [isLength, setIsLength] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const handleBlock = (uid) =>{
-    axios.post('/hr/blockEmployee',{uid}).then(()=>{
+    axios.patch('/hr/blockEmployee',{uid}).then(()=>{
       axios.get("/hr/employees").then((response) => {
         if (response.data.status) {
           if (response.data.length !== 0) {
@@ -22,7 +22,7 @@ function Employees() {
   }
   
 const handleUnBlock = (uid) =>{
-    axios.post('/hr/unblockEmployee',{uid}).then(()=>{
+    axios.patch('/hr/unblockEmployee',{uid}).then(()=>{
       axios.get("/hr/employees").then((response) => {
         if (response.data.status) {
           if (response.data.length !== 0) {

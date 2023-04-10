@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
+import axios from '../../../Api/HrAxios'
 import './Departments.css'
 function Departments(props) {
   const Navigate = useNavigate();
 const toDepartment =(id)=>{
   Navigate(`/hr/DepartmentPage/${id}`)
 }
+const [tasks,SetTasks] = useState([]);
+const [isLength,SetIsLength] = useState(false)
+const [uid, setUid] = useState(null)
+useEffect(() => {
+  axios.get('/hr/getAllTasks').then((response)=>{
+    const data = response.data.doc[0].tasks;
+    const uid = response.data.doc[0].UID;
+    setUid(uid)
+    if(data.length !== 0){
+      SetTasks(data);
+      SetIsLength(true);
+    }
+   }).catch((error)=>{
+    console.log(error)
+    SetIsLength(false);
+   })
+}, []);
 
 const handleOnclick = (id) =>{
   props.setId(id)
@@ -46,9 +64,7 @@ const handleOnclick = (id) =>{
                       {/* <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Budget
                       </th> */}
-                      <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
-                        Completion
-                      </th>
+                      
 
                       <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Task
@@ -190,26 +206,7 @@ const handleOnclick = (id) =>{
                       </td> */}
 
 
-                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap">
-                        <div class="w-3/4 mx-auto">
-                          <div>
-                            <div>
-                              <span class="font-semibold leading-tight text-xs">
-                                60%
-                              </span>
-                            </div>
-                          </div>
-                          <div class="text-xs h-0.75 w-30 m-0 flex overflow-visible rounded-lg bg-gray-200">
-                            <div
-                              class="duration-600 ease-soft bg-gradient-to-tl from-blue-600 to-cyan-400 -mt-0.38 -ml-px flex h-1.5 w-3/5 flex-col justify-center overflow-hidden whitespace-nowrap rounded bg-fuchsia-500 text-center text-white transition-all"
-                              role="progressbar"
-                              aria-valuenow="60"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-                        </div>
-                      </td>
+                      
 
                       <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap"  onClick={()=>handleOnclick(obj._id)}>
                             <div className="flex items-center justify-center" >
@@ -236,77 +233,44 @@ const handleOnclick = (id) =>{
               <div >
                 <div class="relative mb-4 mt-0 after:clear-both after:table after:content-['']">
                  
-                  <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
-                    <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                    New Completion #1832412
+                  {isLength?
+                  tasks.map((obj)=>{
+                    return(
 
-                    </h6>
-                    <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
-                      22 DEC 7:20 PM
-                    </p>
-                  </div>
-                </div>
-                <div class="relative mb-4 after:clear-both after:table ">
-                  
-                  <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
-                    <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                      New Completion #1832412
-                    </h6>
-                    <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
-                      21 DEC 11 PM
-                    </p>
-                  </div>
-                </div>
-                <div class="relative mb-4 after:clear-both after:table after:content-['']">
-                  
-                  <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
-                    <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                    New Completion #1832412
+                      <div className="mt-5 border p-3 rounded-xl">
+                      <div className="flex justify-between">
+        
+                      <div >
+                        {obj.task}
+                      </div>
+                      </div>
+        
+                      <div className="text-xs mt-2 flex justify-between">
+                        <div>
+                          <div>Assigned: {obj.startdate}</div>
+        
+                          <div className="mt-3">
+                            UID:{uid}
+                          </div>
+                        </div>
+        
+                        <div className="w-1/2 flex flex-col ">
+                          <div className="flex justify-end">End Date: {obj.enddate}</div>
+                          <div className="mt-3 flex justify-end">
+                            <span className="p-1.5 text-xs  font-medium uppercase tracking-wider text-yellow-800 bg-green-200 rounded-lg bg-opacity-50">
+                              {obj.status}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    )
+                  })
+                  :
+                  ""}
 
-                    </h6>
-                    <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
-                      21 DEC 9:34 PM
-                    </p>
-                  </div>
                 </div>
-                <div class="relative mb-4 after:clear-both after:table after:content-['']">
-                 
-                  <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
-                    <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                    New Completion #1832412
-
-                    </h6>
-                    <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
-                      20 DEC 2:20 AM
-                    </p>
-                  </div>
-                </div>
-                <div class="relative mb-4 after:clear-both after:table after:content-['']">
-                  <span class="w-6.5 h-6.5 text-base absolute left-4 z-10 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-white text-center font-semibold">
-                    <i class="relative z-10 text-transparent ni leading-none ni-key-25 leading-pro bg-gradient-to-tl from-purple-700 to-pink-500 bg-clip-text fill-transparent"></i>
-                  </span>
-                  <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
-                    <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                    New Completion #1832412
-
-                    </h6>
-                    <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
-                      18 DEC 4:54 AM
-                    </p>
-                  </div>
-                </div>
-                <div class="relative mb-0 after:clear-both after:table after:content-['']">
-                  
-                  <div class="ml-11.252 pt-1.4 lg:max-w-120 relative -top-1.5 w-auto">
-                    <h6 class="mb-0 font-semibold leading-normal text-sm text-slate-700">
-                    New Completion #1832412
-
-                    </h6>
-                    <p class="mt-1 mb-0 font-semibold leading-tight text-xs text-slate-400">
-                      17 DEC
-                    </p>
-                  </div>
-                </div>
+               
               </div>
             </div>
           </div>

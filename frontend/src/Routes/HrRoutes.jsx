@@ -11,6 +11,7 @@ import EachDepartment from "../Pages/HrPages/EachDepartment";
 import Chat from '../Pages/HrPages/Chat'
 import Payslips from "../Pages/HrPages/Payslips";
 import EachDepPayslip from "../Pages/HrPages/EachDepPayslip";
+import Announcementshr from "../Pages/HrPages/Announcementshr";
 
 function HrRoutes() {
   return (
@@ -33,6 +34,7 @@ function HrRoutes() {
         <Route path="/messages" element={<Chat/>} />
         <Route path='/payslips' element={<Payslips/>}/>
         <Route path="/Departmentpayslip/:id" element={<EachDepPayslip/>}/>
+        <Route path="/Announcements" element={<Announcementshr/>}/>
       </Routes>
     </div>
   );

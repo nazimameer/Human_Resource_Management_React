@@ -25,7 +25,7 @@ function LeaveApplications() {
 
   const handleApprove = (id) => {
     axios
-      .post("/hr/applicationApprove", { id: id })
+      .patch("/hr/applicationApprove", { id: id })
       .then((response) => {
         if (response.status === 200) {
           axios
@@ -55,7 +55,7 @@ function LeaveApplications() {
 
   const handleReject = (id) => {
     axios
-      .post("/hr/applicationReject", { id: id })
+      .patch("/hr/applicationReject", { id: id })
       .then((response) => {
         console.log(response);
         if (response.status === 200) {

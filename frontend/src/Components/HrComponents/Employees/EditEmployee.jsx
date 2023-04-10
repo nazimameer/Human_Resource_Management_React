@@ -103,7 +103,7 @@ function EditEmployee(props) {
     const data = {
       data:uid
     }
-    axios.post('/hr/employee/edit/replace',data).then((response)=>{
+    axios.patch('/hr/employee/edit/replace',data).then((response)=>{
       if(response.status === 200){
         Navigate('/hr/employees')
       }
@@ -149,7 +149,7 @@ function EditEmployee(props) {
     //   .post("/hr/checkemail", { email: email })
     //   .then((response) => {
     //     if (response.status === 200) {
-          axios.post('/hr/employee/edit',{uid, formData }).then((response) => {
+          axios.patch('/hr/employee/edit',{uid, formData }).then((response) => {
             if (response.status === 200) {
               Navigate("/hr/employees");
             }

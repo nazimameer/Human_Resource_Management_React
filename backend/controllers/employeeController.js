@@ -3,13 +3,14 @@ const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
 const jwt = require("jsonwebtoken");
 const secretKey = "Brototype";
-const { default: mongoose } = require("mongoose");
+const { mongoose } = require("mongoose");
 const skillModel = require("../models/skillModel");
 const hobbieModel = require("../models/hobbieModel");
 const attendanceModel = require("../models/employeeAttendance");
 const IntTaskModel = require("../models/individualTaskModal");
 const hrModel = require("../models/hrModel");
-const salaryModel = require('../models/salaryModel')
+const salaryModel = require('../models/salaryModel');
+const announcementModel = require("../models/announcementModel");
 module.exports = {
   LoginPageAuth: (req, res) => {
     try {
@@ -645,9 +646,11 @@ module.exports = {
     })
   },
   getMyInfo:(req,res)=>{
+
     const id = req.id;
+    const objID = mongoose.Types.ObjectId(id)
     employeeModel.findOne({
-      _id:id
+      _id:objID
     }).then((doc)=>{
       if(doc){
         const data = doc;
@@ -685,6 +688,10 @@ module.exports = {
     const uid = req.uid;
     const id = req.params.id;
     console.log(id)
+    if(id === null){
+      res.status(400).json({error:"something went wrong"})
+      return; 
+    }
     const objid = mongoose.Types.ObjectId(id);
     salaryModel.findOne({
       UID:uid
@@ -700,12 +707,22 @@ module.exports = {
         }).then((doc)=>{
           console.log(doc)
           res.status(200).json({ doc })
-        })
+        }) 
       }else{
         console.log("not done here ")
 
         res.status(404).json({error:"Salary Slip Not Found"})
       }
     })
+  },
+  getAllAnnou:(req,res)=>{
+    announcementModel.find({}).then((doc)=>{
+      if(doc){
+        res.status(200).json({doc})
+      }
+    }).catch((error)=>{
+      res.status(500).json({error:"Internal Server Error"})
+    })
   }
+  
 };

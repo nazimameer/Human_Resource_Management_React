@@ -33,32 +33,6 @@ function NavBar() {
                 tabindex="-1"
               >
                 <div class="py-1" role="none">
-                  <div
-                    class="text-gray-700 block px-4 py-2 text-sm"
-                    role="menuitem"
-                    tabindex="-1"
-                    id="menu-item-0"
-                  >
-                    Account settings
-                  </div>
-                  <a
-                    href="/"
-                    class="text-gray-700 block px-4 py-2 text-sm"
-                    role="menuitem"
-                    tabindex="-1"
-                    id="menu-item-1"
-                  >
-                    Support
-                  </a>
-                  <a
-                    href="/"
-                    class="text-gray-700 block px-4 py-2 text-sm"
-                    role="menuitem"
-                    tabindex="-1"
-                    id="menu-item-2"
-                  >
-                    License
-                  </a>
                   <div>
                     <button
                       type="submit"

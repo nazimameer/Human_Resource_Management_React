@@ -6,12 +6,14 @@ import Contactus from "../Components/LandingPage/Contactus";
 import Footer from "../Components/LandingPage/Footer";
 function LandingPage() {
   return (
-    <div className="bg-slate-900 h-screen">
+    <div className="bg-slate-900 ">
       <Navbar />
+      <div className="bg-slate-900 min-h-[90vh]">
       <Hero />
       <About/>
       <Contactus/>
       <Footer/>
+      </div>
     </div>
   );
 }

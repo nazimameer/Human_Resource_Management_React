@@ -11,8 +11,19 @@ function Invoice({ open, closeModal,InvId }) {
                 console.log(data)
             }
         })
-        console.log("hei :"+ InvId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    useEffect(() => {
+        axios.get(`/employee/getSalarySlip/${InvId}`).then((response)=>{
+            console.log(response)
+            if(response.status === 200){
+                const data = response.data.doc.salaries;
+                setSlipDetails(data)
+                console.log(data)
+            }
+        })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [InvId]);
 
   if (!open) return null;
   return (

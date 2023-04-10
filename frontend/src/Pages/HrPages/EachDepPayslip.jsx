@@ -28,12 +28,14 @@ function EachDepPayslip() {
     })
 // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
+// paginations//
+
   return (
     <div>
       <SideBar />
       <NavBar />
       <div className="content bg-slate-900">
-        <EmployeesDep setId={(uid)=>SetuId(uid)} isLength={isLength} employees={employees} openSalaryModal={()=>SetOpenSalaryModal(true)} openOverTimeModal={()=>SetOpenOverTimeModal(true)}  openHistoryModal={()=>SetOpenHistoryModal(true)}/>
+        <EmployeesDep  setId={(uid)=>SetuId(uid)} isLength={isLength} employees={employees} openSalaryModal={()=>SetOpenSalaryModal(true)} openOverTimeModal={()=>SetOpenOverTimeModal(true)}  openHistoryModal={()=>SetOpenHistoryModal(true)}/>
         <SalaryModal open={openSalaryModal} closeModal={()=>SetOpenSalaryModal(false)} uid={uid}/> 
          <OverTimeModal open={openOverTimeModal} closeModal={()=>SetOpenOverTimeModal(false)} uid={uid}/> 
          <HistoryModal open={openHistoryModal} closeModal={()=>SetOpenHistoryModal(false)} uid={uid}/>

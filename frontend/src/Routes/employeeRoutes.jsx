@@ -5,6 +5,7 @@ import Applications from "../Pages/EmployeePages/Applications";
 import MyProfile from "../Pages/EmployeePages/myProfile";
 import SalarySlips from "../Pages/EmployeePages/SalarySlips";
 import EmployeeChat from "../Pages/EmployeePages/EmployeeChat";
+import Announcements from "../Pages/EmployeePages/Announcements";
 
 function employeeRoutes() {
   return (
@@ -15,6 +16,7 @@ function employeeRoutes() {
               <Route path="/myprofile" element={<MyProfile />} />
               <Route path="/salaryslip" element={<SalarySlips />} />
               <Route path="/messages" element={<EmployeeChat/>}/>
+              <Route path="/announcements" element={<Announcements/>}/>
       </Routes>
     </>
   );

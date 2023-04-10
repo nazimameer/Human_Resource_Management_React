@@ -1,5 +1,6 @@
 import { createContext, useContext,useState,useEffect } from 'react'
 import axios from '../Api/HrAxios'
+import employeeAxios from '../Api/EmployeeAxios'
 
 const ChatContext = createContext();
 
@@ -19,20 +20,19 @@ const ChatProvider = ({children})=>{
         })
       }
 
-      if(localStorage.getItem('employeejwt')){
-
-        axios.get('/employee/getUserInfo').then((response)=>{
-          console.log(response)
-          const userInfos = response.data.data;
-          setUserInfo(userInfos)
-          console.log("hei")
-        })
-      }
+      
      }, []);
 
-     useEffect(() => {
-      console.log("Nazim  "+selectedChat)
-     }, [selectedChat]);
+useEffect(() => {
+  if(localStorage.getItem('employeejwt')){
+
+    employeeAxios.get('/employee/getUserInfo').then((response)=>{
+      const userIfos = response.data.data;
+      setUserInfo(userIfos)
+      
+    })
+  }
+}, []);
      
     return(
 

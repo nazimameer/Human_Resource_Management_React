@@ -15,9 +15,9 @@ function SalarySlips() {
   useEffect(() => {
     axios.get(`/employee/getSalarySlip/${InvId}`).then((response)=>{
       console.log(response)
-  })
+  })  
   }, [InvId]);
-
+ 
   return (
     <div>
       <SideBar />

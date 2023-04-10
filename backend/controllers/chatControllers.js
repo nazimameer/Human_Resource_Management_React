@@ -59,7 +59,8 @@ module.exports = {
 
   fetchChats: async (req, res) => {
     try {
-      const data = req.body;
+      const data = req.body.data;
+      console.log(data)
       if(data){
         const  uid1  = req.id;
         const { uid } = data;
@@ -90,7 +91,7 @@ module.exports = {
               console.log(error)
               res.status(500).json({error:"Internal Server Error"})
             })
-          }
+          } 
         }).catch((error)=>{
           console.log(error)
           res.status(500).json({error:"Internal Server Error"})
