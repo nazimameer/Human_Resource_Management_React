@@ -31,7 +31,7 @@ router.post('/checkDepartment',Authentication.verifyToken,hrController.checkDepa
 router.get('/getDepartments',Authentication.verifyToken,hrController.getDepartments);
 router.get('/getDepartmentInfo/:id',Authentication.verifyToken,hrController.departmentInfo);
 router.get('/getAllEmployees',Authentication.verifyToken, hrController.getEmployees);
-router.get('/gethrname',Authentication.verifyToken,hrController.getHrName);
+router.get('/gethrDetails',Authentication.verifyToken,hrController.getHrDetails);
 router.post('/addTasktoDepartment',Authentication.verifyToken,hrController.addTaskToDepartment);
 router.post('/addTasktoInt',Authentication.verifyToken,hrController.addTaskToInt);
 router.get('/getHrInfo',Authentication.verifyToken,hrController.getHrInfo);

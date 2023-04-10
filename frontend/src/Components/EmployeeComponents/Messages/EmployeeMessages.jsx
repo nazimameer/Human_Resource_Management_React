@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useRef, useState} from "react";
 import axios from "../../../Api/EmployeeAxios";
 import "./Messages.css";
 import io from 'socket.io-client';
@@ -11,13 +11,15 @@ function EmployeeMessages() {
   const [displayMsg, setDisplayMsg] = useState(null)
   const [messages, setMessages] = useState([]);
   const [allMsg, SetAllMsg] = useState([]);
-  const [lengthMsg, setLengthMsg] = useState(false);
+  const [allNewMessage, setAllNewMessage] = useState([{ text: "", type: "" }]);
+
+  const [inputValue, setInputValue] = useState(false) 
   const [eachUser, setEachUser] = useState({});
   const [recieved, setRecieved] = useState([]);
   const [room, setRoom] = useState(null);
 
   const [allHr, setAllHr] = useState([]);
-  const [userName, setUserName] = useState(null);
+  const [userName, setUserName] = useState({});
   const [isLength, setIsLength] = useState(false);
 
   // socket.io connect
@@ -28,6 +30,8 @@ function EmployeeMessages() {
     //recieve - message 
     socket.on("recieve-message", (message) => {
       setRecieved([...recieved, message]);
+      const received = { text: message, type: "received" };
+    setAllNewMessage([...allNewMessage, received]);
       setNoRecent(false);
     });
   
@@ -41,6 +45,18 @@ function EmployeeMessages() {
 
   //
 
+  const chatWindowRef = useRef(null);
+  useEffect(() => {
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+  }, [recieved]);
+
+  useEffect(() => {
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+  }, [messages]);
+
+  useEffect(() => {
+    chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+  }, [allMsg]);
   
 
   useEffect(() => {
@@ -49,8 +65,8 @@ function EmployeeMessages() {
   }, [room]);
   useEffect(() => {
     axios.get("/employee/getEmployeename").then((response) => {
-      const fullname = response.data.data;
-      setUserName(fullname);
+      const doc = response.data.data;
+      setUserName(doc);
     }); 
     axios
       .get("/employee/getAllhr")
@@ -71,7 +87,7 @@ function EmployeeMessages() {
 
   const handleSelect = (uid) => {
     fetchChat(uid);
-    axios.get(`/chat/getUserInfo/${uid}`).then((response) => {
+    axios.get(`/chat/fetchHrInfo/${uid}`).then((response) => {
       const data = response.data.data;
       if (data) {
         setEachUser(data);
@@ -93,12 +109,10 @@ function EmployeeMessages() {
 
           if (data.length !== 0) {
             SetAllMsg(data);
-            setLengthMsg(true);
           }
         })
         .catch((error) => {
           console.log(error);
-          setLengthMsg(false);
     });
     
   };
@@ -112,6 +126,8 @@ function EmployeeMessages() {
     event.preventDefault();
     const message = event.target.elements.message.value;
     setMessages([...messages, message]);
+    const sent = { text: message, type: "sent" };
+    setAllNewMessage([...allNewMessage, sent]);
     // send message
 
     socket.emit("send-message", message, room);
@@ -133,6 +149,14 @@ function EmployeeMessages() {
     setNoRecent(false);
   };
 
+
+  const handleChangeInput =(event)=>{
+    if(event.target.value !== ""){
+      setInputValue(true);
+    }else{
+      setInputValue(false)
+    }
+  }
  
   return (
     <>
@@ -142,12 +166,12 @@ function EmployeeMessages() {
             <header className="flex items-center justify-between">
               <div className="conten flex">
                 <img
-                  src="../images/adminlogo.jpeg"
+                  src={userName.pic}
                   alt=""
                   className="w-[50px] h-[50px] object-cover rounded-[50%]"
                 />
                 <div className="details ml-[15px]">
-                  <span className="text-[18px] font-medium">{userName}</span>
+                  <span className="text-[18px] font-medium">{userName.fullname}</span>
                   <p>Active now</p>
                 </div>
               </div>
@@ -162,12 +186,12 @@ function EmployeeMessages() {
                 placeholder="Enter name to search..."
                 className="absolute h-[42px] outline-none"
               />
-              <button className="h-[42px] w-[47px] border-none outline-none text-white bg-[#333] cursor-pointer">
+              <button disabled={inputValue === null} className="h-[42px] w-[47px] border-none outline-none text-white bg-[#333] cursor-pointer">
                 <i className="bx bx-search"></i>
               </button>
             </div>
 
-            <div className="users-list max-h-[390px] overflow-y-auto">
+            <div className="users-list max-h-[390px] overflow-y-auto" >
               {isLength
                 ? allHr.map((obj, index) => {
                     return (
@@ -178,7 +202,7 @@ function EmployeeMessages() {
                       >
                         <div className="users-conten flex items-center">
                           <img
-                            src="../images/adminlogo.jpeg"
+                            src={obj.pic}
                             alt=""
                             className="h-[40px] w-[40px] object-cover rounded-[50%]"
                           />
@@ -209,18 +233,24 @@ function EmployeeMessages() {
                 {" "}
                 <i className="bx bx-left-arrow-alt"></i>
               </a>
-              <img
-                src="../images/adminlogo.jpeg"
-                alt=""
-                className="mesImg h-[45px] w-[45px] rounded-[50%] object-cover"
-              />
+              {eachUser && (
+
+
+                <img
+                  src={eachUser.pic}
+                  alt=""
+                  className="mesImg h-[45px] w-[45px] rounded-[50%] object-cover"
+                />
+              )
+
+              }
               <div className="details">
-                <span className="text-[17px] font-medium">{userName}</span>
+                <span className="text-[17px] font-medium">{eachUser.fullname} ( HR )</span>
                 <p className="text-sm">Active now</p>
               </div>
             </header>
 
-            <div className="chat-box h-[466px] bg-[#f7f7f7] overflow-y-auto">
+            <div className="chat-box h-[466px] bg-[#f7f7f7] overflow-y-auto" ref={chatWindowRef}>
               <div className="w-full h-6 flex justify-center">
                 {displayMsg}
               </div>
@@ -235,42 +265,39 @@ function EmployeeMessages() {
                 ""
               )}
 
-              {messages.map((obj) => {
-                return (
-                  <div className="chat outgoing flex">
-                    <div className="details ml-auto">
-                      <p className="bg-[#333] text-[#fff]">{obj}</p>
-                    </div>
-                  </div>
-                );
-              })}
-
-              {recieved.map((obj) => {
-                return (
-                  <div className="chat incoming flex items-end">
-                    <img
-                      src="../images/adminlogo.jpeg"
-                      alt=""
-                      className="h-[35px] w-[35px] rounded-[50%] object-cover"
-                    />
-                    <div className="details ml-[10px] mr-auto">
-                      <p className="bg-[#fff]">{obj}</p>
-                    </div>
-                  </div>
-                );
-              })}
+              
 
 {allMsg.length !== 0 &&
                 allMsg.map((obj, i) => {
                   if (obj.senderId === userInfo._id) {
                     return (
-                      <div className="chat outgoing flex">
+                      <div className="chat outgoing flex" key={i}>
                         <div className="details ml-auto">
                           <p className="bg-[#333] text-[#fff]">{obj.content}</p>
                         </div>
                       </div>
                     );
                   } else {
+                    return (
+                      <div className="chat incoming flex items-end" key={i}>
+                        <img
+                          src="../images/adminlogo.jpeg"
+                          alt=""
+                          className="h-[35px] w-[35px] rounded-[50%] object-cover"
+                        />
+                        <div className="details ml-[10px] mr-auto">
+                          <p className="bg-[#fff]">{obj.content}</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
+
+
+{allNewMessage
+                .filter((obj) => obj.text !== "" && obj.type !== "")
+                .map((obj) => {
+                  if (obj.type === "received") {
                     return (
                       <div className="chat incoming flex items-end">
                         <img
@@ -279,7 +306,15 @@ function EmployeeMessages() {
                           className="h-[35px] w-[35px] rounded-[50%] object-cover"
                         />
                         <div className="details ml-[10px] mr-auto">
-                          <p className="bg-[#fff]">{obj.content}</p>
+                          <p className="bg-[#fff]">{obj.text}</p>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className="chat outgoing flex">
+                        <div className="details ml-auto">
+                          <p className="bg-[#333] text-[#fff]">{obj.text}</p>
                         </div>
                       </div>
                     );
@@ -297,13 +332,17 @@ function EmployeeMessages() {
                 name="message"
                 placeholder="Type a message here..."
                 className="h-[45px] text-[17px]  outline-none"
+                onChange={handleChangeInput}
               />
-              <button
+              {inputValue?
+                <button
                 type="submit"
                 className="w-[55px] border-none outline-none bg-[#333] text-[#fff] text-[19px] cursor-pointer"
               >
                 <i className="bx bx-paper-plane"></i>
               </button>
+              :
+              ""}
             </form>
           </section>
         </div>

@@ -801,14 +801,13 @@ module.exports = {
     });
   },
 
-  getHrName: (req, res) => {
+  getHrDetails: (req, res) => {
     const id = req.id;
     const uid = mongoose.Types.ObjectId(id);
     hrModel.findOne({ _id: uid }).then((doc) => {
       if (doc) {
-        const { fullname } = doc;
-        console.log(fullname);
-        res.status(200).json({ fullname });
+        
+        res.status(200).json({ doc });
       }
     });
   },

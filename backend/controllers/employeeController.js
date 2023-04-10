@@ -626,7 +626,7 @@ module.exports = {
       UID:uid,
     }).then((doc)=>{
       if(doc){
-        const data = doc.fullname;
+        const data = doc;
         res.status(200).json({ data })
       }
     }).catch((error)=>{

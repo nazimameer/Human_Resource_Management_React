@@ -1,6 +1,7 @@
 const Chat = require("../models/chatModel");
 const employeeModel = require("../models/employeeModel");
 const hrModel = require("../models/hrModel");
+const mongoose = require('mongoose');
 
 module.exports = {
   accessChat: async (req, res) => {
@@ -106,10 +107,31 @@ module.exports = {
 
   fetchUserInfo:(req,res)=>{
     const id = req.params.id;
-
+    const objId = mongoose.Types.ObjectId(id)
+    console.log(objId)
     employeeModel.findOne({
-      _id:id
+      _id:objId
     }).then((doc)=>{
+    console.log("doc : ", doc)
+
+      if(doc){
+        const data = doc
+        res.status(200).json({data})
+      }
+    }).catch((error)=>{
+      console.log(error);
+      res.status(500).json({error:"Internal Server Error"})
+    })
+  },
+
+  fetchHrInfo:(req,res)=>{
+    const id = req.params.id;
+    const objId = mongoose.Types.ObjectId(id)
+    console.log(objId)
+    hrModel.findOne({
+      _id:objId
+    }).then((doc)=>{
+
       if(doc){
         const data = doc
         res.status(200).json({data})

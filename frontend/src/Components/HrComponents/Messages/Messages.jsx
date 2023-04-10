@@ -9,18 +9,15 @@ function Messages() {
   const [noRecent, setNoRecent] = useState(true);
   const [messages, setMessages] = useState([]);
   const [allMsg, SetAllMsg] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [lengthMsg, setLengthMsg] = useState(false);
   const [eachUser, setEachUser] = useState({});
   const [recieved, setRecieved] = useState([]);
   const [displayMsg, SetDisplayMsg] = useState(null);
   const [room, setRoom] = useState(null);
 
   const [allEmployees, setAllEmployees] = useState([]);
-  const [hrName, setHrName] = useState(null);
+  const [hrDetails, setHrDetails] = useState({});
   const [isLength, setIsLength] = useState(false);
   const [allNewMessage, setAllNewMessage] = useState([{ text: "", type: "" }]);
-  const [allNewLength, setAllNewLength] = useState(false);
   // socket.io connect
   socket.on("connect", () => {
     SetDisplayMsg(`socket connected id: ${socket.id}`);
@@ -59,9 +56,10 @@ function Messages() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room]);
   useEffect(() => {
-    axios.get("/hr/gethrname").then((response) => {
-      const { fullname } = response.data;
-      setHrName(fullname);
+    axios.get("/hr/gethrDetails").then((response) => {
+      const  data = response.data.doc;
+      console.log(data)
+      setHrDetails(data);
     });
     axios
       .get("/hr/getAllEmployees")
@@ -102,12 +100,10 @@ function Messages() {
         console.log(data);
         if (data.length !== 0) {
           SetAllMsg(data);
-          setLengthMsg(true);
         }
       })
       .catch((error) => {
         console.log(error);
-        setLengthMsg(false);
       });
   };
 
@@ -150,12 +146,12 @@ function Messages() {
             <header className="flex items-center justify-between">
               <div className="conten flex">
                 <img
-                  src="../images/adminlogo.jpeg"
+                  src={hrDetails.pic}
                   alt=""
                   className="w-[50px] h-[50px] object-cover rounded-[50%]"
                 />
                 <div className="details ml-[15px]">
-                  <span className="text-[18px] font-medium">{hrName}</span>
+                  <span className="text-[18px] font-medium">{hrDetails.fullname}</span>
                   <p>Active now</p>
                 </div>
               </div>
