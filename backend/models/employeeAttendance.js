@@ -29,7 +29,15 @@ const AttendanceSchema = new mongoose.Schema({
             status:{
                 type:String,
                 default: "Pending"
-            }
+            },
+            checkout:{
+                type:String, 
+                default:"Pending"
+             },
+             overpaystatus:{
+                type:String,
+                default:"Pending"
+             }
         }
     ]
 })

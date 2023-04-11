@@ -367,7 +367,7 @@ module.exports = {
       const hour = today.getHours() % 12 || 12; // converts to 12-hours format
       const minute = today.getMinutes();
       const second = today.getSeconds();
-      const amPm = hour >= 12 ? "Pm" : "Am";
+      const amPm = hour >= 12 ? "AM": "PM";
       const time = `${hour}:${minute}:${second} ${amPm}`;
       const position = employee.position;
       console.log(time);
@@ -673,7 +673,7 @@ module.exports = {
       })
   },
   getPayslips:(req,res)=>{
-    const uid = req.uid;  
+    const uid = req.uid;
 
     if(uid){
       salaryModel.findOne({UID:uid}).then((doc)=>{
@@ -723,6 +723,34 @@ module.exports = {
     }).catch((error)=>{
       res.status(500).json({error:"Internal Server Error"})
     })
+  },
+  markCheckout:(req,res)=>{
+    const uid = req.uid;
+    console.log(uid)
+    const today = new Date();
+    // Today Date
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+    const day = today.getDate();
+    const date = `${day}-${month}-${year}`;
+    // 
+    // Take Time 
+    const hour = today.getHours() % 12 || 12; // converts to 12-hours format
+    const minute = today.getMinutes();
+    const second = today.getSeconds();
+    const amPm = hour >= 12 ? "AM" : "PM";
+    const time = `${hour}:${minute}:${second} ${amPm}`;
+    console.log(time);
+    //
+    attendanceModel.updateOne({date:date, 'attendance.UID':uid},
+      {$set:{ 'attendance.$.checkout': time }}).then((doc)=>{
+        res.status(200).json({success:true})
+      }).catch((error)=>{
+        console.log(error);
+        res.status(500).json({error:"Internal Server Error"});
+      })
+
+    
   }
   
 };

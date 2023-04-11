@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from '../../../Api/HrAxios'
 import "./Activities.css";
 function Activities() {
+  useEffect(() => {
+    axios.get('/hr/checkAnyOverTime').then((response)=>{
+      console.log(response)
+    })
+  }, []);
   return (
     <div className="w-1/2">
       <div className="activitiesbar w-4/5  mx-10 p-5 rounded-xl bg-white  flex flex-col ">

@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../Api/EmployeeAxios";
 import { useNavigate } from "react-router-dom";
-
+import { message } from 'antd';
 function EmployeeLogin() {
   useEffect(() => {
     if (localStorage.getItem("employeejwt")) {
-      console.log("Hai");
       axios.post('/employee/checkBlocked').then((response)=>{
         if(response.status === 200){
 
           axios.post("/employee/LoginPageAuth").then((response) => {
-            console.log(response.status);
             if (response.status === 200) {
+              message.success('Logged In Successfully');
               Navigate("/employee/home");
             }
           });
@@ -28,12 +27,10 @@ function EmployeeLogin() {
 
   const [usernameError, setusernameError] = useState(false);
   const [passwordError, setpasswordError] = useState(false);
-  const [errors, setErrors] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-  const [message, setmessage] = useState("");
 
   const handleChange = (event) => {
     if (event.target.value === "") {
@@ -76,13 +73,12 @@ function EmployeeLogin() {
       .catch((error) => {
         console.log(error.response.status);
         if (error.response.status === 400) {
-          setErrors(true);
           const msg = error.response.data.error;
-          setmessage(msg);
+          message.error(msg)
+
         } else if (error.response.status === 401) {
-          setErrors(true);
           const msg = error.response.data.error;
-          setmessage(msg);
+          message.error(msg)
         }
       });
   };
@@ -95,13 +91,7 @@ function EmployeeLogin() {
             <p class="text-center text-3xl text-gray-500 font-semibold">
               Employee Login
             </p>
-            {errors ? (
-              <div className=" h-10  flex justify-center items-center mt-2 rounded text-white bg-red-600">
-                <span class="p-5">{message}</span>
-              </div>
-            ) : (
-              ""
-            )}
+            
 
             <form class="mt-6" onSubmit={handleSubmit}>
               <div class="relative">
@@ -166,15 +156,7 @@ function EmployeeLogin() {
               ) : (
                 ""
               )}
-              <div class="mt-4 flex items-center text-gray-500">
-                <input
-                  type="checkbox"
-                  id="remember"
-                  name="remember"
-                  class="mr-3"
-                />
-                <label for="remember">Remember me</label>
-              </div>
+              
               <div class="flex items-center justify-center mt-8">
                 <button
                   class="text-white py-2 px-4 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"

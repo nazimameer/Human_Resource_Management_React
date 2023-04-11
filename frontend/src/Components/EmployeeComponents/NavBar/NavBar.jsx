@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../../../Api/EmployeeAxios"
 import "./NavBar.css";
 function NavBar() {
   const Navigate = useNavigate();
   const [menu, SetMenu] = useState(false);
   const HandleLogout = () => {
-    localStorage.removeItem("employeejwt");
-    Navigate("/employee/login");
+    axios.post("/employee/markCheckout").then((response)=>{
+      if(response.status === 200){
+        localStorage.removeItem("employeejwt");
+        Navigate("/employee/login");
+
+      }
+    })
+
+ 
   };
+
+  
   return (
     <>
       <div className="w-full md:h-16 h-14 xl:h-20 bg-slate-900 flex md:justify-end justify-between content-center fixed z-50">

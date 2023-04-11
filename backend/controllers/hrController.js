@@ -99,7 +99,6 @@ module.exports = {
       const applications = await applicationModel.find({ status: "Pending" });
       if (applications.length != 0) {
         applications.forEach((obj) => {
-          console.log(obj.from);
           //from date retrive
           const from = obj.from;
           const newdate = new Date(from);
@@ -160,7 +159,7 @@ module.exports = {
             submiton: submitdate,
             from: datenew,
             to: todatenew,
-            section:section,
+            section: section,
           };
           applicationsinfo.push(alldata);
         });
@@ -317,7 +316,7 @@ module.exports = {
             submiton: submitdate,
             from: datenew,
             to: todatenew,
-            section:section,
+            section: section,
           };
           applicationsinfo.push(alldata);
         });
@@ -385,7 +384,7 @@ module.exports = {
             submiton: submitdate,
             from: datenew,
             to: todatenew,
-            section:section
+            section: section,
           };
           applicationsinfo.push(alldata);
         });
@@ -414,7 +413,6 @@ module.exports = {
               (record) => record.status === "Pending"
             );
             if (matched.length !== 0) {
-              console.log(matched);
               res.status(200).json({ attendance: matched });
               return;
             } else {
@@ -676,7 +674,6 @@ module.exports = {
   removeEmployee: (req, res) => {
     try {
       const uid = req.body.data;
-      console.log(uid);
       employeeModel
         .findOneAndUpdate(
           { UID: uid },
@@ -806,7 +803,6 @@ module.exports = {
     const uid = mongoose.Types.ObjectId(id);
     hrModel.findOne({ _id: uid }).then((doc) => {
       if (doc) {
-        
         res.status(200).json({ doc });
       }
     });
@@ -825,7 +821,6 @@ module.exports = {
       departmentId: depID,
     });
     if (DepTaskExist) {
-      console.log("Exist");
       DepTaskModal.updateOne(
         { departmentId: depID },
         {
@@ -871,7 +866,6 @@ module.exports = {
     const hr = req.id;
     const assignedBy = mongoose.Types.ObjectId(hr);
     const data = req.body.data;
-    console.log(data);
     const Intfrom = data.from;
     const Intto = data.to;
     const IntTask = data.task;
@@ -880,7 +874,6 @@ module.exports = {
       UID: IntId,
     });
     if (IntTaskExist) {
-      console.log("exist");
       IntTaskModel.updateOne(
         { UID: IntId },
         {
@@ -922,109 +915,111 @@ module.exports = {
         });
     }
   },
-  getHrInfo:(req,res)=>{
+  getHrInfo: (req, res) => {
     const hrid = req.id;
-    if(hrid){
-
-      hrModel.findOne({
-        _id:hrid
-      }).then((doc)=>{
-        const data = doc;
-        res.status(200).json({data})
-      }).catch((error)=>{
-        console.log(error)
-        res.status(500).json({error:"Internal Server Error"})
-      })
+    if (hrid) {
+      hrModel
+        .findOne({
+          _id: hrid,
+        })
+        .then((doc) => {
+          const data = doc;
+          res.status(200).json({ data });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
     }
   },
-  getEmployeeSalary:(req,res)=>{
-    const  id = req.params.id;
-    const intId = parseInt(id)
+  getEmployeeSalary: (req, res) => {
+    const id = req.params.id;
+    const intId = parseInt(id);
 
     if (!Number.isInteger(intId)) {
-      return res.status(400).json({ message: 'Invalid employee ID' });
+      return res.status(400).json({ message: "Invalid employee ID" });
     }
-      employeeModel.findOne({UID:intId}).then((doc)=>{
-        if(doc){
-          const sal = (doc.salary)/12; 
-          const salary = Math.ceil(sal)
-          const accNo = doc.accountNo;
-          const ifsc = doc.ifsc
-          const holder = doc.holdername;
-          const data = {
-            salary,
-            accNo,
-            holder,
-            ifsc
-          }
-          res.status(200).json({ data }) 
-        }
-      }) 
-    
+    employeeModel.findOne({ UID: intId }).then((doc) => {
+      if (doc) {
+        const sal = doc.salary / 12;
+        const salary = Math.ceil(sal);
+        const accNo = doc.accountNo;
+        const ifsc = doc.ifsc;
+        const holder = doc.holdername;
+        const data = {
+          salary,
+          accNo,
+          holder,
+          ifsc,
+        };
+        res.status(200).json({ data });
+      }
+    });
   },
-  initiateSalary:(req,res)=>{
+  initiateSalary: (req, res) => {
     const data = req.body.data;
     const { accountDetails } = data;
     const uid = data.UID;
     let cutoff;
-    if(data.cutoff === null){
-      cutoff = 0
-    }else{
-      cutoff = data.cutoff
+    if (data.cutoff === null) {
+      cutoff = 0;
+    } else {
+      cutoff = data.cutoff;
     }
     const newSalary = {
-     month : data.lastMonth,
-     salary : data.salary,
-     holdername : accountDetails.holder,
-     accountNo : accountDetails.accNo,
-     ifsc : accountDetails.ifsc,
-     cutoff : cutoff,
-     submiton:data.month
+      month: data.lastMonth,
+      salary: data.salary,
+      holdername: accountDetails.holder,
+      accountNo: accountDetails.accNo,
+      ifsc: accountDetails.ifsc,
+      cutoff: cutoff,
+      submiton: data.month,
+    };
+
+    if (uid) {
+      salaryModel
+        .findOne({
+          UID: uid,
+        })
+        .then((doc) => {
+          if (doc) {
+            salaryModel
+              .findOne({ salaries: { $elemMatch: { month: newSalary.month } } })
+              .then((doc) => {
+                if (doc) {
+                  res.status(400).json({ error: " Salary Already Initiated " });
+                } else {
+                  salaryModel
+                    .updateOne({ UID: uid }, { $push: { salaries: newSalary } })
+                    .then((doc) => {
+                      if (doc) {
+                        res.status(200).json({ success: true });
+                      }
+                    });
+                }
+              });
+          } else {
+            salaryModel
+              .create({
+                UID: uid,
+                salaries: [newSalary],
+              })
+              .then((doc) => {
+                res.status(200).json({ success: true });
+              });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
     }
-
-
-    if(uid){
-      salaryModel.findOne({
-        UID:uid
-      }).then((doc)=>{
-        if(doc){
-
-          salaryModel.findOne({ salaries: { $elemMatch: { month: newSalary.month } } }).then((doc)=>{
-            if(doc){
-              res.status(400).json({error:" Salary Already Initiated "})
-            }else{
-              salaryModel.updateOne({UID:uid},
-                {$push:{salaries: newSalary }}).then((doc)=>{
-                  if(doc){
-                    res.status(200).json({success:true})
-                  }
-                })
-            }
-          })
-        }else{
-          salaryModel.create({
-            UID:uid,
-            salaries:[
-              newSalary
-            ]
-          }).then((doc)=>{
-            res.status(200).json({success:true})
-          })
-        }
-      }).catch((error)=>{
-        console.log(error)
-        res.status(500).json({error:"Internal Server Error"})
-      })
-    }
-   
   },
-  getAllTasks:(req,res)=>{
-    IntTaskModel.find({
-    })
+  getAllTasks: (req, res) => {
+    IntTaskModel.find({})
       .then((doc) => {
         const data = doc;
-        if(data){
-          
+        if (data) {
           res.status(200).json({ doc });
         }
       })
@@ -1033,35 +1028,131 @@ module.exports = {
         res.status(500).json({ error: "Internal Server Error" });
       });
   },
-  addAnnouncement:(req,res)=>{
+  addAnnouncement: (req, res) => {
     const id = req.id;
     const data = req.body.data;
-    const time = new Date()
+    const time = new Date();
     const timeString = time.toLocaleString();
     const tittle = data.title;
     const content = data.content;
 
-    console.log(tittle, content)
-
-    announcementModel.create({
-      senderId:id,
-      tittle:tittle, 
-      content:content,
-      time:timeString,
-    }).then((doc)=>{
-      res.status(200).json({success:true})
-    }).catch((error)=>{
-      console.log(error);
-      res.status(500).json({error:"Internal Server Error"})
-    })
+    announcementModel
+      .create({
+        senderId: id,
+        tittle: tittle,
+        content: content,
+        time: timeString,
+      })
+      .then((doc) => {
+        res.status(200).json({ success: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).json({ error: "Internal Server Error" });
+      });
   },
-  getAllAnnou:(req,res)=>{
-    announcementModel.find({}).then((doc)=>{
-      if(doc){
-        res.status(200).json({doc})
-      }else{
-        res.status(404).json({error:"No Documents Found"})
+  getAllAnnou: (req, res) => {
+    announcementModel.find({}).then((doc) => {
+      if (doc) {
+        res.status(200).json({ doc });
+      } else {
+        res.status(404).json({ error: "No Documents Found" });
       }
-    })
-  }
+    });
+  },
+  checkAnyOverTime: async (req, res) => {
+    console.log("Checking .... ");
+    const overtimes = [];
+
+    const allattendance = await attendanceModel.find(
+      { "attendance.checkout": { $ne: "Pending" } },
+      {
+        date: 1,
+        "attendance.fullname": 1,
+        "attendance.position": 1,
+        "attendance.UID": 1,
+        "attendance.time": 1,
+        "attendance.checkout": 1,
+      }
+    );
+
+    if(allattendance){
+
+      allattendance.forEach((obj) => {
+        const date = obj.date;
+        const uid = obj.attendance[0].UID;
+        const fullname = obj.attendance[0].fullname;
+        const position = obj.attendance[0].position;
+  
+        // overtime calculation 
+        const startTimeStr = obj.attendance[0].time;
+        const endTimeStr = obj.attendance[0].checkout;
+  
+        const startTimeParts = startTimeStr.split(":");
+        const startHours = parseInt(startTimeParts[0]);
+        const startMinutes = parseInt(startTimeParts[1]);
+        const startSeconds = parseInt(startTimeParts[2].split(" ")[0]);
+        const startAmPm = startTimeParts[2].split(" ")[1];
+  
+        let startHours24 = startHours;
+        if (startAmPm === "PM" && startHours !== 12) {
+          startHours24 = startHours + 12;
+        } else if (startAmPm === "AM" && startHours === 12) {
+          startHours24 = 0;
+        }
+  
+        const endTimeParts = endTimeStr.split(":");
+        const endHours = parseInt(endTimeParts[0]);
+        const endMinutes = parseInt(endTimeParts[1]);
+        const endSeconds = parseInt(endTimeParts[2].split(" ")[0]);
+        const endAmPm = endTimeParts[2].split(" ")[1];
+  
+        let endHours24 = endHours;
+        if (endAmPm === "PM" && endHours !== 12) {
+          endHours24 = endHours + 12;
+        } else if (endAmPm === "AM" && endHours === 12) {
+          endHours24 = 0;
+        }
+  
+        if (
+          endHours24 < startHours24 ||
+          (endHours24 === startHours24 && endMinutes < startMinutes)
+        ) {
+          endHours24 += 24;
+        }
+  
+        const startDate = new Date();
+        startDate.setHours(startHours24, startMinutes, startSeconds);
+  
+        const endDate = new Date();
+        endDate.setHours(endHours24, endMinutes, endSeconds);
+        const timeDiff = Math.abs(endDate - startDate);
+  
+        const minutesDiff = Math.floor(timeDiff / 60000);
+        const secondsDiff = Math.floor((timeDiff / 1000) % 60);
+  
+        if (minutesDiff > 480) {
+          const timeDifference = minutesDiff + ":" + secondsDiff + "minutes";
+          const realDiff = minutesDiff - 480;
+          const overTimeHours = Math.floor(realDiff / 60);
+          const overTimeMin = realDiff % 60;
+          const overTime = overTimeHours + " Hours " + overTimeMin + " Minutes ";
+          const data = {
+            date: date,
+            UID: uid,
+            fullname: fullname,
+            position:position,
+            overtime: overTime,
+          };
+  
+          overtimes.push(data);
+        }
+      });
+  
+      res.status(200).json({overtimes})
+    }else{
+      res.status(200).json({overtimes})
+    }
+
+  },
 };

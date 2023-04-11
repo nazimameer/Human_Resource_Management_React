@@ -33,7 +33,8 @@ router.get('/getUserInfo',Authentication.verifyToken,employeeController.getMyInf
 router.post('/setAccount',Authentication.verifyToken,employeeController.setAccount)
 router.get('/getPayslips',Authentication.verifyToken,employeeController.getPayslips);
 router.get('/getSalarySlip/:id',Authentication.verifyToken,employeeController.getPayslip);
-router.get('/getAllAnnounce',Authentication.verifyToken,employeeController.getAllAnnou)
+router.get('/getAllAnnounce',Authentication.verifyToken,employeeController.getAllAnnou);
+router.post('/markCheckout',Authentication.verifyToken, employeeController.markCheckout);
  
 module.exports = router;
  

@@ -39,6 +39,7 @@ router.get('/getEmployeeSalary/:id',Authentication.verifyToken,hrController.getE
 router.post('/initiateSalary',Authentication.verifyToken,hrController.initiateSalary);
 router.get("/getAllTasks",Authentication.verifyToken,hrController.getAllTasks);
 router.post('/addNewAnnouncement',Authentication.verifyToken,hrController.addAnnouncement);
-router.get('/getAllAnnouncement',Authentication.verifyToken,hrController.getAllAnnou)
+router.get('/getAllAnnouncement',Authentication.verifyToken,hrController.getAllAnnou);
+router.get('/checkAnyOverTime',Authentication.verifyToken, hrController.checkAnyOverTime)
 
 module.exports = router;
