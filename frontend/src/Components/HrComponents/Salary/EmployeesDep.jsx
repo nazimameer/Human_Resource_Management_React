@@ -24,11 +24,7 @@ function EmployeesDep(props) {
         props.openSalaryModal();
       }
 
-      const handleOverTimeClick = (uid)=>{
-        console.log(uid)
-        props.setId(uid)
-        props.openOverTimeModal();
-      }
+     
 
       const handleHistoryClick = (uid)=>{
         console.log(uid)
@@ -87,9 +83,7 @@ function EmployeesDep(props) {
                   Salary
                 </th>
 
-                <th className="p-3 text-sm font-semibold tracking-wide text-left flex justify-center">
-                  OverTime Pay
-                </th>
+                
 
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                     History
@@ -129,11 +123,6 @@ function EmployeesDep(props) {
                       <i class='bx bx-money-withdraw text-2xl' ></i>
                       </td>
                       
-                      <td className="p-3 justify-center " onClick={()=>handleOverTimeClick(obj.UID)}>
-                      <button className='flex justify-center items-center w-full'>
-                      <i class='bx bx-time-five text-2xl' ></i>
-                      </button>
-                      </td> 
 
                       <td className="p-3 cursor-pointer" onClick={()=>handleHistoryClick(obj.UID)}>
                         <div>

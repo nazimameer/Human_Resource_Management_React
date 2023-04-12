@@ -3,7 +3,7 @@ const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
 const jwt = require("jsonwebtoken");
 const secretKey = "Brototype";
-const { mongoose } = require("mongoose");
+const mongoose  = require("mongoose");
 const skillModel = require("../models/skillModel");
 const hobbieModel = require("../models/hobbieModel");
 const attendanceModel = require("../models/employeeAttendance");
@@ -11,6 +11,7 @@ const IntTaskModel = require("../models/individualTaskModal");
 const hrModel = require("../models/hrModel");
 const salaryModel = require('../models/salaryModel');
 const announcementModel = require("../models/announcementModel");
+const overtimepaymentModal = require("../models/overtimepaymentModal");
 module.exports = {
   LoginPageAuth: (req, res) => {
     try {
@@ -687,9 +688,8 @@ module.exports = {
   getPayslip:(req,res)=>{
     const uid = req.uid;
     const id = req.params.id;
-    console.log(id)
-    if(id === null){
-      res.status(400).json({error:"something went wrong"})
+    if(!mongoose.Types.ObjectId.isValid(id)){
+      res.status(400).json({error:"Invalid ID"})
       return; 
     }
     const objid = mongoose.Types.ObjectId(id);
@@ -749,8 +749,17 @@ module.exports = {
         console.log(error);
         res.status(500).json({error:"Internal Server Error"});
       })
-
-    
+  },
+  getOvertimePaySlips:(req,res)=>{
+    const uid = req.uid;
+    overtimepaymentModal.find({UID: uid}).then((doc)=>{
+      if(doc){
+        const data = doc
+        res.status(200).json({ data })
+      }
+    }).catch((error)=>{
+      res.status(500).json({error:"Internal Server Error"})
+    })
   }
   
 };

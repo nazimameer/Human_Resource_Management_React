@@ -35,6 +35,7 @@ router.get('/getPayslips',Authentication.verifyToken,employeeController.getPaysl
 router.get('/getSalarySlip/:id',Authentication.verifyToken,employeeController.getPayslip);
 router.get('/getAllAnnounce',Authentication.verifyToken,employeeController.getAllAnnou);
 router.post('/markCheckout',Authentication.verifyToken, employeeController.markCheckout);
+router.get('/getOvertimePaySlips',Authentication.verifyToken, employeeController.getOvertimePaySlips)
  
 module.exports = router;
  

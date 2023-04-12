@@ -9,7 +9,7 @@ function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
   const thismonth = `${year}-${month.toString().padStart(2, "0")}`;
   const [Salary, SetSalary] =useState(null);
   const [Slips, SetSlips] = useState(null)
-  
+  const [overtimeSlips, setOvertimeSlips] = useState([])
   const [accountDetails, setAccountDetails] = useState({
     holder:'',
     accountNo:'',
@@ -58,6 +58,13 @@ function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
+
+  useEffect(() => {
+   axios.get("/employee/getOvertimePaySlips").then((response)=>{
+    console.log(response.data.data);
+    setOvertimeSlips(response.data.data);
+   })
+  }, []);
 
   const handleInvoiceClick = (invId)=>{
     setInvId(invId);
@@ -221,9 +228,9 @@ function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
                   </div>
                   <div class="flex items-center leading-normal text-sm">
                     {/* 200 */}
-                    <button class="inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer ease-soft-in bg-150 text-sm active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 text-slate-700">
+                    {/* <button class="inline-block px-0 py-3 mb-0 ml-6 font-bold leading-normal text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none cursor-pointer ease-soft-in bg-150 text-sm active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 text-slate-700">
                       <i class="bx bxs-file-pdf"></i> PDF
-                    </button>
+                    </button> */}
                   </div>
                 </li>
                 )
@@ -246,72 +253,52 @@ function SalarySlip({ openModal, refresh,setRefresh, OpenInvoice ,setInvId }) {
               <div class="p-6 px-4 pb-0 mb-0 bg-white border-b-0 rounded-t-2xl">
                 <h6 class="mb-0">Overtime Pay Slip </h6>
               </div>
+
               <div class="flex-auto p-4 pt-6">
                 <ul class="flex flex-col pl-0 mb-0 rounded-lg">
-                  <li class="relative flex p-6 mb-2 border-0 rounded-t-inherit rounded-xl bg-gray-50">
+
+
+                  
+
+
+                  { overtimeSlips.map((obj)=>{
+
+                    return(
+
+                  <li class="relative flex p-6 mt-4 mb-2 border-0 rounded-xl bg-gray-50" key={obj._id}>
                     <div class="flex flex-col">
-                      <h6 class="mb-4 leading-normal text-sm">
-                       Amount :{" "}
-                        <span className="text-green-500 text-lg"> + 1909</span>
-                      </h6>
-                      <span class="mb-2 leading-tight text-xs">
-                        Overtime hours:
-                        <span class="font-semibold text-slate-700 sm:ml-2">
-                          3 hours
-                        </span>
-                      </span>
-                      <span class="mb-2 leading-tight text-xs">
-                        Date:{" "}
-                        <span class="font-semibold text-slate-700 sm:ml-2">
-                          10-02-2023
-                        </span>
-                      </span>
                       
-                    </div>
-                  </li>
-                  <li class="relative flex p-6 mt-4 mb-2 border-0 rounded-xl bg-gray-50">
-                    <div class="flex flex-col">
+
                       <h6 class="mb-4 leading-normal text-sm">
                         Amount :{" "}
-                        <span className="text-green-500 text-lg"> + 1209</span>
-                      </h6>
-                      <span class="mb-2 leading-tight text-xs">
-                        Overtime hours:
-                        <span class="font-semibold text-slate-700 sm:ml-2">
-                          2 hours
-                        </span>
-                      </span>
-                      <span class="mb-2 leading-tight text-xs">
-                        Date:{" "}
-                        <span class="font-semibold text-slate-700 sm:ml-2">
-                          10-02-2023
-                        </span>
-                      </span>
-                      
-                    </div>
-                  </li>
-                  <li class="relative flex p-6 mt-4 mb-2 border-0 rounded-b-inherit rounded-xl bg-gray-50">
-                    <div class="flex flex-col">
-                      <h6 class="mb-4 leading-normal text-sm">
-                        Amount :{" "}
-                        <span className="text-green-500 text-lg"> + 1800</span>
+                        <span className="text-green-500 text-lg"> {obj.payment} /-</span>
                       </h6>
 
+                      
+                     
                       <span class="mb-2 leading-tight text-xs">
-                        Overtime hours:{" "}
+                        Overtime hours:
                         <span class="font-semibold text-slate-700 sm:ml-2">
-                          2:30 hours
+                          {obj.duration}
                         </span>
                       </span>
                       <span class="mb-2 leading-tight text-xs">
                         Date:{" "}
                         <span class="font-semibold text-slate-700 sm:ml-2">
-                          10-02-2023
+                          {obj.date}
                         </span>
                       </span>
-                      
+
+                     
+
                     </div>
                   </li>
+                    )
+                  }) 
+                  }
+
+
+
                 </ul>
               </div>
             </div>

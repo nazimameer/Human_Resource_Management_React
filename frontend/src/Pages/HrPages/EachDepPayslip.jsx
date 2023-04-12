@@ -6,14 +6,12 @@ import axios from '../../Api/HrAxios'
 import { useParams } from 'react-router-dom';
 import HistoryModal from '../../Components/HrComponents/Salary/HistoryModal';
 import SalaryModal from '../../Components/HrComponents/Salary/SalaryModal';
-import OverTimeModal from '../../Components/HrComponents/Dashboard/OverTimeModal';
 function EachDepPayslip() {
 
     const [employees,SetEmployees] = useState([]);
     const [uid,SetuId] = useState(null)
   const [isLength, setIsLength] = useState(false);
   const [openSalaryModal,SetOpenSalaryModal] = useState(false);
-  const [openOverTimeModal,SetOpenOverTimeModal] = useState(false);
   const [openHistoryModal,SetOpenHistoryModal] = useState(false);
   const {id} = useParams();
 
@@ -35,9 +33,8 @@ function EachDepPayslip() {
       <SideBar />
       <NavBar />
       <div className="content bg-slate-900">
-        <EmployeesDep  setId={(uid)=>SetuId(uid)} isLength={isLength} employees={employees} openSalaryModal={()=>SetOpenSalaryModal(true)} openOverTimeModal={()=>SetOpenOverTimeModal(true)}  openHistoryModal={()=>SetOpenHistoryModal(true)}/>
+        <EmployeesDep  setId={(uid)=>SetuId(uid)} isLength={isLength} employees={employees} openSalaryModal={()=>SetOpenSalaryModal(true)}  openHistoryModal={()=>SetOpenHistoryModal(true)}/>
         <SalaryModal open={openSalaryModal} closeModal={()=>SetOpenSalaryModal(false)} uid={uid}/> 
-         <OverTimeModal open={openOverTimeModal} closeModal={()=>SetOpenOverTimeModal(false)} uid={uid}/> 
          <HistoryModal open={openHistoryModal} closeModal={()=>SetOpenHistoryModal(false)} uid={uid}/>
       </div>
     </div>

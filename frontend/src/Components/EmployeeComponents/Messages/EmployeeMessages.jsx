@@ -3,7 +3,8 @@ import axios from "../../../Api/EmployeeAxios";
 import "./Messages.css";
 import io from 'socket.io-client';
 import { ChatState } from "../../../Context/ChatProvider";
-const socket = io('http://localhost:8000');
+import { baseUrl } from "../../../Constants/Constants";
+const socket = io(baseUrl);
 
 function EmployeeMessages() {
   const { userInfo } = ChatState()
