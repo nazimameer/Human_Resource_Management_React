@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const secretKey = process.env.JWT_SECRET;
+const secretKey = "Brototype"
 module.exports = {
   verifyToken: (req, res, next) => {
     try{
