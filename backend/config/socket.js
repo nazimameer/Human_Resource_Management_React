@@ -3,7 +3,7 @@ const io = require("socket.io");
 const socketIo = (server) => {
   const ioServer = io(server, {
     cors: {
-      origin: ["http://localhost:3000"],
+      origin: [process.env.SOCKET_CONNECT],
     },
   });
 

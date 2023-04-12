@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 module.exports = {
   dbconnect: async () => {
     try {
-      mongoose.connect("mongodb://localhost:27017/HRM").then(() => {
+      mongoose.connect(process.env.MONGO_CONNECT).then(() => {
         console.log("dbconnected");
       });
     } catch (error) {
