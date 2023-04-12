@@ -13,6 +13,7 @@ const departmentModal = require("../models/departmentModal");
 const { parse } = require("path");
 const salaryModel = require("../models/salaryModel");
 const announcementModel = require("../models/announcementModel");
+const overtimepaymentModal = require('../models/overtimepaymentModal')
 module.exports = {
   verifyLogin: (req, res) => {
     const authHeader = req.headers.authorization;
@@ -1065,7 +1066,7 @@ module.exports = {
     const overtimes = [];
 
     const allattendance = await attendanceModel.find(
-      { "attendance.checkout": { $ne: "Pending" } },
+      { "attendance.overpaystatus": { $ne: "Paid" } },
       {
         date: 1,
         "attendance.fullname": 1,
@@ -1100,12 +1101,18 @@ module.exports = {
         } else if (startAmPm === "AM" && startHours === 12) {
           startHours24 = 0;
         }
-  
+        if (!endTimeStr) {
+          return;
+        }
         const endTimeParts = endTimeStr.split(":");
-        const endHours = parseInt(endTimeParts[0]);
-        const endMinutes = parseInt(endTimeParts[1]);
-        const endSeconds = parseInt(endTimeParts[2].split(" ")[0]);
-        const endAmPm = endTimeParts[2].split(" ")[1];
+        if (!endTimeParts || endTimeParts.length < 3) {
+          return;
+        }
+          const endHours = parseInt(endTimeParts[0]);
+          const endMinutes = parseInt(endTimeParts[1]);
+          const endSeconds = parseInt(endTimeParts[2].split(" ")[0]);
+          const endAmPm = endTimeParts[2].split(" ")[1];
+
   
         let endHours24 = endHours;
         if (endAmPm === "PM" && endHours !== 12) {
@@ -1155,4 +1162,33 @@ module.exports = {
     }
 
   },
+  overTimePayment:(req,res)=>{
+    const id = req.id
+    const data = req.body.data;
+    if(data){
+      overtimepaymentModal.create({
+        date:data.date,
+        fullname:data.fullname,
+        UID:data.UID,
+        position:data.position,
+        duration: data.duration,
+        payment:data.payment,
+        assignedBy:id
+      }).then((doc)=>{
+        if(doc){
+          attendanceModel.findOneAndUpdate({date:data.date, 'attendance.UID': data.UID },
+          {$set:{'attendance.$.overpaystatus': 'Paid'}}).then((doc)=>{
+            if(doc){
+              console.log("done")
+              res.status(200).json({success:true})
+            }
+          })
+        }
+      }).catch((error)=>{
+        console.log(error);
+        res.status(500).json({error:"Internal Server Error"})
+      })
+    }
+    console.log(data, id)
+  }
 };

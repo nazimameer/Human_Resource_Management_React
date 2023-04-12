@@ -6,7 +6,7 @@ import axios from '../../Api/HrAxios'
 import { useParams } from 'react-router-dom';
 import HistoryModal from '../../Components/HrComponents/Salary/HistoryModal';
 import SalaryModal from '../../Components/HrComponents/Salary/SalaryModal';
-import OverTimeModal from '../../Components/HrComponents/Salary/OverTimeModal';
+import OverTimeModal from '../../Components/HrComponents/Dashboard/OverTimeModal';
 function EachDepPayslip() {
 
     const [employees,SetEmployees] = useState([]);

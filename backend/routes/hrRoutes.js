@@ -40,6 +40,7 @@ router.post('/initiateSalary',Authentication.verifyToken,hrController.initiateSa
 router.get("/getAllTasks",Authentication.verifyToken,hrController.getAllTasks);
 router.post('/addNewAnnouncement',Authentication.verifyToken,hrController.addAnnouncement);
 router.get('/getAllAnnouncement',Authentication.verifyToken,hrController.getAllAnnou);
-router.get('/checkAnyOverTime',Authentication.verifyToken, hrController.checkAnyOverTime)
+router.get('/checkAnyOverTime',Authentication.verifyToken, hrController.checkAnyOverTime);
+router.post('/OverTimePayment',Authentication.verifyToken,hrController.overTimePayment)
 
 module.exports = router;
