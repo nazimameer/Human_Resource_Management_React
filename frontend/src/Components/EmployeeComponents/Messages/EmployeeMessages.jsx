@@ -4,7 +4,7 @@ import "./Messages.css";
 import io from 'socket.io-client';
 import { ChatState } from "../../../Context/ChatProvider";
 import { baseUrl } from "../../../Constants/Constants";
-const socket = io("https://controlhub.online/backend");
+const socket = io("https://controlhub.online");
 
 function EmployeeMessages() {
   const { userInfo } = ChatState()
