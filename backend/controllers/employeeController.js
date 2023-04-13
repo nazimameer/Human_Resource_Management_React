@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
 const jwt = require("jsonwebtoken");
-const secretKey = "Brototype";
 const mongoose  = require("mongoose");
 const skillModel = require("../models/skillModel");
 const hobbieModel = require("../models/hobbieModel");
@@ -17,7 +16,7 @@ module.exports = {
     try {
       const authHeader = req.headers.authorization;
       const token = authHeader.split(" ").pop();
-      jwt.verify(token, secretKey, (err, decoded) => {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
           res.status(500).json({ error: "Authentication failed" });
         } else {
@@ -32,7 +31,6 @@ module.exports = {
 
   postLogin: async (req, res) => {
     try {
-      console.log("haldj");
       const data = req.body;
       const user = await employeeModel.findOne({
         email: data.username,
@@ -53,7 +51,7 @@ module.exports = {
             email: user.email,
           };
           // Secret Key
-          const secretKey = "Brototype";
+          
 
           // Expire
           const expire = {
@@ -61,7 +59,7 @@ module.exports = {
           };
 
           // Sign Token
-          const token = jwt.sign(payload, secretKey, expire);
+          const token = jwt.sign(payload, process.env.JWT_SECRET, expire);
           res.status(200).json({ success: true, token: token });
         } else {
           res.status(400).json({ error: "Incorrect Password" });

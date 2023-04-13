@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const secretKey = "Brototype"
+const dotenv = require('dotenv');
 module.exports = {
   verifyToken: (req, res, next) => {
     try{
@@ -9,7 +9,7 @@ module.exports = {
         return;
       }
       const token = authHeader.split(" ").pop();
-      jwt.verify(token, secretKey, (err, decoded) => {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
           res.status(500).send({ error: "Authentication failed" });
           return;

@@ -95,7 +95,6 @@ function Dashboard() {
     axios
       .get("/hr/getPresent")
       .then((response) => {
-        console.log(response.data.attendance);
         const data = response.data.attendance;
 
         if (data.length !== 0) {
@@ -118,7 +117,6 @@ function Dashboard() {
     axios
       .get("/hr/getAbsent")
       .then((response) => {
-        console.log(response.data.attendance);
         const data = response.data.attendance;
         if (data.length !== 0) {
           const datas = data.reverse();
@@ -138,9 +136,7 @@ function Dashboard() {
   const [overtimeRefresh, setOvertimeRefresh] =useState(false)
   const [ObjInfo, SetObjInfo] = useState([]);
 
-  useEffect(() => {
-    console.log(ObjInfo)
-  }, [ObjInfo]);
+ 
   return (
     <div className="mt-20 bg-slate-900">
       <div className="calenderbar flex w-full h-2/3">

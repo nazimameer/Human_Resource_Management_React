@@ -6,7 +6,6 @@ const attendanceModel = require("../models/employeeAttendance");
 const DepartmentModel = require("../models/departmentModal");
 const DepTaskModal = require("../models/departmentTaskModal");
 const IntTaskModel = require("../models/individualTaskModal");
-const secretKey = "Brototype";
 const hrModel = require("../models/hrModel");
 const { default: mongoose } = require("mongoose");
 const departmentModal = require("../models/departmentModal");
@@ -18,7 +17,7 @@ module.exports = {
   verifyLogin: (req, res) => {
     const authHeader = req.headers.authorization;
     const token = authHeader.split(" ").pop();
-    jwt.verify(token, secretKey, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         res.status(500).json({ error: "Authentication failed" });
       } else {
@@ -53,8 +52,6 @@ module.exports = {
               id: hrId,
               username: providedUsername,
             };
-            // Secret key
-            const secretKey = "Brototype";
 
             // Expire
             const expire = {
@@ -62,7 +59,7 @@ module.exports = {
             };
 
             // Sign token
-            const token = jwt.sign(payload, secretKey, expire);
+            const token = jwt.sign(payload, process.env.JWT_SECRET, expire);
             res.status(200).json({ success: true, token: token }); // Send response with token
           } else {
             res.status(401).json({ message: "Incorrect Password...!" });

@@ -1,7 +1,10 @@
 const io = require("socket.io");
+const dotenv = require('dotenv')
 
 const socketIo = (server) => {
+
   const ioServer = io(server, {
+
     cors: {
       origin: [process.env.SOCKET_CONNECT],
     },
