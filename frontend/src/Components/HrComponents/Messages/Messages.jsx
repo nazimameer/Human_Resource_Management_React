@@ -4,7 +4,7 @@ import "./Messages.css";
 import { io } from "socket.io-client";
 import { ChatState } from "../../../Context/ChatProvider";
 import { baseUrl } from "../../../Constants/Constants";
-const socket = io(baseUrl);
+const socket = io("https://controlhub.online/backend");
 function Messages() {
   const { hrInfo } = ChatState();
   const [noRecent, setNoRecent] = useState(true);

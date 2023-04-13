@@ -6,7 +6,7 @@ const socketIo = (server) => {
   const ioServer = io(server, {
 
     cors: {
-      origin: [process.env.SOCKET_CONNECT],
+      origin: ["https://controlhub.online"],
     },
   });
 
