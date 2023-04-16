@@ -1,7 +1,6 @@
 import React from 'react'
 import SideBar from "../../Components/HrComponents/SideBar/SideBar";
 import NavBar from "../../Components/HrComponents/NavBar/NavBar";
-// import Chats from '../../Components/HrComponents/Messages/Messages'
 import HrChat from '../../Components/HrComponents/Messages/HrChat'
 
 function Chat() {

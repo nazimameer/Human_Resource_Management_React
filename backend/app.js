@@ -11,7 +11,6 @@ const { dbconnect } = require("./config/dbconnection");
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes')
 const { Server } = require('socket.io')
-// const socketIo = require('./config/socket')
 
 dotenv.config()
 app.use(express.json());
