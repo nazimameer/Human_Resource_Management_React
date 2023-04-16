@@ -4,7 +4,8 @@ import "./Messages.css";
 import io from 'socket.io-client';
 import { ChatState } from "../../../Context/ChatProvider";
 import { baseUrl } from "../../../Constants/Constants";
-const socket = io("https://controlhub.online");
+const socket = io("http://localhost:8000");
+
 
 function EmployeeMessages() {
   const { userInfo } = ChatState()

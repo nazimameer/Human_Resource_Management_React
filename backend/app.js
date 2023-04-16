@@ -1,29 +1,51 @@
 // SET PATH=C:\Program Files\Nodejs;%PATH%
+const express = require("express");
+const app = express();
+const http = require('http');
+const cors = require("cors");
+app.use(cors());
 const path = require("path");
 const {chats} = require('./data/data')
-const express = require("express");
-const cors = require("cors");
 const dotenv = require('dotenv')
 const { dbconnect } = require("./config/dbconnection");
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes')
-const http = require('http');
-const socketIo = require('./config/socket')
+const { Server } = require('socket.io')
+// const socketIo = require('./config/socket')
 
-const app = express();
 dotenv.config()
- 
-
-app.use(cors());
-
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
+ // socket io 
+ const server = http.createServer(app);
 
-//server 
+const io = new Server(server, {
+    cors:{
+        origin: "https://controlhub.online",
+        methods:["GET", "POST"],
+    },
+});
 
-const server = http.createServer(app);
-socketIo(server)
+io.on("connection", (socket)=>{
+    console.log(`User Connected : ${socket.id}`);
+
+
+    socket.on('join_room', (data)=>{
+            socket.join(data);
+            console.log(`User with id ${socket.id} is joined in room: ${data}`)
+    });
+
+    socket.on('send-message',(data)=>{
+        socket.to(data.room).emit("recieve-message", data)
+    })
+
+    socket.on("disconnect", ()=>{
+        console.log("User Disconnected", socket.id)
+    })
+}) 
+
+//
+
 
 // Routes
 

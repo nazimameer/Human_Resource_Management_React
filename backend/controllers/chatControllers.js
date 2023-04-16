@@ -145,6 +145,7 @@ module.exports = {
   storeMsg:(req,res)=>{
     const id = req.id;
     const data = req.body;
+    console.log(data)
     const { message } = data;
     const { room } = data;
 

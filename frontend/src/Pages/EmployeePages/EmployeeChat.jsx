@@ -1,5 +1,5 @@
 import React from 'react'
-import Messages from '../../Components/EmployeeComponents/Messages/EmployeeMessages'
+import Messages from '../../Components/EmployeeComponents/Messages/EmployeeChat'
 import NavBar from '../../Components/EmployeeComponents/NavBar/NavBar'
 import SideBar from '../../Components/EmployeeComponents/SideBar/SideBar'
 
