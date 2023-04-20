@@ -63,6 +63,7 @@ function EachMessages({ Chat, userId, room, socket, showChat }) {
     socket.on("recieve-message", (data) => {
       const received = { data: data, type: "received" };
       setAllNewMessage((list) => [...list, received]);
+      console.log(data)
     });
   }, [socket]);
   //
