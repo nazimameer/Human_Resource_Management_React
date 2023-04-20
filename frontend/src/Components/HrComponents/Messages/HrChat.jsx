@@ -5,8 +5,8 @@ import io from "socket.io-client";
 import "./Messages.css";
 import EachMessages from "./EachMessages";
 
-const socket = io.connect("http://localhost:8000");
-// https://controlhub.online
+const socket = io.connect("https://controlhub.online");
+// http://localhost:8000
 function HrChat() {
   const [hrDetails, setHrDetails] = useState({});
   const [userId, setUserId] = useState("");
@@ -29,7 +29,7 @@ function HrChat() {
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         setIsLength(false);
       });
   }, []);
@@ -51,7 +51,7 @@ function HrChat() {
 
   //join each room
   const joinRoom = (UID) => {
-    setShowChat(true)
+    setShowChat(true);
     setUserId(UID);
     const data = {
       uid: UID,
@@ -76,7 +76,7 @@ function HrChat() {
     if (room !== "") {
       socket.emit("join_room", room);
       setChat(true);
-      setShowChat(true)
+      setShowChat(true);
     } else {
       setChat(false);
     }
@@ -86,95 +86,88 @@ function HrChat() {
   return (
     <>
       <div className="body">
-{!showChat ?(
-
-  <div className="wrapper bg-white w-[450px] mt-24 mb-6 mx-10 rounded-xl h-[84vh]">
-    <section className="users">
-      <header className="flex items-center justify-between">
-        <div className="conten flex">
-          <img
-            src={hrDetails.pic}
-            alt=""
-            className="w-[50px] h-[50px] object-cover rounded-[50%]"
-          />
-          <div className="details ml-[15px]">
-            <span className="text-[18px] font-medium">
-              {hrDetails.fullname} (HR)
-            </span>
-            {/* <p>Active now</p> */}
-          </div>
-        </div>
-        {/* <a href="/" className="logout bg-[#333] text-white">
-          add
-        </a> */}
-      </header>
-      <div className="search my-[20px] flex items-center justify-between relative">
-        <span className="text">Select an</span>
-        <input
-          type="text"
-          placeholder="Enter name to search..."
-          className="absolute h-[42px] outline-none"
-        />
-        <button className="h-[42px] w-[47px] border-none outline-none text-white bg-[#333] cursor-pointer">
-          <i className="bx bx-search"></i>
-        </button>
-      </div>
-
-      <div className="users-list max-h-[390px] overflow-y-auto">
-        {isLength ? (
-          allEmployees.map((obj, index) => {
-            return (
-              <div
-                key={index}
-                className="flex items-center justify-between pb-[20px] mb-[15px] pr-[15px] cursor-pointer hover:bg-gray-100"
-                onClick={() => joinRoom(obj._id)}
-              >
-                <div className="users-conten flex items-center">
+        {!showChat ? (
+          <div className="wrapper bg-white w-[450px] mt-24 mb-6 mx-10 rounded-xl h-[84vh]">
+            <section className="users">
+              <header className="flex items-center justify-between">
+                <div className="conten flex">
                   <img
-                    src={obj.pic}
+                    src={hrDetails.pic}
                     alt=""
-                    className="h-[40px] w-[40px] object-cover rounded-[50%]"
+                    className="w-[50px] h-[50px] object-cover rounded-[50%]"
                   />
                   <div className="details ml-[15px]">
-                    <span className="text-[16px] font-medium">
-                      {obj.fullname}
+                    <span className="text-[18px] font-medium">
+                      {hrDetails.fullname} (HR)
                     </span>
-                    <p className="text-[#67676a] text-sm">
-                      This is text message
-                    </p>
+                    {/* <p>Active now</p> */}
                   </div>
                 </div>
-                <div className="status-dot  text-[12px] pr-[15px]">
-                  <i className="bx bxs-circle"></i>
-                </div>
+                {/* <a href="/" className="logout bg-[#333] text-white">
+          add
+        </a> */}
+              </header>
+              <div className="search my-[20px] flex items-center justify-between relative">
+                <span className="text">Select an</span>
+                <input
+                  type="text"
+                  placeholder="Enter name to search..."
+                  className="absolute h-[42px] outline-none"
+                />
+                <button className="h-[42px] w-[47px] border-none outline-none text-white bg-[#333] cursor-pointer">
+                  <i className="bx bx-search"></i>
+                </button>
               </div>
-            );
-          })
-        ) : (
-          <div className="flex items-center justify-between pb-[20px] mb-[15px] pr-[15px] cursor-pointer hover:bg-gray-100">
-            No Employees Available
-          </div>
-        )}
-      </div>
-    </section>
-  </div>
- 
-)
-        :
-         (
 
+              <div className="users-list max-h-[390px] overflow-y-auto">
+                {isLength ? (
+                  allEmployees.map((obj, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between pb-[20px] mb-[15px] pr-[15px] cursor-pointer hover:bg-gray-100"
+                        onClick={() => joinRoom(obj._id)}
+                      >
+                        <div className="users-conten flex items-center">
+                          <img
+                            src={obj.pic}
+                            alt=""
+                            className="h-[40px] w-[40px] object-cover rounded-[50%]"
+                          />
+                          <div className="details ml-[15px]">
+                            <span className="text-[16px] font-medium">
+                              {obj.fullname}
+                            </span>
+                            <p className="text-[#67676a] text-sm">
+                              This is text message
+                            </p>
+                          </div>
+                        </div>
+                        <div className="status-dot  text-[12px] pr-[15px]">
+                          <i className="bx bxs-circle"></i>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="flex items-center justify-between pb-[20px] mb-[15px] pr-[15px] cursor-pointer hover:bg-gray-100">
+                    No Employees Available
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+        ) : (
           <div className="wrapper bg-white w-[980px] mt-24 mb-6 mx-5 rounded-xl">
             <EachMessages
               socket={socket}
               Chat={Chat}
               userId={userId}
               room={room}
-              showChat={()=>setShowChat(false)}
+              showChat={() => setShowChat(false)}
             />
           </div>
-         )
-          }
-        
+        )}
       </div>
     </>
   );

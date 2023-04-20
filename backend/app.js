@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 //  https://controlhub.online
 const io = new Server(server, {
     cors:{
-        origin: "http://localhost:3000",
+        origin: "https://controlhub.online",
         methods:["GET", "POST"],
     },
 });
