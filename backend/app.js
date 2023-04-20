@@ -52,14 +52,14 @@ const hrRoutes = require("./routes/hrRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
 //start
 
-app.use("/backend/hr", hrRoutes);
-app.use("/backend/employee", employeeRoutes);
+app.use("/hr", hrRoutes);
+app.use("/employee", employeeRoutes);
 
 
 // chat  
 
-app.use('/backend/chat',chatRoutes);
-app.use('/backend/api/message', messageRoutes);
+app.use('/chat',chatRoutes);
+app.use('/api/message', messageRoutes);
 
 //
 
