@@ -2,13 +2,13 @@ const bcrypt = require("bcrypt");
 const employeeModel = require("../models/employeeModel");
 const applicationModel = require("../models/leaveApplication");
 const jwt = require("jsonwebtoken");
-const mongoose  = require("mongoose");
+const mongoose = require("mongoose");
 const skillModel = require("../models/skillModel");
 const hobbieModel = require("../models/hobbieModel");
 const attendanceModel = require("../models/employeeAttendance");
 const IntTaskModel = require("../models/individualTaskModal");
 const hrModel = require("../models/hrModel");
-const salaryModel = require('../models/salaryModel');
+const salaryModel = require("../models/salaryModel");
 const announcementModel = require("../models/announcementModel");
 const overtimepaymentModal = require("../models/overtimepaymentModal");
 module.exports = {
@@ -51,7 +51,6 @@ module.exports = {
             email: user.email,
           };
           // Secret Key
-          
 
           // Expire
           const expire = {
@@ -89,7 +88,7 @@ module.exports = {
           submiton: now,
           leavePeriod: "Half Day",
           reason: reason,
-          section:section,
+          section: section,
         });
       } else if (leavePeriod === "Full Day") {
         const now = new Date();
@@ -344,7 +343,7 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-  },  
+  },
 
   markAttendance: async (req, res) => {
     try {
@@ -353,20 +352,20 @@ module.exports = {
         UID: uid,
       });
       const fullname = employee.fullname;
-  
+
       // Today Date
       const today = new Date();
       const year = today.getFullYear();
       const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
       const day = today.getDate();
       const date = `${day}-${month}-${year}`;
-      // 
+      //
 
-      // Take Time 
+      // Take Time
       const hour = today.getHours() % 12 || 12; // converts to 12-hours format
       const minute = today.getMinutes();
       const second = today.getSeconds();
-      const amPm = hour >= 12 ? "AM": "PM";
+      const amPm = hour >= 12 ? "AM" : "PM";
       const time = `${hour}:${minute}:${second} ${amPm}`;
       const position = employee.position;
       console.log(time);
@@ -379,7 +378,7 @@ module.exports = {
       } else {
       }
 
-      const image = { 
+      const image = {
         url: req.file.path,
         filename: req.file.filename,
       };
@@ -458,306 +457,399 @@ module.exports = {
     }
   },
   verifyCheckIn: (req, res) => {
-    const uid = req.uid;
-    // Today Date
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
-    const day = today.getDate();
-    const date = `${day}-${month}-${year}`;
-    //
+    try {
+      const uid = req.uid;
+      // Today Date
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+      const day = today.getDate();
+      const date = `${day}-${month}-${year}`;
+      //
 
-    attendanceModel
-      .findOne({
-        date: date,
-        attendance: { $elemMatch: { UID: uid } },
-      })
-      .then((doc) => {
-        if (doc) {
-          res.status(200).json({ success: true });
-        } else if (!doc) {
-          res.status(404).json({ error: "no attendance marked" });
-        }
-      });
+      attendanceModel
+        .findOne({
+          date: date,
+          attendance: { $elemMatch: { UID: uid } },
+        })
+        .then((doc) => {
+          if (doc) {
+            res.status(200).json({ success: true });
+          } else if (!doc) {
+            res.status(404).json({ error: "no attendance marked" });
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
   getSalaryInfo: (req, res) => {
-    const uid = req.uid;
-    employeeModel
-      .findOne({ UID: uid })
-      .then((doc) => {
-        if (doc) {
-          const data ={
-            salary:doc.salary,
-            holdername:doc.holdername,
-            accNo:doc.accountNo,
-            ifsc:doc.ifsc
-          } 
-          res.status(200).json({ data });
-        } else {
-          res.status(404).json({ error: "No Document Found" });
-        }
-      })
-      .catch((error) => {
-        res.status(500).json({ error: " Internal Server Error" });
-        console.log(error);
-      });
+    try {
+      const uid = req.uid;
+      employeeModel
+        .findOne({ UID: uid })
+        .then((doc) => {
+          if (doc) {
+            const data = {
+              salary: doc.salary,
+              holdername: doc.holdername,
+              accNo: doc.accountNo,
+              ifsc: doc.ifsc,
+            };
+            res.status(200).json({ data });
+          } else {
+            res.status(404).json({ error: "No Document Found" });
+          }
+        })
+        .catch((error) => {
+          res.status(500).json({ error: " Internal Server Error" });
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
   checkBlocked: async (req, res) => {
-    const uid = req.uid;
-    console.log(uid);
+    try {
+      const uid = req.uid;
+      console.log(uid);
 
-    const doc = await employeeModel.findOne({ UID: uid, status: "Blocked" });
+      const doc = await employeeModel.findOne({ UID: uid, status: "Blocked" });
 
-    if (doc) {
-      console.log("blocked");
-      res.status(400).json({ error: "YOU ARE BLOCKED" });
-    } else {
-      console.log("done");
-      res.status(200).json({ success: true });
+      if (doc) {
+        console.log("blocked");
+        res.status(400).json({ error: "YOU ARE BLOCKED" });
+      } else {
+        console.log("done");
+        res.status(200).json({ success: true });
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
   allUsers: async (req, res) => {
-    const keyword = { fullname: req.query.search };
+    try {
+      const keyword = { fullname: req.query.search };
 
-    const users = await employeeModel.findOne(keyword.fullname);
-    console.log(users);
+      const users = await employeeModel.findOne(keyword.fullname);
+      console.log(users);
+    } catch (error) {
+      console.log(error);
+    }
   },
   getAllTasks: (req, res) => {
-    const uid = req.uid;
+    try {
+      const uid = req.uid;
 
-    IntTaskModel.findOne({
-      UID: uid,
-    })
-      .then((doc) => {
-        const data = doc;
-        if(data){
-          const tasks = data.tasks;
-          res.status(200).json({ tasks });
-        }
+      IntTaskModel.findOne({
+        UID: uid,
       })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({ error: "Internal Server Error" });
-      });
+        .then((doc) => {
+          const data = doc;
+          if (data) {
+            const tasks = data.tasks;
+            res.status(200).json({ tasks });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   taskFinished: (req, res) => {
-    const id = req.uid;
-    const data = req.body.id;
+    try {
+      const id = req.uid;
+      const data = req.body.id;
 
-    IntTaskModel.findOneAndUpdate(
-      {
-        UID: id,
-        "tasks._id": data,
-      },
-      {
-        $set: {
-          "tasks.$.status": "Finished",
+      IntTaskModel.findOneAndUpdate(
+        {
+          UID: id,
+          "tasks._id": data,
         },
-      },
-      {
-        new: true,
-      }
-    )
-      .then((doc) => {
-        res.status(200).json({ success: true });
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({ error: "Internal Server Error" });
-      });
+        {
+          $set: {
+            "tasks.$.status": "Finished",
+          },
+        },
+        {
+          new: true,
+        }
+      )
+        .then((doc) => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
   taskPending: (req, res) => {
-    const id = req.uid;
-    const data = req.body.id;
+    try {
+      const id = req.uid;
+      const data = req.body.id;
 
-    IntTaskModel.findOneAndUpdate(
-      {
-        UID: id,
-        "tasks._id": data,
-      },
-      {
-        $set: {
-          "tasks.$.status": "Pending",
+      IntTaskModel.findOneAndUpdate(
+        {
+          UID: id,
+          "tasks._id": data,
         },
-      },
-      {
-        new: true,
-      }
-    )
-      .then((doc) => {
-        res.status(200).json({ success: true });
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({ error: "Internal Server Error" });
-      });
+        {
+          $set: {
+            "tasks.$.status": "Pending",
+          },
+        },
+        {
+          new: true,
+        }
+      )
+        .then((doc) => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   taskIncomplete: (req, res) => {
-    const id = req.uid;
-    const data = req.body.id;
-    IntTaskModel.findOneAndUpdate(
-      {
-        UID: id,
-        "tasks._id": data,
-      },
-      {
-        $set: {
-          "tasks.$.status": "Incomplete",
+    try {
+      const id = req.uid;
+      const data = req.body.id;
+      IntTaskModel.findOneAndUpdate(
+        {
+          UID: id,
+          "tasks._id": data,
         },
-      },
-      {
-        new: true,
-      }
-    )
-      .then((doc) => {
-        res.status(200).json({ success: true });
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({ error: "Internal Server Error" });
-      });
-  },
-  getUserName:(req,res)=>{
-    const uid = req.uid;
-    employeeModel.findOne({
-      UID:uid,
-    }).then((doc)=>{
-      if(doc){
-        const data = doc;
-        res.status(200).json({ data })
-      }
-    }).catch((error)=>{
+        {
+          $set: {
+            "tasks.$.status": "Incomplete",
+          },
+        },
+        {
+          new: true,
+        }
+      )
+        .then((doc) => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
       console.log(error);
-      res.status(500).json({error:"Internal Server Error"})
-    })
-  },
-  getAllhr:(req,res)=>{
-    hrModel.find({}).then((doc)=>{
-      if(doc){
-        const data = doc
-        res.status(200).json({ data })
-      }
-    }).catch((error)=>{
-      console.log(error)
-      res.status(500).json({error:"Internal Server Error"})
-    })
-  },
-  getMyInfo:(req,res)=>{
-
-    const id = req.id;
-    const objID = mongoose.Types.ObjectId(id)
-    employeeModel.findOne({
-      _id:objID
-    }).then((doc)=>{
-      if(doc){
-        const data = doc;
-        res.status(200).json({data})
-      }
-    })
-  }, 
-
-  setAccount:(req,res)=>{
-    const uid = req.uid;
-    const data = req.body.formData;
-    const holder = data.holdername;
-    const accNo = data.accountno;
-    const ifsc = data.ifsc
-    employeeModel.updateOne({UID:uid},
-      {$set:{ accountNo:accNo, holdername:holder,ifsc:ifsc }}).then((doc)=>{
-        if(doc){
-          res.status(200).json({success:true})
-        }
-      })
-  },
-  getPayslips:(req,res)=>{
-    const uid = req.uid;
-
-    if(uid){
-      salaryModel.findOne({UID:uid}).then((doc)=>{
-        if(doc){
-          const data = doc.salaries;
-          res.status(200).json({data})
-        }
-      })
     }
   },
-  getPayslip:(req,res)=>{
-    const uid = req.uid;
-    const id = req.params.id;
-    if(!mongoose.Types.ObjectId.isValid(id)){
-      res.status(400).json({error:"Invalid ID"})
-      return; 
-    }
-    const objid = mongoose.Types.ObjectId(id);
-    salaryModel.findOne({
-      UID:uid
-    }).then((doc)=>{
-      if(doc){
-        salaryModel.findOne({
-          UID:uid,
-          salaries: {
-            $elemMatch: {
-              _id: objid
-            }
+  getUserName: (req, res) => {
+    try {
+      const uid = req.uid;
+      employeeModel
+        .findOne({
+          UID: uid,
+        })
+        .then((doc) => {
+          if (doc) {
+            const data = doc;
+            res.status(200).json({ data });
           }
-        }).then((doc)=>{
-          console.log(doc)
-          res.status(200).json({ doc })
-        }) 
-      }else{
-        console.log("not done here ")
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getAllhr: (req, res) => {
+    try {
+      hrModel
+        .find({})
+        .then((doc) => {
+          if (doc) {
+            const data = doc;
+            res.status(200).json({ data });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getMyInfo: (req, res) => {
+    try {
+      const id = req.id;
+      const objID = mongoose.Types.ObjectId(id);
+      employeeModel
+        .findOne({
+          _id: objID,
+        })
+        .then((doc) => {
+          if (doc) {
+            const data = doc;
+            res.status(200).json({ data });
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
-        res.status(404).json({error:"Salary Slip Not Found"})
-      }
-    })
+  setAccount: (req, res) => {
+    try {
+      const uid = req.uid;
+      const data = req.body.formData;
+      const holder = data.holdername;
+      const accNo = data.accountno;
+      const ifsc = data.ifsc;
+      employeeModel
+        .updateOne(
+          { UID: uid },
+          { $set: { accountNo: accNo, holdername: holder, ifsc: ifsc } }
+        )
+        .then((doc) => {
+          if (doc) {
+            res.status(200).json({ success: true });
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
-  getAllAnnou:(req,res)=>{
-    announcementModel.find({}).then((doc)=>{
-      if(doc){
-        res.status(200).json({doc})
+  getPayslips: (req, res) => {
+    try {
+      const uid = req.uid;
+
+      if (uid) {
+        salaryModel.findOne({ UID: uid }).then((doc) => {
+          if (doc) {
+            const data = doc.salaries;
+            res.status(200).json({ data });
+          }
+        });
       }
-    }).catch((error)=>{
-      res.status(500).json({error:"Internal Server Error"})
-    })
+    } catch (error) {
+      console.log(error);
+    }
   },
-  markCheckout:(req,res)=>{
-    const uid = req.uid;
-    console.log(uid)
-    const today = new Date();
-    // Today Date
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
-    const day = today.getDate();
-    const date = `${day}-${month}-${year}`;
-    // 
-    // Take Time 
-    const hour = today.getHours() % 12 || 12; // converts to 12-hours format
-    const minute = today.getMinutes();
-    const second = today.getSeconds();
-    const amPm = hour >= 12 ? "AM" : "PM";
-    const time = `${hour}:${minute}:${second} ${amPm}`;
-    console.log(time);
-    //
-    attendanceModel.updateOne({date:date, 'attendance.UID':uid},
-      {$set:{ 'attendance.$.checkout': time }}).then((doc)=>{
-        res.status(200).json({success:true})
-      }).catch((error)=>{
-        console.log(error);
-        res.status(500).json({error:"Internal Server Error"});
-      })
-  },
-  getOvertimePaySlips:(req,res)=>{
-    const uid = req.uid;
-    overtimepaymentModal.find({UID: uid}).then((doc)=>{
-      if(doc){
-        const data = doc
-        res.status(200).json({ data })
+  getPayslip: (req, res) => {
+    try {
+      const uid = req.uid;
+      const id = req.params.id;
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400).json({ error: "Invalid ID" });
+        return;
       }
-    }).catch((error)=>{
-      res.status(500).json({error:"Internal Server Error"})
-    })
-  }
-  
+      const objid = mongoose.Types.ObjectId(id);
+      salaryModel
+        .findOne({
+          UID: uid,
+        })
+        .then((doc) => {
+          if (doc) {
+            salaryModel
+              .findOne({
+                UID: uid,
+                salaries: {
+                  $elemMatch: {
+                    _id: objid,
+                  },
+                },
+              })
+              .then((doc) => {
+                console.log(doc);
+                res.status(200).json({ doc });
+              });
+          } else {
+            console.log("not done here ");
+
+            res.status(404).json({ error: "Salary Slip Not Found" });
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getAllAnnou: (req, res) => {
+    try {
+      announcementModel
+        .find({})
+        .then((doc) => {
+          if (doc) {
+            res.status(200).json({ doc });
+          }
+        })
+        .catch((error) => {
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  markCheckout: (req, res) => {
+    try {
+      const uid = req.uid;
+      console.log(uid);
+      const today = new Date();
+      // Today Date
+      const year = today.getFullYear();
+      const month = today.getMonth() + 1; // Add 1 to get month number from 1-12
+      const day = today.getDate();
+      const date = `${day}-${month}-${year}`;
+      //
+      // Take Time
+      const hour = today.getHours() % 12 || 12; // converts to 12-hours format
+      const minute = today.getMinutes();
+      const second = today.getSeconds();
+      const amPm = hour >= 12 ? "AM" : "PM";
+      const time = `${hour}:${minute}:${second} ${amPm}`;
+      console.log(time);
+      //
+      attendanceModel
+        .updateOne(
+          { date: date, "attendance.UID": uid },
+          { $set: { "attendance.$.checkout": time } }
+        )
+        .then((doc) => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getOvertimePaySlips: (req, res) => {
+    try {
+      const uid = req.uid;
+      overtimepaymentModal
+        .find({ UID: uid })
+        .then((doc) => {
+          if (doc) {
+            const data = doc;
+            res.status(200).json({ data });
+          }
+        })
+        .catch((error) => {
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };

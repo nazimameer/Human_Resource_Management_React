@@ -5,8 +5,8 @@ import io from "socket.io-client";
 import "./Messages.css";
 import EachMessages from "./EachMessages";
 
-const socket = io.connect("https://controlhub.online");
-
+const socket = io.connect("http://localhost:8000");
+// https://controlhub.online
 function HrChat() {
   const [hrDetails, setHrDetails] = useState({});
   const [userId, setUserId] = useState("");

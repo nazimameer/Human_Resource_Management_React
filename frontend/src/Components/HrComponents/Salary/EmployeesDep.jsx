@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { Pagination } from "@mui/material";
 function EmployeesDep(props) {
-    const [searchQuery, setSearchQuery] = useState("");
-    const handleInputSearch = (event) => {
-        setSearchQuery(event.target.value);
-      };
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleInputSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
-      const filteredList = searchQuery
+  const filteredList = searchQuery
     ? props.employees.filter(
         (employees) =>
           employees.fullname
@@ -18,39 +18,35 @@ function EmployeesDep(props) {
       )
     : props.employees;
 
-    const handleSalaryClick = (uid)=>{
-        console.log(uid)
-        props.setId(uid)
-        props.openSalaryModal();
-      }
+  const handleSalaryClick = (uid) => {
+    console.log(uid);
+    props.setId(uid);
+    props.openSalaryModal();
+  };
 
-     
+  // const handleHistoryClick = (uid)=>{
+  //   console.log(uid)
+  //   props.setId(uid)
+  //   props.openHistoryModal();
+  // }
 
-      const handleHistoryClick = (uid)=>{
-        console.log(uid)
-        props.setId(uid)
-        props.openHistoryModal();
-      }
-
-      //pagination
-// eslint-disable-next-line no-unused-vars
-      const [itemsPerPage, setItemsPerPage] = useState(5);
-      const [currentPage, setCurrentPage] = useState(1);
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      const displayedItems = filteredList.slice(startIndex, endIndex);
-      const handleChangePage = (event, value) => {
-        setCurrentPage(value);
-      };
-      const totalPages = Math.ceil(filteredList.length / itemsPerPage);
-      //
+  //pagination
+  // eslint-disable-next-line no-unused-vars
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedItems = filteredList.slice(startIndex, endIndex);
+  const handleChangePage = (event, value) => {
+    setCurrentPage(value);
+  };
+  const totalPages = Math.ceil(filteredList.length / itemsPerPage);
+  //
   return (
     <div className="bg-slate-900">
       <div className="sm:mx-5 md:mx-10 my-24">
         <div className="my-3">
           <div className="flex items-center ">
-           
-
             {props.isLength ? (
               <input
                 type="text"
@@ -74,7 +70,7 @@ function EmployeesDep(props) {
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                   ID
                 </th>
-                
+
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                   Role
                 </th>
@@ -83,11 +79,10 @@ function EmployeesDep(props) {
                   Salary
                 </th>
 
-                
-
+                {/* 
                 <th className="p-3 text-sm font-semibold tracking-wide text-left">
                     History
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -104,31 +99,28 @@ function EmployeesDep(props) {
                           />
                         </div>
                         <div className="mx-3">
-                          <div>
-                          {obj.fullname}
-                          </div>
-                        <div className="text-xs">{obj.email}</div>
-                          </div>
+                          <div>{obj.fullname}</div>
+                          <div className="text-xs">{obj.email}</div>
+                        </div>
                       </td>
-                      
 
-                      <td className="p-3 text-sm text-grey-700">
-                        #{obj.UID}
-                      </td>
+                      <td className="p-3 text-sm text-grey-700">#{obj.UID}</td>
                       <td className="p-3 text-sm text-grey-700 ">
                         {obj.position}
                       </td>
 
-                      <td className="p-3 cursor-pointer justify-center items-center" onClick={()=>handleSalaryClick(obj.UID)}>
-                      <i class='bx bx-money-withdraw text-2xl' ></i>
+                      <td
+                        className="p-3 cursor-pointer justify-center items-center"
+                        onClick={() => handleSalaryClick(obj.UID)}
+                      >
+                        <i class="bx bx-money-withdraw text-2xl"></i>
                       </td>
-                      
 
-                      <td className="p-3 cursor-pointer" onClick={()=>handleHistoryClick(obj.UID)}>
+                      {/* <td className="p-3 cursor-pointer" onClick={()=>handleHistoryClick(obj.UID)}>
                         <div>
                         <i class='bx bx-history text-2xl'></i>
                         </div>
-                        </td>
+                        </td> */}
                     </tr>
                   );
                 })
@@ -149,7 +141,13 @@ function EmployeesDep(props) {
               {props.isLength ? (
                 <tr className="h-16 relative" colSpan="6">
                   <td className="py-3 px-3 absolute right-0">
-                  <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} variant="outlined" shape="rounded" />
+                    <Pagination
+                      count={totalPages}
+                      page={currentPage}
+                      onChange={handleChangePage}
+                      variant="outlined"
+                      shape="rounded"
+                    />
                   </td>
                 </tr>
               ) : (
@@ -203,7 +201,7 @@ function EmployeesDep(props) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default EmployeesDep
+export default EmployeesDep;

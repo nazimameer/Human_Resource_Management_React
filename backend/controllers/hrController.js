@@ -12,7 +12,7 @@ const departmentModal = require("../models/departmentModal");
 const { parse } = require("path");
 const salaryModel = require("../models/salaryModel");
 const announcementModel = require("../models/announcementModel");
-const overtimepaymentModal = require('../models/overtimepaymentModal')
+const overtimepaymentModal = require("../models/overtimepaymentModal");
 module.exports = {
   verifyLogin: (req, res) => {
     const authHeader = req.headers.authorization;
@@ -171,14 +171,18 @@ module.exports = {
   },
 
   applicApprove: async (req, res) => {
-    const id = req.body.id;
+    try {
+      const id = req.body.id;
 
-    const objid = mongoose.Types.ObjectId(id);
-    applicationModel
-      .updateOne({ _id: objid }, { $set: { status: "Approved" } })
-      .then((response) => {
-        res.status(200).json({ success: true });
-      });
+      const objid = mongoose.Types.ObjectId(id);
+      applicationModel
+        .updateOne({ _id: objid }, { $set: { status: "Approved" } })
+        .then((response) => {
+          res.status(200).json({ success: true });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   applicReject: async (req, res) => {
@@ -759,433 +763,497 @@ module.exports = {
     }
   },
   getDepartments: (req, res) => {
-    departmentModal
-      .find({})
-      .then((doc) => {
-        if (doc) {
-          const data = doc;
-          res.status(200).json({ data });
-        } else {
-          res.status(404).json({ error: "No Documents found" });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({ error: "Internal Server Error" });
-      });
-  },
-  departmentInfo: (req, res) => {
-    const id = req.params.id;
-    const objId = mongoose.Types.ObjectId(id);
-    departmentModal.findOne({ _id: objId }).then((doc) => {
-      if (doc) {
-        const dep = doc.name;
-        employeeModel
-          .find({
-            department: dep,
-          })
-          .then((document) => {
-            const data = document;
-            res.status(200).json({ data });
-          })
-          .catch((error) => {
-            res.status(500).json({ error: "Internal server error" });
-            console.log(error);
-          });
-      }
-    });
-  },
-
-  getHrDetails: (req, res) => {
-    const id = req.id;
-    const uid = mongoose.Types.ObjectId(id);
-    hrModel.findOne({ _id: uid }).then((doc) => {
-      if (doc) {
-        res.status(200).json({ doc });
-      }
-    });
-  },
-
-  addTaskToDepartment: async (req, res) => {
-    const hr = req.id;
-    const data = req.body.data;
-    const depID = mongoose.Types.ObjectId(data.Depid);
-    const startDate = data.from;
-    const endDate = data.to;
-    const assignedBy = mongoose.Types.ObjectId(hr);
-    const task = data.task;
-
-    const DepTaskExist = await DepTaskModal.findOne({
-      departmentId: depID,
-    });
-    if (DepTaskExist) {
-      DepTaskModal.updateOne(
-        { departmentId: depID },
-        {
-          $push: {
-            tasks: {
-              startdate: startDate,
-              enddate: endDate,
-              task: task,
-              assignedby: assignedBy,
-            },
-          },
-        }
-      )
-        .then((doc) => {
-          res.status(200).json({ success: true });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(500).json({ error: "Internal Server Error" });
-        });
-    } else {
-      DepTaskModal.create({
-        departmentId: depID,
-        tasks: [
-          {
-            startdate: startDate,
-            enddate: endDate,
-            task: task,
-            assignedby: assignedBy,
-          },
-        ],
-      })
-        .then((doc) => {
-          res.status(200).json({ success: true });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(500).json({ error: "Internal Server Error" });
-        });
-    }
-  },
-  addTaskToInt: async (req, res) => {
-    const hr = req.id;
-    const assignedBy = mongoose.Types.ObjectId(hr);
-    const data = req.body.data;
-    const Intfrom = data.from;
-    const Intto = data.to;
-    const IntTask = data.task;
-    const IntId = data.uid;
-    const IntTaskExist = await IntTaskModel.findOne({
-      UID: IntId,
-    });
-    if (IntTaskExist) {
-      IntTaskModel.updateOne(
-        { UID: IntId },
-        {
-          $push: {
-            tasks: {
-              startdate: Intfrom,
-              enddate: Intto,
-              task: IntTask,
-              assignedBy: assignedBy,
-            },
-          },
-        }
-      )
-        .then(() => {
-          res.status(200).json({ success: true });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(500).json({ error: "Internal Server Error" });
-        });
-    } else {
-      IntTaskModel.create({
-        UID: IntId,
-        tasks: [
-          {
-            startdate: Intfrom,
-            enddate: Intto,
-            task: IntTask,
-            assignedby: assignedBy,
-          },
-        ],
-      })
-        .then((doc) => {
-          res.status(200).json({ success: true });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(500).json({ error: "Internal Server Error" });
-        });
-    }
-  },
-  getHrInfo: (req, res) => {
-    const hrid = req.id;
-    if (hrid) {
-      hrModel
-        .findOne({
-          _id: hrid,
-        })
-        .then((doc) => {
-          const data = doc;
-          res.status(200).json({ data });
-        })
-        .catch((error) => {
-          console.log(error);
-          res.status(500).json({ error: "Internal Server Error" });
-        });
-    }
-  },
-  getEmployeeSalary: (req, res) => {
-    const id = req.params.id;
-    const intId = parseInt(id);
-
-    if (!Number.isInteger(intId)) {
-      return res.status(400).json({ message: "Invalid employee ID" });
-    }
-    employeeModel.findOne({ UID: intId }).then((doc) => {
-      if (doc) {
-        const sal = doc.salary / 12;
-        const salary = Math.ceil(sal);
-        const accNo = doc.accountNo;
-        const ifsc = doc.ifsc;
-        const holder = doc.holdername;
-        const data = {
-          salary,
-          accNo,
-          holder,
-          ifsc,
-        };
-        res.status(200).json({ data });
-      }
-    });
-  },
-  initiateSalary: (req, res) => {
-    const data = req.body.data;
-    const { accountDetails } = data;
-    const uid = data.UID;
-    let cutoff;
-    if (data.cutoff === null) {
-      cutoff = 0;
-    } else {
-      cutoff = data.cutoff;
-    }
-    const newSalary = {
-      month: data.lastMonth,
-      salary: data.salary,
-      holdername: accountDetails.holder,
-      accountNo: accountDetails.accNo,
-      ifsc: accountDetails.ifsc,
-      cutoff: cutoff,
-      submiton: data.month,
-    };
-
-    if (uid) {
-      salaryModel
-        .findOne({
-          UID: uid,
-        })
+    try {
+      departmentModal
+        .find({})
         .then((doc) => {
           if (doc) {
-            salaryModel
-              .findOne({ salaries: { $elemMatch: { month: newSalary.month } } })
-              .then((doc) => {
-                if (doc) {
-                  res.status(400).json({ error: " Salary Already Initiated " });
-                } else {
-                  salaryModel
-                    .updateOne({ UID: uid }, { $push: { salaries: newSalary } })
-                    .then((doc) => {
-                      if (doc) {
-                        res.status(200).json({ success: true });
-                      }
-                    });
-                }
-              });
+            const data = doc;
+            res.status(200).json({ data });
           } else {
-            salaryModel
-              .create({
-                UID: uid,
-                salaries: [newSalary],
-              })
-              .then((doc) => {
-                res.status(200).json({ success: true });
-              });
+            res.status(404).json({ error: "No Documents found" });
           }
         })
         .catch((error) => {
           console.log(error);
           res.status(500).json({ error: "Internal Server Error" });
         });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  departmentInfo: (req, res) => {
+    try {
+      const id = req.params.id;
+      const objId = mongoose.Types.ObjectId(id);
+      departmentModal.findOne({ _id: objId }).then((doc) => {
+        if (doc) {
+          const dep = doc.name;
+          employeeModel
+            .find({
+              department: dep,
+            })
+            .then((document) => {
+              const data = document;
+              res.status(200).json({ data });
+            })
+            .catch((error) => {
+              res.status(500).json({ error: "Internal server error" });
+              console.log(error);
+            });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getHrDetails: (req, res) => {
+    try {
+      const id = req.id;
+      const uid = mongoose.Types.ObjectId(id);
+      hrModel.findOne({ _id: uid }).then((doc) => {
+        if (doc) {
+          res.status(200).json({ doc });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  addTaskToDepartment: async (req, res) => {
+    try {
+      const hr = req.id;
+      const data = req.body.data;
+      const depID = mongoose.Types.ObjectId(data.Depid);
+      const startDate = data.from;
+      const endDate = data.to;
+      const assignedBy = mongoose.Types.ObjectId(hr);
+      const task = data.task;
+
+      const DepTaskExist = await DepTaskModal.findOne({
+        departmentId: depID,
+      });
+      if (DepTaskExist) {
+        DepTaskModal.updateOne(
+          { departmentId: depID },
+          {
+            $push: {
+              tasks: {
+                startdate: startDate,
+                enddate: endDate,
+                task: task,
+                assignedby: assignedBy,
+              },
+            },
+          }
+        )
+          .then((doc) => {
+            res.status(200).json({ success: true });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
+      } else {
+        DepTaskModal.create({
+          departmentId: depID,
+          tasks: [
+            {
+              startdate: startDate,
+              enddate: endDate,
+              task: task,
+              assignedby: assignedBy,
+            },
+          ],
+        })
+          .then((doc) => {
+            res.status(200).json({ success: true });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  addTaskToInt: async (req, res) => {
+    try {
+      const hr = req.id;
+      const assignedBy = mongoose.Types.ObjectId(hr);
+      const data = req.body.data;
+      const Intfrom = data.from;
+      const Intto = data.to;
+      const IntTask = data.task;
+      const IntId = data.uid;
+      const IntTaskExist = await IntTaskModel.findOne({
+        UID: IntId,
+      });
+      if (IntTaskExist) {
+        IntTaskModel.updateOne(
+          { UID: IntId },
+          {
+            $push: {
+              tasks: {
+                startdate: Intfrom,
+                enddate: Intto,
+                task: IntTask,
+                assignedBy: assignedBy,
+              },
+            },
+          }
+        )
+          .then(() => {
+            res.status(200).json({ success: true });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
+      } else {
+        IntTaskModel.create({
+          UID: IntId,
+          tasks: [
+            {
+              startdate: Intfrom,
+              enddate: Intto,
+              task: IntTask,
+              assignedby: assignedBy,
+            },
+          ],
+        })
+          .then((doc) => {
+            res.status(200).json({ success: true });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getHrInfo: (req, res) => {
+    try {
+      const hrid = req.id;
+      if (hrid) {
+        hrModel
+          .findOne({
+            _id: hrid,
+          })
+          .then((doc) => {
+            const data = doc;
+            res.status(200).json({ data });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getEmployeeSalary: (req, res) => {
+    try {
+      const id = req.params.id;
+      const intId = parseInt(id);
+
+      if (!Number.isInteger(intId)) {
+        return res.status(400).json({ message: "Invalid employee ID" });
+      }
+      employeeModel.findOne({ UID: intId }).then((doc) => {
+        if (doc) {
+          const sal = doc.salary / 12;
+          const salary = Math.ceil(sal);
+          const accNo = doc.accountNo;
+          const ifsc = doc.ifsc;
+          const holder = doc.holdername;
+          const data = {
+            salary,
+            accNo,
+            holder,
+            ifsc,
+          };
+          res.status(200).json({ data });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  initiateSalary: (req, res) => {
+    try {
+      const data = req.body.data;
+      const { accountDetails } = data;
+      const uid = data.UID;
+      let cutoff;
+      if (data.cutoff === null) {
+        cutoff = 0;
+      } else {
+        cutoff = data.cutoff;
+      }
+      const newSalary = {
+        month: data.lastMonth,
+        salary: data.salary,
+        holdername: accountDetails.holder,
+        accountNo: accountDetails.accNo,
+        ifsc: accountDetails.ifsc,
+        cutoff: cutoff,
+        submiton: data.month,
+      };
+
+      if (uid) {
+        salaryModel
+          .findOne({
+            UID: uid,
+          })
+          .then((doc) => {
+            if (doc) {
+              salaryModel
+                .findOne({
+                  salaries: { $elemMatch: { month: newSalary.month } },
+                })
+                .then((doc) => {
+                  if (doc) {
+                    res
+                      .status(400)
+                      .json({ error: " Salary Already Initiated " });
+                  } else {
+                    salaryModel
+                      .updateOne(
+                        { UID: uid },
+                        { $push: { salaries: newSalary } }
+                      )
+                      .then((doc) => {
+                        if (doc) {
+                          res.status(200).json({ success: true });
+                        }
+                      });
+                  }
+                });
+            } else {
+              salaryModel
+                .create({
+                  UID: uid,
+                  salaries: [newSalary],
+                })
+                .then((doc) => {
+                  res.status(200).json({ success: true });
+                });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
   getAllTasks: (req, res) => {
-    IntTaskModel.find({})
-      .then((doc) => {
-        const data = doc;
-        if (data) {
-          res.status(200).json({ doc });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({ error: "Internal Server Error" });
-      });
+    try {
+      IntTaskModel.find({})
+        .then((doc) => {
+          const data = doc;
+          if (data) {
+            res.status(200).json({ doc });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
   addAnnouncement: (req, res) => {
-    const id = req.id;
-    const data = req.body.data;
-    const time = new Date();
-    const timeString = time.toLocaleString();
-    const tittle = data.title;
-    const content = data.content;
+    try {
+      const id = req.id;
+      const data = req.body.data;
+      const time = new Date();
+      const timeString = time.toLocaleString();
+      const tittle = data.title;
+      const content = data.content;
 
-    announcementModel
-      .create({
-        senderId: id,
-        tittle: tittle,
-        content: content,
-        time: timeString,
-      })
-      .then((doc) => {
-        res.status(200).json({ success: true });
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({ error: "Internal Server Error" });
-      });
+      announcementModel
+        .create({
+          senderId: id,
+          tittle: tittle,
+          content: content,
+          time: timeString,
+        })
+        .then((doc) => {
+          res.status(200).json({ success: true });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error: "Internal Server Error" });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   },
   getAllAnnou: (req, res) => {
-    announcementModel.find({}).then((doc) => {
-      if (doc) {
-        res.status(200).json({ doc });
-      } else {
-        res.status(404).json({ error: "No Documents Found" });
-      }
-    });
+    try {
+      announcementModel.find({}).then((doc) => {
+        if (doc) {
+          res.status(200).json({ doc });
+        } else {
+          res.status(404).json({ error: "No Documents Found" });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
   checkAnyOverTime: async (req, res) => {
-    console.log("Checking .... ");
-    const overtimes = [];
+    try {
+      console.log("Checking .... ");
+      const overtimes = [];
 
-    const allattendance = await attendanceModel.find(
-      { "attendance.overpaystatus": { $ne: "Paid" } },
-      {
-        date: 1,
-        "attendance.fullname": 1,
-        "attendance.position": 1,
-        "attendance.UID": 1,
-        "attendance.time": 1,
-        "attendance.checkout": 1,
-      }
-    );
+      const allattendance = await attendanceModel.find(
+        { "attendance.overpaystatus": { $ne: "Paid" } },
+        {
+          date: 1,
+          "attendance.fullname": 1,
+          "attendance.position": 1,
+          "attendance.UID": 1,
+          "attendance.time": 1,
+          "attendance.checkout": 1,
+        }
+      );
 
-    if(allattendance){
+      if (allattendance) {
+        allattendance.forEach((obj) => {
+          const date = obj.date;
+          const uid = obj.attendance[0].UID;
+          const fullname = obj.attendance[0].fullname;
+          const position = obj.attendance[0].position;
 
-      allattendance.forEach((obj) => {
-        const date = obj.date;
-        const uid = obj.attendance[0].UID;
-        const fullname = obj.attendance[0].fullname;
-        const position = obj.attendance[0].position;
-  
-        // overtime calculation 
-        const startTimeStr = obj.attendance[0].time;
-        const endTimeStr = obj.attendance[0].checkout;
-  
-        const startTimeParts = startTimeStr.split(":");
-        const startHours = parseInt(startTimeParts[0]);
-        const startMinutes = parseInt(startTimeParts[1]);
-        const startSeconds = parseInt(startTimeParts[2].split(" ")[0]);
-        const startAmPm = startTimeParts[2].split(" ")[1];
-  
-        let startHours24 = startHours;
-        if (startAmPm === "PM" && startHours !== 12) {
-          startHours24 = startHours + 12;
-        } else if (startAmPm === "AM" && startHours === 12) {
-          startHours24 = 0;
-        }
-        if (!endTimeStr) {
-          return;
-        }
-        const endTimeParts = endTimeStr.split(":");
-        if (!endTimeParts || endTimeParts.length < 3) {
-          return;
-        }
+          // overtime calculation
+          const startTimeStr = obj.attendance[0].time;
+          const endTimeStr = obj.attendance[0].checkout;
+
+          const startTimeParts = startTimeStr.split(":");
+          const startHours = parseInt(startTimeParts[0]);
+          const startMinutes = parseInt(startTimeParts[1]);
+          const startSeconds = parseInt(startTimeParts[2].split(" ")[0]);
+          const startAmPm = startTimeParts[2].split(" ")[1];
+
+          let startHours24 = startHours;
+          if (startAmPm === "PM" && startHours !== 12) {
+            startHours24 = startHours + 12;
+          } else if (startAmPm === "AM" && startHours === 12) {
+            startHours24 = 0;
+          }
+          if (!endTimeStr) {
+            return;
+          }
+          const endTimeParts = endTimeStr.split(":");
+          if (!endTimeParts || endTimeParts.length < 3) {
+            return;
+          }
           const endHours = parseInt(endTimeParts[0]);
           const endMinutes = parseInt(endTimeParts[1]);
           const endSeconds = parseInt(endTimeParts[2].split(" ")[0]);
           const endAmPm = endTimeParts[2].split(" ")[1];
 
-  
-        let endHours24 = endHours;
-        if (endAmPm === "PM" && endHours !== 12) {
-          endHours24 = endHours + 12;
-        } else if (endAmPm === "AM" && endHours === 12) {
-          endHours24 = 0;
-        }
-  
-        if (
-          endHours24 < startHours24 ||
-          (endHours24 === startHours24 && endMinutes < startMinutes)
-        ) {
-          endHours24 += 24;
-        }
-  
-        const startDate = new Date();
-        startDate.setHours(startHours24, startMinutes, startSeconds);
-  
-        const endDate = new Date();
-        endDate.setHours(endHours24, endMinutes, endSeconds);
-        const timeDiff = Math.abs(endDate - startDate);
-  
-        const minutesDiff = Math.floor(timeDiff / 60000);
-        const secondsDiff = Math.floor((timeDiff / 1000) % 60);
-  
-        if (minutesDiff > 480) {
-          const timeDifference = minutesDiff + ":" + secondsDiff + "minutes";
-          const realDiff = minutesDiff - 480;
-          const overTimeHours = Math.floor(realDiff / 60);
-          const overTimeMin = realDiff % 60;
-          const overTime = overTimeHours + " Hours " + overTimeMin + " Minutes ";
-          const data = {
-            date: date,
-            UID: uid,
-            fullname: fullname,
-            position:position,
-            overtime: overTime,
-          };
-  
-          overtimes.push(data);
-        }
-      });
-  
-      res.status(200).json({overtimes})
-    }else{
-      res.status(200).json({overtimes})
-    }
+          let endHours24 = endHours;
+          if (endAmPm === "PM" && endHours !== 12) {
+            endHours24 = endHours + 12;
+          } else if (endAmPm === "AM" && endHours === 12) {
+            endHours24 = 0;
+          }
 
+          if (
+            endHours24 < startHours24 ||
+            (endHours24 === startHours24 && endMinutes < startMinutes)
+          ) {
+            endHours24 += 24;
+          }
+
+          const startDate = new Date();
+          startDate.setHours(startHours24, startMinutes, startSeconds);
+
+          const endDate = new Date();
+          endDate.setHours(endHours24, endMinutes, endSeconds);
+          const timeDiff = Math.abs(endDate - startDate);
+
+          const minutesDiff = Math.floor(timeDiff / 60000);
+          const secondsDiff = Math.floor((timeDiff / 1000) % 60);
+
+          if (minutesDiff > 480) {
+            const timeDifference = minutesDiff + ":" + secondsDiff + "minutes";
+            const realDiff = minutesDiff - 480;
+            const overTimeHours = Math.floor(realDiff / 60);
+            const overTimeMin = realDiff % 60;
+            const overTime =
+              overTimeHours + " Hours " + overTimeMin + " Minutes ";
+            const data = {
+              date: date,
+              UID: uid,
+              fullname: fullname,
+              position: position,
+              overtime: overTime,
+            };
+
+            overtimes.push(data);
+          }
+        });
+
+        res.status(200).json({ overtimes });
+      } else {
+        res.status(200).json({ overtimes });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
-  overTimePayment:(req,res)=>{
-    const id = req.id
-    const data = req.body.data;
-    if(data){
-      overtimepaymentModal.create({
-        date:data.date,
-        fullname:data.fullname,
-        UID:data.UID,
-        position:data.position,
-        duration: data.duration,
-        payment:data.payment,
-        assignedBy:id
-      }).then((doc)=>{
-        if(doc){
-          attendanceModel.findOneAndUpdate({date:data.date, 'attendance.UID': data.UID },
-          {$set:{'attendance.$.overpaystatus': 'Paid'}}).then((doc)=>{
-            if(doc){
-              console.log("done")
-              res.status(200).json({success:true})
+  overTimePayment: (req, res) => {
+    try {
+      const id = req.id;
+      const data = req.body.data;
+      if (data) {
+        overtimepaymentModal
+          .create({
+            date: data.date,
+            fullname: data.fullname,
+            UID: data.UID,
+            position: data.position,
+            duration: data.duration,
+            payment: data.payment,
+            assignedBy: id,
+          })
+          .then((doc) => {
+            if (doc) {
+              attendanceModel
+                .findOneAndUpdate(
+                  { date: data.date, "attendance.UID": data.UID },
+                  { $set: { "attendance.$.overpaystatus": "Paid" } }
+                )
+                .then((doc) => {
+                  if (doc) {
+                    console.log("done");
+                    res.status(200).json({ success: true });
+                  }
+                });
             }
           })
-        }
-      }).catch((error)=>{
-        console.log(error);
-        res.status(500).json({error:"Internal Server Error"})
-      })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({ error: "Internal Server Error" });
+          });
+      }
+      console.log(data, id);
+    } catch (error) {
+      console.log(error);
     }
-    console.log(data, id)
-  }
+  },
 };

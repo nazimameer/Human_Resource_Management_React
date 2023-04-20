@@ -25,10 +25,10 @@ useEffect(() => {
    })
 }, []);
 
-const handleOnclick = (id) =>{
-  props.setId(id)
-  props.openTaskDep()
-}
+// const handleOnclick = (id) =>{
+//   props.setId(id)
+//   props.openTaskDep()
+// }
   return (
     <div className="mx-5 relative">
       <div class="flex flex-wrap my-6 -mx-3">
@@ -66,9 +66,9 @@ const handleOnclick = (id) =>{
                       </th> */}
                       
 
-                      <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                      {/* <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Task
-                      </th>
+                      </th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -208,11 +208,11 @@ const handleOnclick = (id) =>{
 
                       
 
-                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap"  onClick={()=>handleOnclick(obj._id)}>
+                      {/* <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap"  onClick={()=>handleOnclick(obj._id)}>
                             <div className="flex items-center justify-center" >
                             <i class='bx bx-task text-xl'></i>
                             </div>
-                      </td>
+                      </td> */}
                     </tr>
   )
 })

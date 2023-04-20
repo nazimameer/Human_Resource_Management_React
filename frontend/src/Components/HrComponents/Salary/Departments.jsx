@@ -7,10 +7,10 @@ const toDepartment =(id)=>{
   Navigate(`/hr/Departmentpayslip/${id}`)
 }
 
-const handleOnclick = (id) =>{
-  props.setId(id)
-  props.openTaskDep()
-}
+// const handleOnclick = (id) =>{
+//   props.setId(id)
+//   props.openTaskDep()
+// }
   return (
     <div className="mx-5 relative mt-20">
       <div class="flex flex-wrap my-6 -mx-3">
@@ -19,11 +19,11 @@ const handleOnclick = (id) =>{
             <div class="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid bg-white p-6 pb-0">
               <div class="flex flex-wrap mt-0 -mx-3">
                 <div class="flex w-7/12 max-w-full px-3 lg:w-full justify-between">
-                  <div className="h-9 flex justify-center items-center">
-                 
+                  <div className="h-9 flex justify-center items-center text-2xl">
+                    All Departments
                   </div>
 
-            <div ><input type="text" className="rounded w-40" placeholder="Search..." onChange={(event)=>props.Search(event)}/></div>
+            {/* <div ><input type="text" className="rounded w-40" placeholder="Search..." onChange={(event)=>props.Search(event)}/></div> */}
                 </div>
                 
               </div>
@@ -36,9 +36,9 @@ const handleOnclick = (id) =>{
                       <th class="px-6 py-3 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Departments
                       </th>
-                      <th class="px-6 py-3 pl-2 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                      {/* <th class="px-6 py-3 pl-2 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Members
-                      </th>
+                      </th> */}
                       {/* <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Budget
                       </th> */}
@@ -46,9 +46,9 @@ const handleOnclick = (id) =>{
                         Completion
                       </th> */}
 
-                      <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                      {/* <th class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
                         Task
-                      </th>
+                      </th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -72,7 +72,7 @@ const handleOnclick = (id) =>{
 
                       </td>
 
-                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap">
+                      {/* <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap">
                         <div class="mt-2 avatar-group">
                           <a
                             href="/"
@@ -179,7 +179,7 @@ const handleOnclick = (id) =>{
                             ></div>
                           </div>
                         </div>
-                      </td>
+                      </td> */}
 
 
                       {/* <td class="p-2 leading-normal text-center align-middle bg-transparent border-b text-sm whitespace-nowrap">
@@ -211,13 +211,13 @@ const handleOnclick = (id) =>{
                         </div>
                       </td> */}
 
-                      <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap" 
+                      {/* <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap" 
                     //    onClick={()=>handleOnclick(obj._id)}
                        >
                             <div className="flex items-center justify-center" >
                             <i class='bx bx-task text-xl'></i>
                             </div>
-                      </td>
+                      </td> */}
                     </tr>
   )
 })
