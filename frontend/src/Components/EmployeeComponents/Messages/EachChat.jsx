@@ -147,7 +147,7 @@ function EachChat({ socket, Chat, hrId, room, showChat }) {
                     <div className="details ml-auto">
                       <p className="bg-[#333] text-[#fff]">
                         {obj.content}{" "}
-                        <span className="text-[12px] text-[#67676a] ml-3 text-white">
+                        <span className="text-[12px] ml-3 text-white">
                           {obj.time.replace(/^.*?,/, "").replace(/:\d+\s/, " ")}
                         </span>
                       </p>
@@ -202,7 +202,7 @@ function EachChat({ socket, Chat, hrId, room, showChat }) {
                     <div className="details ml-auto">
                       <p className="bg-[#333] text-[#fff]">
                         {obj.data.message}{" "}
-                        <span className="text-[12px] text-[#67676a] ml-3 text-white">
+                        <span className="text-[12px] ml-3 text-white">
                           {obj.data.time}
                         </span>
                       </p>
