@@ -5,7 +5,7 @@ import io from "socket.io-client";
 import "./Messages.css";
 import EachChat from "./EachChat";
 
-const socket = io.connect("https://controlhub.online");
+const socket = io.connect("https://api.controlhub.online");
 // http://localhost:8000
 function EmployeeChat() {
   //getting employee details
