@@ -4,30 +4,34 @@ import "./Hero.css";
 function Hero() {
   return (
     <>
-        <div className="h-[75vh] max-h-[500px] mb-10 flex flex-col sm:flex-row justify-between mx-auto max-w-[1500px] px-10">
-          <div className="w-full h-full sm:w-1/2 flex flex-col justify-center self-start sm:self-center order-2 sm:order-1 sm:px-10">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-white">
-              Let's Build A Strong Work Force Together
+         <div className="flex xl:flex-row flex-col gap-5 relative z-0 max-w-[1440px] mx-auto">
+          <div className="sm:px-16 px-6 flex-1 pt-20 md:pt-36">
+            <h1 className="2xl:text-[72px] sm:text-[64px] text-[50px] font-extrabold">
+            Let's Build A Strong Work Force Together
             </h1>
-            <p className="text-base md:text-lg lg:text-xl font-normal my-3 text-white">
-              Streamline your business with our management solutions
+
+           
+            <button type="button" className="bg-slate-900 text-white rounded-full mt-10 flex flex-row relative justify-center items-center py-3 px-6 outline-none">
+              
+              <Link to={"/employee/login"} className="flex-1">
+                Sign In
+              </Link>
+
+            </button>
+
+        <p className=" text-[27px] text-black-100 font-light mt-5">
+            Streamline your business with our management solutions
             </p>
-            <div className="flex gap-1">
-              <Link
-                to={"/hr/login"}
-                className="bg-sky-500 w-fit px-4 py-2 text-sm md:text-base lg:text-lg font-semibold rounded text-white hover:bg-sky-700"
-              >
-                I'm HR
-              </Link>
-              <Link
-                to={"/employee/login"}
-                className="bg-sky-500 w-fit px-4 py-2 text-sm md:text-base lg:text-lg font-semibold rounded text-white hover:bg-sky-700"
-              >
-                I'm Employee
-              </Link>
-            </div>
           </div>
-          <div className="w-full h-full sm:w-1/2 bg-center bg-no-repeat bg-contain self-end sm:self-center order-1 sm:order-2 image"></div>
+
+          <div className="xl:flex-[1.5] flex justify-center items-center w-full xl:h-screen lg:mt-[7%]">
+              <div className="relative xl:w-full w-[90%] xl:h-full h-[590px] z-0">
+                <img src="../images/landing.svg" fill  alt="hero" className="object-contain sm:w-[650px] sm:h-[650px] md:w-[750px] md:ml-10" />
+              </div>
+              <div>
+
+              </div>
+          </div>
         </div>
     </>
   );

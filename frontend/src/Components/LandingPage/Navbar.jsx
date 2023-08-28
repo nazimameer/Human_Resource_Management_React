@@ -1,27 +1,27 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
-    <div className="bg-slate-900">
-      <nav className="w-full flex py-6 justify-between items-center navbar z-20 sticky">
+    <header className="w-full fixed z-10 bg-white ">
+      <nav className="max-w-[1440px] mx-auto flex justify-between items-center sm:px-16 px-6 py-4">
+        <Link to={`/`} className="flex justify-center items-center">
+        
         <img
-          src="../images/controlhublogo.png"
+          src="../images/seLogo.svg"
           alt="controlhub"
-          className="w-[124px] sm:w-[150px] md:w-[200px] ml-6"
+          width={118}
+          height={18}
+          className="object-contain"
         />
-        <ul className="list-none flex   items-center flex-1 mt-3 justify-end sm:justify-end mr-5">
-          <li className="font-poppins font-normal cursor-pointer text-[12px] sm:text-[16px] md:text-[22px] text-white mr-4  sm:mr-10">
-            About
-          </li>
-          <li className="font-poppins font-normal cursor-pointer text-[12px] sm:text-[16px] md:text-[22px] text-white mr-4 sm:mr-10">
-            Contact
-          </li>
-          <li className="font-poppins font-normal cursor-pointer text-[12px] sm:text-[16px] md:text-[22px] text-white">
-            Faq
-          </li>
-        </ul>
+        </Link>
+        <button className="text-primary-blue rounded-full bg-slate-900 min-w-[130px] flex flex-row relative justify-center items-center py-3 px-6 outline-none;" type="button">
+          <Link to={"/employee/login"} className="flex-1 text-white">
+            Sign In
+          </Link>
+        </button>
       </nav>
-    </div>
+    </header>
   );
 }
 

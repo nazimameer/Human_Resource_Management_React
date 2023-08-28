@@ -1,19 +1,18 @@
 import React from "react";
+import './LandingPage.css'
 import Hero from "../Components/LandingPage/Hero";
 import Navbar from "../Components/LandingPage/Navbar";
-import About from '../Components/LandingPage/About'
-import Contactus from "../Components/LandingPage/Contactus";
+// import About from '../Components/LandingPage/About'
+// import Contactus from "../Components/LandingPage/Contactus";
 import Footer from "../Components/LandingPage/Footer";
 function LandingPage() {
   return (
-    <div className="bg-slate-900 ">
+    <div className="bg-white relative">
       <Navbar />
-      <div className="bg-slate-900 min-h-[90vh]">
+      <main className="overflow-hidden">
       <Hero />
-      <About/>
-      <Contactus/>
+      </main>
       <Footer/>
-      </div>
     </div>
   );
 }
