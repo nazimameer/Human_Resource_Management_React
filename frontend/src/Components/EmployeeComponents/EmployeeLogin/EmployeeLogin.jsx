@@ -1,23 +1,53 @@
 import React, { useState, useEffect } from "react";
+import {
+  Tabs,
+  TabsHeader,
+  Tab,
+  Card,
+  Input,
+  Button,
+  Typography,
+} from "@material-tailwind/react";
 import axios from "../../../Api/EmployeeAxios";
 import { useNavigate } from "react-router-dom";
-import { message } from 'antd';
+import { message } from "antd";
 function EmployeeLogin() {
+  const data = [
+    {
+      label: "HR",
+      value: "HR",
+    },
+    {
+      label: "Employee",
+      value: "Employee",
+    },
+  ];
+
   useEffect(() => {
     if (localStorage.getItem("employeejwt")) {
-      axios.post('/employee/checkBlocked').then((response)=>{
-        if(response.status === 200){
-
-          axios.post("/employee/LoginPageAuth").then((response) => {
-            if (response.status === 200) {
-              message.success('Logged In Successfully');
-              Navigate("/employee/home");
-            }
-          });
+      axios
+        .post("/employee/checkBlocked")
+        .then((response) => {
+          if (response.status === 200) {
+            axios.post("/employee/LoginPageAuth").then((response) => {
+              if (response.status === 200) {
+                message.success("Logged In Successfully");
+                Navigate("/employee/home");
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (localStorage.getItem("hrjwt")) {
+      console.log("Hai");
+      axios.post("/hr/LoginPageAuth").then((response) => {
+        console.log(response.status);
+        if (response.status === 200) {
+          Navigate("/hr/home");
         }
-      }).catch((error)=>{
-        console.log(error);
-      })
+      });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -25,150 +55,126 @@ function EmployeeLogin() {
 
   const Navigate = useNavigate();
 
-  const [usernameError, setusernameError] = useState(false);
-  const [passwordError, setpasswordError] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-
-  const handleChange = (event) => {
-    if (event.target.value === "") {
-      if (event.target.name === "username") {
-        setusernameError(true);
-      } else if (event.target.name === "password") {
-        setpasswordError(true);
-      }
-    } else {
-      if (event.target.name === "username") {
-        setusernameError(false);
-      } else if (event.target.name === "password") {
-        setpasswordError(false);
-      }
-    }
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
-  };
   const handleSubmit = (event) => {
     event.preventDefault();
     if (formData.username === "") {
-      setusernameError(true);
+      message.error("Username Required");
       return;
     } else if (formData.password === "") {
-      setpasswordError(true);
+      message.error("Password Required");
       return;
     }
 
-    axios
-      .post("/employee/login", formData)
-      .then((response) => {
-        if (response.status === 200) {
-          const token = response.data.token;
-          localStorage.setItem("employeejwt", token);
-          Navigate("/employee/home");
-        }
-      })
-      .catch((error) => {
-        console.log(error.response.status);
-        if (error.response.status === 400) {
-          const msg = error.response.data.error;
-          message.error(msg)
+    if (role === "HR") {
+      axios
+        .post("/hr/login", formData)
+        .then((response) => {
+          if (response.data) {
+            const token = response.data.token; //recieved token to a variable
+            localStorage.setItem("hrjwt", token); // store the token into local storage
 
-        } else if (error.response.status === 401) {
-          const msg = error.response.data.error;
-          message.error(msg)
-        }
-      });
+            Navigate("/hr/home"); //navigate to home page
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.status);
+          if (error.response.status === 400) {
+            const msg = error.response.data.error;
+            message.error(msg);
+          } else if (error.response.status === 401) {
+            const msg = error.response.data.error;
+            message.error(msg);
+          }
+        });
+    } else if (role === "Employee") {
+      axios
+        .post("/employee/login", formData)
+        .then((response) => {
+          if (response.status === 200) {
+            const token = response.data.token;
+            localStorage.setItem("employeejwt", token);
+            Navigate("/employee/home");
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.status);
+          if (error.response.status === 400) {
+            const msg = error.response.data.error;
+            message.error(msg);
+          } else if (error.response.status === 401) {
+            const msg = error.response.data.error;
+            message.error(msg);
+          }
+        });
+    }
   };
+  const [role, setRole] = useState("Employee");
+
+  useEffect(() => {
+    console.log(role);
+  }, [role]);
 
   return (
-    <div>
-      <div>
-        <div class="p-8 lg:w-1/2 mx-auto">
-          <div class=" rounded-b-lg py-12 px-4 lg:px-24">
-            <p class="text-center text-3xl text-gray-500 font-semibold">
-              Employee Login
-            </p>
-            
+    <div className="py-[16%] flex w-full justify-center items-center">
+      <Tabs
+        value={role}
+        className="w-full bg-white rounded-lg flex justify-center items-center flex-col"
+      >
+        <div className="flex justify-center items-center">
+          <Card color="transparent" shadow={false}>
+            <Typography variant="h4" color="black" className="my-3">
+              Sign In
+            </Typography>
 
-            <form class="mt-6" onSubmit={handleSubmit}>
-              <div class="relative">
-                <input
-                  class="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline"
-                  id="username"
-                  name="username"
-                  type="text"
-                  onChange={handleChange}
-                  placeholder="Email"
-                />
-
-                <div class="absolute left-0 inset-y-0 flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-7 w-7 ml-3 text-gray-400 p-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                </div>
-              </div>
-              {usernameError ? (
-                <div>
-                  <div className=" w-60 h-10  flex justify-center items-center mt-2 rounded text-white bg-red-600">
-                    <span class="p-5">This field is required !</span>
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
-
-              <div class="relative mt-3">
-                <input
-                  class="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline"
-                  id="username"
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  placeholder="Password"
-                />
-
-                <div class="absolute left-0 inset-y-0 flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-7 w-7 ml-3 text-gray-400 p-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M10 2a5 5 0 00-5 5v2a2 2 0 00-2 2v5a2 2 0 002 2h10a2 2 0 002-2v-5a2 2 0 00-2-2H7V7a3 3 0 015.905-.75 1 1 0 001.937-.5A5.002 5.002 0 0010 2z" />
-                  </svg>
-                </div>
-              </div>
-              {passwordError ? (
-                <div>
-                  <div className=" w-60 h-10  flex justify-center items-center mt-2 rounded text-white bg-red-600">
-                    <span class="p-5">This field is required !</span>
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
-              
-              <div class="flex items-center justify-center mt-8">
-                <button
-                  class="text-white py-2 px-4 uppercase rounded bg-indigo-500 hover:bg-indigo-600 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
-                  type="submit"
+            <TabsHeader
+              className="bg-transparent"
+              indicatorProps={{
+                className: "bg-gray-900/10 shadow-none !text-gray-900",
+              }}
+            >
+              {data.map(({ label, value }) => (
+                <Tab
+                  key={value}
+                  value={value}
+                  className="w-[200px]"
+                  onClick={() => setRole(value)}
                 >
-                  Sign in
-                </button>
+                  {label}
+                </Tab>
+              ))}
+            </TabsHeader>
+            <form
+              className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+              onSubmit={handleSubmit}
+            >
+              <div className="mb-4 flex flex-col gap-6">
+                <Input
+                  size="lg"
+                  placeholder="Username"
+                  onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                  }
+                />
+                <Input
+                  type="password"
+                  size="lg"
+                  placeholder="Password"
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                />
               </div>
+              <Button className="mt-6" fullWidth type="submit">
+                Register
+              </Button>
             </form>
-          </div>
+          </Card>
         </div>
-      </div>
+      </Tabs>
     </div>
   );
 }

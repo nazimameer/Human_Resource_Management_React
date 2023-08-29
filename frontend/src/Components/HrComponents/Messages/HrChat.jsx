@@ -6,7 +6,7 @@ import "./Messages.css";
 import EachMessages from "./EachMessages";
 
 const socket = io.connect("https://api.controlhub.online");
-// http://localhost:8000
+//  http://localhost:8000
 function HrChat() {
   const [hrDetails, setHrDetails] = useState({});
   const [userId, setUserId] = useState("");

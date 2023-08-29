@@ -6,7 +6,7 @@ function NavBar() {
   const Navigate = useNavigate();
   const HandleLogout = () => {
     localStorage.removeItem("hrjwt");
-    Navigate("/hr/login");
+    Navigate("/employee/login");
   };
   return (
     <>
