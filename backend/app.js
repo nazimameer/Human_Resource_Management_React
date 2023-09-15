@@ -15,18 +15,25 @@ dotenv.config()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // socket io 
+
 const server = http.createServer(app);
 const corsOptions = {
     origin: 'https://controlhub.online', // Adjust this to match your origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // If you need to send cookies or headers with credentials
   };
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://controlhub.online');
+    // Add other CORS headers as needed
+    next();
+  });
 app.use(cors(corsOptions));
 //  
 const io = new Server(server, {
     cors:{
         origin: "https://controlhub.online",
         methods:["GET", "POST"],
+        credentials: true,
     },
 });
 
