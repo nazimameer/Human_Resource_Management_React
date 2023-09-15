@@ -3,7 +3,6 @@ const express = require("express");
 const app = express();
 const http = require('http');
 const cors = require("cors");
-app.use(cors());
 const path = require("path");
 const {chats} = require('./data/data')
 const dotenv = require('dotenv')
@@ -15,8 +14,14 @@ const { Server } = require('socket.io')
 dotenv.config()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
- // socket io 
- const server = http.createServer(app);
+// socket io 
+const server = http.createServer(app);
+const corsOptions = {
+    origin: 'https://controlhub.online', // Adjust this to match your origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // If you need to send cookies or headers with credentials
+  };
+app.use(cors(corsOptions));
 //  
 const io = new Server(server, {
     cors:{
